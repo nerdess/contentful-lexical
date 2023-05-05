@@ -7,17 +7,18 @@ const Field = (props) => {
 	const sdk = useSDK();
 	const window = sdk.window;
 
+
 	window.startAutoResizer();
-
-
-	//return <TipTap />
-
-	return <Lexical />
+ 
+	return <Lexical 
+		initialValue={sdk.field.getValue()}
+		setValue={(value) => sdk.field.setValue(value)}
+	/>
 
 	/*return <RichTextEditor 
 				initialValue={sdk.field.getValue()}
 				setValue={(value) => sdk.field.setValue(value)}  
-			/>;*/
+	/>;*/
 };
 
 export default Field;

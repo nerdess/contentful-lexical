@@ -45,28 +45,18 @@ body {
   }
   
   .editor-container {
-    /*margin: 20px auto 20px auto;
-    border-radius: 2px;
-    max-width: 600px;
-    color: #000;
-    position: relative;
-    line-height: 20px;
-    font-weight: 400;
-    text-align: left;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;*/
     border: 1px solid rgb(207, 217, 224);
     border-radius: 10px;
+    overflow: hidden;
+    //border-bottom-right-radius: 0;
   }
   
   .editor-inner {
-    background: #fff;
+    //background: #fff;
     position: relative;
   }
   
   .editor-input {
-    min-height: 150px;
-    resize: none;
     font-size: 15px;
     caret-color: rgb(5, 5, 5);
     position: relative;
@@ -74,6 +64,7 @@ body {
     outline: 0;
     padding: 15px 10px;
     caret-color: #444;
+    width: 100%;
   }
   
   .editor-placeholder {
@@ -212,8 +203,10 @@ body {
   
   .editor-paragraph {
     margin: 0;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     position: relative;
+    font-size: 0.875rem;
+    font-weight: 400;
   }
   
   .editor-paragraph:last-child {
@@ -348,6 +341,7 @@ body {
   
   .toolbar {
     display: flex;
+    flex-wrap: wrap;
     margin-bottom: 1px;
     background: #fff;
     padding: 4px;
@@ -357,7 +351,7 @@ body {
     border-bottom: 1px solid #eee;
   }
   
-  .toolbar button.toolbar-item {
+  .editor-container button.toolbar-item {
     border: 0;
     display: flex;
     background: none;
@@ -365,9 +359,10 @@ body {
     padding: 8px;
     cursor: pointer;
     vertical-align: middle;
+    background: #fff;
   }
   
-  .toolbar button.toolbar-item:disabled {
+  .editor-container button.toolbar-item:disabled {
     cursor: not-allowed;
   }
   
@@ -375,7 +370,7 @@ body {
     margin-right: 2px;
   }
   
-  .toolbar button.toolbar-item i.format {
+  .editor-container button.toolbar-item i.format {
     background-size: contain;
     display: inline-block;
     height: 18px;
@@ -386,19 +381,19 @@ body {
     opacity: 0.6;
   }
   
-  .toolbar button.toolbar-item:disabled i.format {
+  button.toolbar-item:disabled i.format {
     opacity: 0.2;
   }
   
-  .toolbar button.toolbar-item.active {
+  button.toolbar-item.active {
     background-color: rgba(223, 232, 250, 0.3);
   }
   
-  .toolbar button.toolbar-item.active i {
+  button.toolbar-item.active i {
     opacity: 1;
   }
   
-  .toolbar .toolbar-item:hover:not([disabled]) {
+  .toolbar-item:hover:not([disabled]) {
     background-color: #eee;
   }
   
@@ -588,6 +583,23 @@ body {
     line-height: 16px;
     background-size: contain;
   }
+
+  .input-text {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    border-radius: 15px;
+    background-color: #eee;
+    font-size: 15px;
+    color: rgb(5, 5, 5);
+    border: 0;
+    outline: 0;
+    position: relative;
+    font-family: inherit;
+  }
+
+  /* Icons */
   
   i.undo {
     background-image: url(../../images/icons/arrow-counterclockwise.svg);
@@ -690,12 +702,15 @@ body {
   i.image {
     background-image: url(../../images/icons/file-image.svg);
   }
+
+
+  i.clear {
+    background-image: url(../../images/icons/trash.svg);
+  }
   
   
-  
-  
-  
-  
-  
-  
-  
+//modal
+html .modal-image {
+  margin: 0;
+  max-height: calc(100vh - 1rem);
+}

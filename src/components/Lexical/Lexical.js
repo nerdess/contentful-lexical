@@ -1,4 +1,4 @@
-import ExampleTheme from '../../themes/ExampleTheme';
+import theme from '../../themes/defaultTheme';
 
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
@@ -11,22 +11,27 @@ import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
 import { ListItemNode, ListNode } from '@lexical/list';
 import { CodeHighlightNode, CodeNode } from '@lexical/code';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
-import { ImageNode } from "./nodes/ImageNode";
 
-
-//import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
+import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
+import { $generateHtmlFromNodes } from '@lexical/html';
+
+import { ImageNode } from "./nodes/ImageNode";
+import {CustomParagraphNode} from './nodes/CustomParagraphNode';
+import {CustomTextNode} from './nodes/CustomTextNode';
+
 import TreeViewPlugin from './plugins/TreeViewPlugin';
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
-
 import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 import FloatingLinkEditorPlugin from './plugins/toolbar/link/FloatingLinkEditorPlugin';
 import LinkPlugin from './plugins/toolbar/link/LinkPlugin';
 import ImagePlugin from "./plugins/ImagePlugin.ts";
-
-
 import InitialContentPlugin from './plugins/InitialContentPlugin';
+
+import { $generateNodesFromDOM } from '@lexical/html';
+
+import { Resizable } from 're-resizable';
 
 import {
 	$getRoot,
@@ -34,53 +39,78 @@ import {
 	$insertNodes,
 	$createParagraphNode,
 } from 'lexical';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+
+
+import {ParagraphNode, TextNode} from 'lexical';
 
 import './lexical.scss';
 
+
 function Placeholder() {
-	return <div className='editor-placeholder'>Enter some rich text...</div>;
+	return <div className='editor-placeholder'>Leg los :)</div>;
 }
 
+const regex = /<\/?span>/g;
+
 const editorConfig = {
-	// The editor theme
-	theme: ExampleTheme,
+	theme,
 	// Handling of errors during update
 	onError(error) {
 		throw error;
 	},
 	// Any custom nodes go here
 	nodes: [
-		HeadingNode,
 		ListNode,
 		ListItemNode,
-		QuoteNode,
-		CodeNode,
-		CodeHighlightNode,
-		TableNode,
-		TableCellNode,
-		TableRowNode,
 		AutoLinkNode,
 		LinkNode,
-		ImageNode
+		ImageNode,
+		CustomParagraphNode,
+		CustomTextNode,
+		{
+			replace: ParagraphNode,
+			with: (node) => {
+			  return new CustomParagraphNode();
+			}
+		},
+		{
+			replace: TextNode,
+			with: (node) => {
+			  return new CustomTextNode(node.__text);
+			}
+		}
+
 	],
 };
 
-export default function Editor() {
-
+const Editor = ({
+	initialValue = '',
+	setValue = () => {},
+}) => {
+	
 	return (
 		<LexicalComposer initialConfig={editorConfig}>
 			<div className='editor-container'>
 				<ToolbarPlugin />
 				<div className='editor-inner'>
 					<RichTextPlugin
-						contentEditable={<ContentEditable className='editor-input' />}
+						contentEditable={
+							<Resizable
+								minHeight={200}
+								height={320}
+								style={{
+									overflow: 'hidden'
+								}}
+							>
+								<ContentEditable className='editor-input' />
+							</Resizable>
+						}
 						placeholder={<Placeholder />}
 						ErrorBoundary={LexicalErrorBoundary}
 					/>
-          			<InitialContentPlugin />
+
 					<HistoryPlugin />
-					<TreeViewPlugin />
+					{<TreeViewPlugin />}
 					<AutoFocusPlugin />
 					<ListPlugin />
 					<ClickableLinkPlugin />
@@ -88,8 +118,24 @@ export default function Editor() {
           			<FloatingLinkEditorPlugin />
 					<ListMaxIndentLevelPlugin maxDepth={7} />
 					<ImagePlugin />
+					<InitialContentPlugin htmlString={initialValue} />
+					<OnChangePlugin onChange={(editorState, editor) => {
+						editor.update(() => {
+
+							const html = $generateHtmlFromNodes(editor, null);
+							let value = '';
+
+							if (html !== '<p></p>') {
+								value = html.replace(regex, '');
+							} 
+							console.log('html: ', value);
+							setValue(value)
+						})
+					}} />
 				</div>
 			</div>
 		</LexicalComposer>
 	);
 }
+
+export default Editor;

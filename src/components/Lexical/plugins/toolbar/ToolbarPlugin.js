@@ -45,7 +45,7 @@ import { getSelectedNode } from '../utils/getSelectedNode';
 import { LowPriority } from './const';
 import { sanitizeUrl } from '../utils/url';
 //import FloatingLinkEditor from './link/FloatingLinkEditor';
-import { INSERT_IMAGE_COMMAND } from "../ImagePlugin.ts";
+//import { INSERT_IMAGE_COMMAND } from "../ImagePlugin.ts";
 
 import Divider from './divider/Divider';
 import { $isImageNode } from '../../nodes/ImageNode';
@@ -178,7 +178,7 @@ const ToolbarPlugin = () => {
 		}
 	}, [editor]);
 
-	console.log('isImage', isImage);
+	//console.log('isImage', isImage);
 
 	useEffect(() => {
 		return mergeRegister(
@@ -239,9 +239,6 @@ const ToolbarPlugin = () => {
 		}
 	}, [editor, isLink]);
 
-	const onClick = (payload) => {
-		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
-	  };
 
 	return (
 		<div className='toolbar' ref={toolbarRef}>
@@ -339,7 +336,6 @@ const ToolbarPlugin = () => {
 					});
 				}}
 				className={'toolbar-item spaced '}
-				disabled={!editor.getEditorState().selection}
 				aria-label='Insert ndash'
 			>
 				<i className='format ndash' />
@@ -375,10 +371,11 @@ const ToolbarPlugin = () => {
 				})
 				}*/
 				onClick={() => {
-					showModal('Insert Image', (onClose) => (
+					showModal('Insert Image', (onClose, onOK) => (
 					  <ImageDialog
 						editor={editor}
 						onClose={onClose}
+						onOK={onOK}
 					  />
 					));
 				  }}
@@ -386,6 +383,7 @@ const ToolbarPlugin = () => {
       		>
         		<i className='format image' />
       		</button>
+			{modal}
 		</div>
 	);
 };

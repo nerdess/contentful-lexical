@@ -83,7 +83,7 @@ function PortalImpl({
   );
 }
 
-export default function Modal({
+const Modal = ({
   onClose,
   children,
   title,
@@ -93,7 +93,10 @@ export default function Modal({
   closeOnClickOutside?: boolean;
   onClose: () => void;
   title: string;
-}): JSX.Element {
+}): JSX.Element => {
+
+  console.log('xxxx', title);
+
   return createPortal(
     <PortalImpl
       onClose={onClose}
@@ -103,4 +106,7 @@ export default function Modal({
     </PortalImpl>,
     document.body,
   );
+
 }
+
+export default Modal;

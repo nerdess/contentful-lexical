@@ -1,19 +1,19 @@
 import {
 	$getRoot,
-	$getSelection,
 	$insertNodes,
 	$createParagraphNode,
 } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $generateNodesFromDOM } from '@lexical/html';
 
+//const htmlString = '<b>Just some outside bold text</b><p>There was an alien bla fooo bla ><b><a href="http://www.test.de" target="_blank">Foooo</a>I am bold</b></p><br><p><b><i>I am bold and italic</i></b></p>';
 
-const InitialContentPlugin = () => {
+const InitialContentPlugin = ({htmlString}) => {
 
 	const [editor] = useLexicalComposerContext();
-
+;
 	editor.update(() => {
-		const htmlString = '<p>There was an alien bla fooo bla ><b><a href="http://www.test.de" target="_blank">Foooo</a>I am bold</b></p><br><p><b><i>I am bold and italic</i></b></p>';
+		
 		const parser = new DOMParser();
 		const dom = parser.parseFromString(htmlString, 'text/html');
 
