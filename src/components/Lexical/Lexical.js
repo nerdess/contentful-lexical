@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import theme from '../../themes/defaultTheme';
 
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
@@ -16,9 +17,9 @@ import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { $generateHtmlFromNodes } from '@lexical/html';
 
-import { ImageNode } from "./nodes/ImageNode";
-import {CustomParagraphNode} from './nodes/CustomParagraphNode';
-import {CustomTextNode} from './nodes/CustomTextNode';
+import { ImageNode } from './nodes/ImageNode';
+import { CustomParagraphNode } from './nodes/CustomParagraphNode';
+import { CustomTextNode } from './nodes/CustomTextNode';
 
 import TreeViewPlugin from './plugins/TreeViewPlugin';
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin';
@@ -26,25 +27,14 @@ import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 import FloatingLinkEditorPlugin from './plugins/toolbar/link/FloatingLinkEditorPlugin';
 import LinkPlugin from './plugins/toolbar/link/LinkPlugin';
-import ImagePlugin from "./plugins/ImagePlugin.ts";
+import ImagePlugin from './plugins/ImagePlugin.ts';
 import InitialContentPlugin from './plugins/InitialContentPlugin';
-
-import { $generateNodesFromDOM } from '@lexical/html';
 
 import { Resizable } from 're-resizable';
 
-import {
-	$getRoot,
-	$getSelection,
-	$insertNodes,
-	$createParagraphNode,
-} from 'lexical';
-
-
-import {ParagraphNode, TextNode} from 'lexical';
+import { ParagraphNode, TextNode } from 'lexical';
 
 import './lexical.scss';
-
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Leg los :)</div>;
@@ -70,72 +60,109 @@ const editorConfig = {
 		{
 			replace: ParagraphNode,
 			with: (node) => {
-			  return new CustomParagraphNode();
-			}
+				return new CustomParagraphNode();
+			},
 		},
 		{
 			replace: TextNode,
 			with: (node) => {
-			  return new CustomTextNode(node.__text);
-			}
-		}
-
+				return new CustomTextNode(node.__text);
+			},
+		},
 	],
 };
 
-const Editor = ({
-	initialValue = '',
-	setValue = () => {},
-}) => {
-	
+const BottomRightHandle = () => (
+	<div
+		//className='foo'
+		style={{
+			background: '#eee',
+			height: 5,
+			width: '100%',
+		}}
+	></div>
+);
+
+const ContentEditableContainer = () => {
+	const [height, setHeight] = useState(320);
+	const ref = useRef(null);
+	return (
+		<div ref={ref}>
+		<Resizable
+			minHeight={200}
+			
+			defaultSize={{
+				height: 320,
+			}}
+			enable={{
+				top: false,
+				right: false,
+				bottom: true,
+				left: false,
+				topRight: false,
+				bottomRight: false,
+				bottomLeft: false,
+				topLeft: false,
+			}}
+			handleComponent={{
+				bottom: <BottomRightHandle />,
+			}}
+			onResize={() => setHeight(ref.current.clientHeight+5)}
+		>
+			<div
+				className='fooo'
+				style={{
+					overflow: 'auto',
+					height,
+				}}
+			>
+				<ContentEditable className='editor-input' />
+			</div>
+		</Resizable>
+		</div>
+	);
+};
+
+const Editor = ({ initialValue = '', setValue = () => {} }) => {
 	return (
 		<LexicalComposer initialConfig={editorConfig}>
 			<div className='editor-container'>
 				<ToolbarPlugin />
 				<div className='editor-inner'>
 					<RichTextPlugin
-						contentEditable={
-							<Resizable
-								minHeight={200}
-								height={320}
-								style={{
-									overflow: 'hidden'
-								}}
-							>
-								<ContentEditable className='editor-input' />
-							</Resizable>
-						}
+						contentEditable={<ContentEditableContainer />}
 						placeholder={<Placeholder />}
 						ErrorBoundary={LexicalErrorBoundary}
 					/>
 
 					<HistoryPlugin />
-					{<TreeViewPlugin />}
+					{/*<TreeViewPlugin />*/}
 					<AutoFocusPlugin />
 					<ListPlugin />
 					<ClickableLinkPlugin />
 					<LinkPlugin />
-          			<FloatingLinkEditorPlugin />
+					<FloatingLinkEditorPlugin />
 					<ListMaxIndentLevelPlugin maxDepth={7} />
 					<ImagePlugin />
 					<InitialContentPlugin htmlString={initialValue} />
-					<OnChangePlugin onChange={(editorState, editor) => {
-						editor.update(() => {
+					<OnChangePlugin
+						onChange={(editorState, editor) => {
+							editor.update(() => {
+								const html = $generateHtmlFromNodes(editor, null);
+								let value = '';
 
-							const html = $generateHtmlFromNodes(editor, null);
-							let value = '';
-
-							if (html !== '<p></p>') {
-								value = html.replace(regex, '');
-							} 
-							console.log('html: ', value);
-							setValue(value)
-						})
-					}} />
+								if (html !== '<p></p>') {
+									value = html.replace(regex, '');
+								}
+								//console.log('html: ', value);
+								setValue(value);
+							});
+						}}
+					/>
 				</div>
 			</div>
 		</LexicalComposer>
 	);
-}
+};
 
 export default Editor;

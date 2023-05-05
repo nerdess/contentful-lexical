@@ -32,7 +32,7 @@ export class CustomTextNode extends TextNode {
         mode: this.getMode(),
         style: this.getStyle(),
         text: this.getTextContent(),
-        type: 'text',
+        type: 'custom-text',
         version: 1,
       };
     }

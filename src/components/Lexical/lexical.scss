@@ -6,6 +6,7 @@ body {
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
   }
   
   .other h2 {
@@ -55,6 +56,7 @@ body {
     //background: #fff;
     position: relative;
   }
+
   
   .editor-input {
     font-size: 15px;
@@ -199,6 +201,11 @@ body {
   
   .editor-tokenFunction {
     color: #dd4a68;
+  }
+
+  .editor-inner li {
+       font-size: 0.875rem;
+      font-weight: 400;
   }
   
   .editor-paragraph {
