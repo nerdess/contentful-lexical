@@ -7,10 +7,8 @@ import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import { TableCellNode, TableNode, TableRowNode } from '@lexical/table';
+
 import { ListItemNode, ListNode } from '@lexical/list';
-import { CodeHighlightNode, CodeNode } from '@lexical/code';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
 
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
@@ -21,7 +19,7 @@ import { ImageNode } from './nodes/ImageNode';
 import { CustomParagraphNode } from './nodes/CustomParagraphNode';
 import { CustomTextNode } from './nodes/CustomTextNode';
 
-import TreeViewPlugin from './plugins/TreeViewPlugin';
+//import TreeViewPlugin from './plugins/TreeViewPlugin';
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
@@ -107,12 +105,12 @@ const ContentEditableContainer = () => {
 				}}
 				handleStyles={{
 					bottom: {
-						bottom: -15
+						bottom: -10
 					}
 				}}
-				onResize={() => setHeight(ref.current.clientHeight + 5)}
+				onResize={() => setHeight(ref.current.clientHeight)}
 				style={{
-					marginBottom: 15
+					marginBottom: 10
 				}}
 			>
 				<div 
