@@ -25,3 +25,7 @@ This is how the editor should look like in your Contentful CMS:
 ## Extend/Modify
 
 Please refer to the [Lexical Documentation](https://lexical.dev/) on how to extend/modify this boilerplate. Lexical also has a helpful [community](https://lexical.dev/community). 
+
+## Todo
+
+This is just a first (but working!) proof-of-concept. I need to cleanup the code a bit, write some tests and all that stuff 🙈
