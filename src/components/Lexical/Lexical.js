@@ -37,7 +37,7 @@ import { ParagraphNode, TextNode } from 'lexical';
 import './lexical.scss';
 
 function Placeholder() {
-	return <div className='editor-placeholder'>Leg los :)</div>;
+	return <div className='editor-placeholder'>Schreib los :)</div>;
 }
 
 const regex = /<\/?span>/g;
@@ -73,52 +73,57 @@ const editorConfig = {
 };
 
 const BottomRightHandle = () => (
-	<div
-		//className='foo'
-		style={{
-			background: '#eee',
-			height: 5,
-			width: '100%',
-		}}
-	></div>
+	<div className='editor-resize-handle'>
+		<span />
+		<span />
+		<span />
+	</div>
 );
 
 const ContentEditableContainer = () => {
+
 	const [height, setHeight] = useState(320);
 	const ref = useRef(null);
+
 	return (
 		<div ref={ref}>
-		<Resizable
-			minHeight={200}
-			
-			defaultSize={{
-				height: 320,
-			}}
-			enable={{
-				top: false,
-				right: false,
-				bottom: true,
-				left: false,
-				topRight: false,
-				bottomRight: false,
-				bottomLeft: false,
-				topLeft: false,
-			}}
-			handleComponent={{
-				bottom: <BottomRightHandle />,
-			}}
-			onResize={() => setHeight(ref.current.clientHeight+5)}
-		>
-			<div
-				className='fooo'
+			<Resizable
+				minHeight={200}
+				defaultSize={{
+					height: 320,
+				}}
+				enable={{
+					top: false,
+					right: false,
+					bottom: true,
+					left: false,
+					topRight: false,
+					bottomRight: false,
+					bottomLeft: false,
+					topLeft: false,
+				}}
+				handleComponent={{
+					bottom: <BottomRightHandle />,
+				}}
+				handleStyles={{
+					bottom: {
+						bottom: -15
+					}
+				}}
+				onResize={() => setHeight(ref.current.clientHeight + 5)}
 				style={{
-					overflow: 'auto',
-					height,
+					marginBottom: 15
 				}}
 			>
-				<ContentEditable className='editor-input' />
-			</div>
-		</Resizable>
+				<div 
+					style={{
+						overflow: 'auto',
+						height,
+					}}
+				>
+					<ContentEditable className='editor-input' />
+				</div>
+			</Resizable>
 		</div>
 	);
 };

@@ -721,3 +721,27 @@ html .modal-image {
   margin: 0;
   max-height: calc(100vh - 1rem);
 }
+
+//resize handle
+.editor-resize-handle {
+  height: 10px;
+  width: 100%;
+  background-color: #fff;
+  padding-top: 1px;
+  border-top: 1px solid #cfd9e0;
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  /*&:active {
+    background-color: rgba(223, 232, 250,1);
+  }*/
+
+  & > span {
+    display: block;
+    border-top: 1px solid #cfd9e0;
+    margin: 1px auto;
+    width: 20px;
+  }
+}
