@@ -20,7 +20,7 @@ Then, go to `Apps > Custom Apps > Manage Apps Definition > Create app` in your C
 
 This is how the editor should look like in your Contentful CMS:
 
-![Lexical in Contentful]([https://github.com/nerdess/contentful-lexical/tree/main/public/images/lexical.png](https://raw.githubusercontent.com/nerdess/contentful-lexical/main/public/images/lexical.png?token=GHSAT0AAAAAACBCKJ6YJIIMMYBF6SUEVYVMZCWJDCQ))
+![Lexical in Contentful](https://raw.githubusercontent.com/nerdess/contentful-lexical/main/public/images/lexical.png?token=GHSAT0AAAAAACBCKJ6YJIIMMYBF6SUEVYVMZCWJDCQ)
 
 ## Extend/Modify
 
