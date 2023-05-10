@@ -1,7 +1,6 @@
 {
-  "name": "contentful-summernote",
-  "version": "0.1.0",
-  "private": true,
+  "name": "contentful-lexical",
+  "version": "0.1.1",
   "homepage": ".",
   "dependencies": {
     "@contentful/app-sdk": "^4.17.1",
