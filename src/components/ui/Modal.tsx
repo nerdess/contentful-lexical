@@ -6,11 +6,9 @@
  *
  */
 
-import './Modal.css';
-
-import * as React from 'react';
 import {ReactNode, useEffect, useRef} from 'react';
 import {createPortal} from 'react-dom';
+import './Modal.css';
 
 function PortalImpl({
   onClose,
@@ -94,8 +92,6 @@ const Modal = ({
   onClose: () => void;
   title: string;
 }): JSX.Element => {
-
-  console.log('xxxx', title);
 
   return createPortal(
     <PortalImpl

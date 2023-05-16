@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
 	CAN_REDO_COMMAND,
 	CAN_UNDO_COMMAND,
@@ -7,18 +7,13 @@ import {
 	UNDO_COMMAND,
 	SELECTION_CHANGE_COMMAND,
 	FORMAT_TEXT_COMMAND,
-	FORMAT_ELEMENT_COMMAND,
 	$getSelection,
 	$isRangeSelection,
-	$createParagraphNode,
-	$getNodeByKey,
 	$setSelection,
 } from 'lexical';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import {
 	$isParentElementRTL,
-	$wrapNodes,
-	$isAtNodeEnd,
 } from '@lexical/selection';
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
@@ -28,25 +23,17 @@ import {
 	$isListNode,
 	ListNode,
 } from '@lexical/list';
-import { createPortal } from 'react-dom';
 import {
-	$createHeadingNode,
-	$createQuoteNode,
 	$isHeadingNode,
 } from '@lexical/rich-text';
 import {
-	$createCodeNode,
 	$isCodeNode,
 	getDefaultCodeLanguage,
-	getCodeLanguages,
 } from '@lexical/code';
 
 import { getSelectedNode } from '../utils/getSelectedNode';
 import { LowPriority } from './const';
 import { sanitizeUrl } from '../utils/url';
-//import FloatingLinkEditor from './link/FloatingLinkEditor';
-//import { INSERT_IMAGE_COMMAND } from "../ImagePlugin.ts";
-
 import Divider from './divider/Divider';
 import { $isImageNode } from '../../nodes/ImageNode';
 import ImageDialog from '../image/ImageDialog';
@@ -55,8 +42,6 @@ import useModal from '../../../../hooks/useModal';
 const wrap = ({ left = '', right = '', editor }) => {
 	editor.update(() => {
 		const selection = $getSelection();
-
-		console.log('selection', selection);
 		if (!selection) return null;
 
 		let _left = {};
@@ -120,9 +105,6 @@ const ToolbarPlugin = () => {
 	const [isUnderline, setIsUnderline] = useState(false);
 	const [isStrikethrough, setIsStrikethrough] = useState(false);
 	const [isImage, setIsImage] = useState(false);
-	const [isCode, setIsCode] = useState(false);
-	const [openLinkEditor, setOpenLinkEditor] = useState(false);
-	const [isQuote, setIsQuote] = useState(false);
 	const [modal, showModal] = useModal();
 
 	const updateToolbar = useCallback(() => {
@@ -156,7 +138,6 @@ const ToolbarPlugin = () => {
 			setIsItalic(selection.hasFormat('italic'));
 			setIsUnderline(selection.hasFormat('underline'));
 			setIsStrikethrough(selection.hasFormat('strikethrough'));
-			setIsCode(selection.hasFormat('code'));
 			setIsRTL($isParentElementRTL(selection));
 
 			// Update links
@@ -177,8 +158,6 @@ const ToolbarPlugin = () => {
 
 		}
 	}, [editor]);
-
-	//console.log('isImage', isImage);
 
 	useEffect(() => {
 		return mergeRegister(
@@ -363,13 +342,6 @@ const ToolbarPlugin = () => {
 			</button>
 			<Divider />
 			<button
-				/*onClick={() =>
-				onClick({
-					altText: "Pink flowers",
-					src:
-					"https://images.pexels.com/photos/5656637/pexels-photo-5656637.jpeg?auto=compress&cs=tinysrgb&w=200"
-				})
-				}*/
 				onClick={() => {
 					showModal('Insert Image', (onClose, onOK) => (
 					  <ImageDialog

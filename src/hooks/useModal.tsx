@@ -7,10 +7,7 @@
  */
 
 import {useCallback, useMemo, useState} from 'react';
-import * as React from 'react';
-
-//import Modal from '../components/ui/Modal';
-import { Modal, Button } from '@contentful/f36-components';
+import { Modal } from '@contentful/f36-components';
 
 export default function useModal(): [
   JSX.Element | null,
@@ -27,49 +24,22 @@ export default function useModal(): [
     setModalContent(null);
   }, []);
 
-  const onOK = useCallback(() => {
-    //setOK((prev) => !prev);
-  }, []);
+  const onOK = useCallback(() => {}, []);
 
-  //console.log('zzzz', ok);
 
   const modal = useMemo(() => {
     if (modalContent === null) {
       return null;
     }
-    const {title, content, closeOnClickOutside} = modalContent;
-    /*return (
-      <Modal
-        onClose={onClose}
-        title={title}
-        closeOnClickOutside={closeOnClickOutside}>
-        {content}
-      </Modal>
-    );*/
+    const {title, content} = modalContent;
     return (
-      <Modal className="modal-image" onClose={onClose}  /*onClose={() => setShown(false)}*/ isShown={true}>
+      <Modal className="modal-image" onClose={onClose} isShown={true}>
       {() => (
         <>
-          <Modal.Header title={title} onClose={onClose} /*onClose={() => setShown(false)}*/ />
+          <Modal.Header title={title} onClose={onClose} />
           <Modal.Content>
             {content}
           </Modal.Content>
-          {/*<Modal.Controls>
-              <Button
-                size="small"
-                variant="transparent"
-                onClick={onClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                size="small"
-                variant="positive"
-                onClick={onOK}
-              >
-                OK
-              </Button>
-            </Modal.Controls>*/}
           </>
       )}
       

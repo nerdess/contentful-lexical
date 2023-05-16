@@ -1,21 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-	CAN_REDO_COMMAND,
-	CAN_UNDO_COMMAND,
-	REDO_COMMAND,
-	UNDO_COMMAND,
-	SELECTION_CHANGE_COMMAND,
-	FORMAT_TEXT_COMMAND,
-	FORMAT_ELEMENT_COMMAND,
 	$getSelection,
 	$isRangeSelection,
-	$createParagraphNode,
-	$getNodeByKey,
 } from 'lexical';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
-import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import { getSelectedNode } from '../../utils/getSelectedNode';
-import { LowPriority } from '../const';
 
 function positionEditorElement(editor, rect) {
 
@@ -33,24 +22,13 @@ function positionEditorElement(editor, rect) {
 }
 
 const FloatingLinkEditor = ({ 
-    editor,
-    //setOpen,
-    //open
+    editor
 }) => {
-
-    //const selection = $getSelection();
-    //console.log('ope12333', open);
-
-
 
 	const editorRef = useRef(null);
 	const inputRef = useRef(null);
 	const mouseDownRef = useRef(false);
-	//const [isEditMode, setEditMode] = useState(false);
 	const [lastSelection, setLastSelection] = useState(null);
-    //const [linkUrl, setLinkUrl] = useState({});
-	const [linkTarget, setLinkTarget] = useState('');
-    const [linkRel, setLinkRel] = useState('');
     const [link, setLink] = useState(null);
 
 	const updateLinkEditor = useCallback(() => {
@@ -110,32 +88,11 @@ const FloatingLinkEditor = ({
 		} else if (!activeElement || activeElement.className !== 'link-input') {
 			positionEditorElement(editorElem, null);
 			setLastSelection(null);
-			//setEditMode(false);
-			//setLinkUrl('');
             setLink(null)
 		}
 
 		return true;
 	}, [editor]);
-
-	/*useEffect(() => {
-		return mergeRegister(
-			editor.registerUpdateListener(({ editorState }) => {
-				editorState.read(() => {
-					updateLinkEditor();
-				});
-			}),
-
-			editor.registerCommand(
-				SELECTION_CHANGE_COMMAND,
-				() => {
-					updateLinkEditor();
-					return true;
-				},
-				LowPriority
-			)
-		);
-	}, [editor, updateLinkEditor]);*/
 
 	useEffect(() => {
 		editor.getEditorState().read(() => {
@@ -149,9 +106,6 @@ const FloatingLinkEditor = ({
 		}
 	}, []);
 
-
-    console.log('link', link);
-
 	return (
         <>
             <div ref={editorRef} className='link-editor'>
@@ -160,23 +114,15 @@ const FloatingLinkEditor = ({
                     type='text'
                     value={link?.url}
                     onChange={(event) => {
-                        //setLinkUrl(event.target.value);
                         setLink((link) => ({
                             ...link,
                             url: event.target.value,
-                        }));
-                    
+                        }));                   
                     }}
                     onKeyDown={(event) => {
                         if (event.key === 'Enter') {
                             event.preventDefault();
                             if (lastSelection !== null && link) {
-                             
-                                    /*editor.dispatchCommand(TOGGLE_LINK_COMMAND, {
-                                        url: linkUrl,
-                                        target: 'fooooo',
-                                        rel: target === '_blank' ? 'noopener noreferrer' : null,
-                                    });*/
 
                                     editor.dispatchCommand(TOGGLE_LINK_COMMAND, {
                                         ...link,
@@ -195,8 +141,6 @@ const FloatingLinkEditor = ({
                             type='checkbox'
                             checked={link?.target === '_blank'}
                             onChange={(event) => {
-
-                                console.log('event checked', event.target.checked);
 
                                 setLink((link) => ({
                                     ...link,

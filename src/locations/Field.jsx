@@ -1,24 +1,21 @@
-import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
-import RichTextEditor from '../components/RichTextEditor/RichTextEditor';
+import { useSDK } from '@contentful/react-apps-toolkit';
 import Lexical from '../components/Lexical/Lexical';
+import { cleanup } from '../components/Lexical/helper';
 
 const Field = (props) => {
 
 	const sdk = useSDK();
 	const window = sdk.window;
 
-
 	window.startAutoResizer();
- 
+
+	const initialValue = cleanup(sdk.field.getValue()) || '';
+
 	return <Lexical 
-		initialValue={sdk.field.getValue()}
+		initialValue={initialValue}
 		setValue={(value) => sdk.field.setValue(value)}
 	/>
 
-	/*return <RichTextEditor 
-				initialValue={sdk.field.getValue()}
-				setValue={(value) => sdk.field.setValue(value)}  
-	/>;*/
 };
 
 export default Field;

@@ -186,9 +186,6 @@ function FloatingLinkEditor({
 
   const handleLinkSubmission = () => {
 
-    console.log('handleLinkSubmission');
-
-
     if (lastSelection !== null) {
       if (linkUrl !== '') {
         editor.dispatchCommand(TOGGLE_LINK_COMMAND, {

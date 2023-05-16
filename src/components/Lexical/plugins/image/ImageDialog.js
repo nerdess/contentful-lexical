@@ -15,7 +15,6 @@ const ImageDialog = ({ editor, onClose, onOK }) => {
 	const isDisabled = src === '';
 
 	const addImage = (payload) => {
-    console.log('playload', payload);
 		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
     onClose();
 	};

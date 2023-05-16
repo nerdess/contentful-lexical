@@ -35,7 +35,6 @@ export class CustomParagraphNode extends ParagraphNode {
 
   exportDOM(editor) {
     
-    //const {element} = super.exportDOM(editor);
     const element = super.createDOM(editor._config, editor);
 
     element.removeAttribute('dir');
@@ -47,9 +46,4 @@ export class CustomParagraphNode extends ParagraphNode {
     };
   }
 
-  /*createDOM(config) {
-    const dom = super.createDOM(config);
-    dom.style = "background: green";
-    return dom;
-  }*/
 }

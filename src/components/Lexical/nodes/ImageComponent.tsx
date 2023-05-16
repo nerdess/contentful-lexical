@@ -121,9 +121,6 @@ export default function ImageComponent({
   const onDelete = useCallback(
     (payload: KeyboardEvent) => {
 
-      console.log('onDelete');
-
-
       if (isSelected && $isNodeSelection($getSelection())) {
         const event: KeyboardEvent = payload;
         event.preventDefault();
@@ -181,7 +178,6 @@ export default function ImageComponent({
         DRAGSTART_COMMAND,
         (event) => {
           if (event.target === imageRef.current) {
-            console.log('true', true);
             // TODO This is just a temporary workaround for FF to behave like other browsers.
             // Ideally, this handles drag & drop too (and all browsers).
             event.preventDefault();
