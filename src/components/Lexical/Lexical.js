@@ -53,11 +53,13 @@ const editorConfig = {
 		AutoLinkNode,
 		LinkNode,
 		ImageNode,
-		CustomParagraphNode,
 		CustomTextNode,
+		//ParagraphNode,
+		CustomParagraphNode,
 		{
 			replace: ParagraphNode,
 			with: (node) => {
+				//console.log('node....', node);
 				return new CustomParagraphNode();
 			},
 		},
@@ -127,6 +129,9 @@ const ContentEditableContainer = () => {
 };
 
 const Editor = ({ initialValue = '', setValue = () => {} }) => {
+
+	const initialChangeDone = useRef(false);	// To avoid to setValue on initial load so article stays as "published" in Contentful
+	
 	return (
 		<LexicalComposer initialConfig={editorConfig}>
 			<div className='editor-container'>
@@ -150,6 +155,7 @@ const Editor = ({ initialValue = '', setValue = () => {} }) => {
 					<InitialContentPlugin htmlString={initialValue} />
 					<OnChangePlugin
 						onChange={(editorState, editor) => {
+				
 							editor.update(() => {
 								const html = $generateHtmlFromNodes(editor, null);
 								let value = '';
@@ -158,8 +164,9 @@ const Editor = ({ initialValue = '', setValue = () => {} }) => {
 									value = html.replace(regex, '');
 								}
 								//console.log('html: ', value);
-								setValue(value);
+								initialChangeDone.current && setValue(value);
 							});
+							initialChangeDone.current = true;
 						}}
 					/>
 				</div>

@@ -7,14 +7,12 @@ import {
 	UNDO_COMMAND,
 	SELECTION_CHANGE_COMMAND,
 	FORMAT_TEXT_COMMAND,
+	FORMAT_ELEMENT_COMMAND,
 	$getSelection,
 	$isRangeSelection,
 	$setSelection,
 } from 'lexical';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
-import {
-	$isParentElementRTL,
-} from '@lexical/selection';
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
 	INSERT_ORDERED_LIST_COMMAND,
@@ -23,21 +21,20 @@ import {
 	$isListNode,
 	ListNode,
 } from '@lexical/list';
-import {
-	$isHeadingNode,
-} from '@lexical/rich-text';
-import {
-	$isCodeNode,
-	getDefaultCodeLanguage,
-} from '@lexical/code';
+import { $isHeadingNode } from '@lexical/rich-text';
 
 import { getSelectedNode } from '../utils/getSelectedNode';
 import { LowPriority } from './const';
 import { sanitizeUrl } from '../utils/url';
 import Divider from './divider/Divider';
-import { $isImageNode } from '../../nodes/ImageNode';
+
 import ImageDialog from '../image/ImageDialog';
 import useModal from '../../../../hooks/useModal';
+
+//import { $isCodeNode, getDefaultCodeLanguage } from '@lexical/code';
+//import { $isImageNode } from '../../nodes/ImageNode';
+//import { $isParentElementRTL } from '@lexical/selection';
+
 
 const wrap = ({ left = '', right = '', editor }) => {
 	editor.update(() => {
@@ -96,16 +93,16 @@ const ToolbarPlugin = () => {
 	const [canUndo, setCanUndo] = useState(false);
 	const [canRedo, setCanRedo] = useState(false);
 	const [blockType, setBlockType] = useState('paragraph');
-	const [selectedElementKey, setSelectedElementKey] = useState(null);
-	const [codeLanguage, setCodeLanguage] = useState('');
-	const [isRTL, setIsRTL] = useState(false);
 	const [isLink, setIsLink] = useState(false);
 	const [isBold, setIsBold] = useState(false);
 	const [isItalic, setIsItalic] = useState(false);
 	const [isUnderline, setIsUnderline] = useState(false);
 	const [isStrikethrough, setIsStrikethrough] = useState(false);
-	const [isImage, setIsImage] = useState(false);
 	const [modal, showModal] = useModal();
+	//const [selectedElementKey, setSelectedElementKey] = useState(null);
+	//const [codeLanguage, setCodeLanguage] = useState('');
+	//const [isRTL, setIsRTL] = useState(false);
+	//const [isImage, setIsImage] = useState(false);
 
 	const updateToolbar = useCallback(() => {
 		const selection = $getSelection();
@@ -118,7 +115,7 @@ const ToolbarPlugin = () => {
 			const elementKey = element.getKey();
 			const elementDOM = editor.getElementByKey(elementKey);
 			if (elementDOM !== null) {
-				setSelectedElementKey(elementKey);
+				//setSelectedElementKey(elementKey);
 				if ($isListNode(element)) {
 					const parentList = $getNearestNodeOfType(anchorNode, ListNode);
 					const type = parentList ? parentList.getTag() : element.getTag();
@@ -128,9 +125,9 @@ const ToolbarPlugin = () => {
 						? element.getTag()
 						: element.getType();
 					setBlockType(type);
-					if ($isCodeNode(element)) {
+					/*if ($isCodeNode(element)) {
 						setCodeLanguage(element.getLanguage() || getDefaultCodeLanguage());
-					}
+					}*/
 				}
 			}
 			// Update text format
@@ -138,7 +135,7 @@ const ToolbarPlugin = () => {
 			setIsItalic(selection.hasFormat('italic'));
 			setIsUnderline(selection.hasFormat('underline'));
 			setIsStrikethrough(selection.hasFormat('strikethrough'));
-			setIsRTL($isParentElementRTL(selection));
+			//setIsRTL($isParentElementRTL(selection));
 
 			// Update links
 			const node = getSelectedNode(selection);
@@ -150,12 +147,11 @@ const ToolbarPlugin = () => {
 				setIsLink(false);
 			}
 
-			if ($isImageNode(parent) || $isImageNode(node)) {
+			/*if ($isImageNode(parent) || $isImageNode(node)) {
 				setIsImage(true);
 			} else {
 				setIsImage(false);
-			}
-
+			}*/
 		}
 	}, [editor]);
 
@@ -193,22 +189,21 @@ const ToolbarPlugin = () => {
 		);
 	}, [editor, updateToolbar]);
 
-
 	const formatBulletList = () => {
-		if (blockType !== "ul") {
-		  editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND);
+		if (blockType !== 'ul') {
+			editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND);
 		} else {
-		  editor.dispatchCommand(REMOVE_LIST_COMMAND);
+			editor.dispatchCommand(REMOVE_LIST_COMMAND);
 		}
-	  };
-	
-	  const formatNumberedList = () => {
-		if (blockType !== "ol") {
-		  editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND);
+	};
+
+	const formatNumberedList = () => {
+		if (blockType !== 'ol') {
+			editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND);
 		} else {
-		  editor.dispatchCommand(REMOVE_LIST_COMMAND);
+			editor.dispatchCommand(REMOVE_LIST_COMMAND);
 		}
-	  };
+	};
 
 	const insertLink = useCallback(() => {
 		if (!isLink) {
@@ -217,7 +212,6 @@ const ToolbarPlugin = () => {
 			editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
 		}
 	}, [editor, isLink]);
-
 
 	return (
 		<div className='toolbar' ref={toolbarRef}>
@@ -287,19 +281,37 @@ const ToolbarPlugin = () => {
 			>
 				<i className='format ul' />
 			</button>
-			<button 
+			<button
 				className={`toolbar-item spaced ${blockType === 'ol' ? 'active' : ''}`}
 				onClick={formatNumberedList}
 			>
 				<i className='format ol' />
 			</button>
 			<Divider />
+				<button
+					className={`toolbar-item spaced`}
+					onClick={() => {
+						editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
+					}}
+				>
+					<i className='format left-align' />
+				</button>
+				<button
+					className={`toolbar-item spaced`}
+					onClick={() => {
+						editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
+					}}
+				>
+					<i className='format center-align' />
+				</button>
+			
+			<Divider />
 			<button
 				onClick={() => {
 					wrap({
 						left: '„',
 						right: '“',
-						editor
+						editor,
 					});
 				}}
 				className={'toolbar-item spaced ' /*+ (isLink ? 'active' : '')*/}
@@ -311,7 +323,7 @@ const ToolbarPlugin = () => {
 				onClick={() => {
 					wrap({
 						left: '–',
-						editor
+						editor,
 					});
 				}}
 				className={'toolbar-item spaced '}
@@ -324,7 +336,7 @@ const ToolbarPlugin = () => {
 				onClick={() => {
 					wrap({
 						left: '—',
-						editor
+						editor,
 					});
 				}}
 				className={'toolbar-item spaced '}
@@ -344,17 +356,13 @@ const ToolbarPlugin = () => {
 			<button
 				onClick={() => {
 					showModal('Insert Image', (onClose, onOK) => (
-					  <ImageDialog
-						editor={editor}
-						onClose={onClose}
-						onOK={onOK}
-					  />
+						<ImageDialog editor={editor} onClose={onClose} onOK={onOK} />
 					));
-				  }}
-				className={"toolbar-item spaced "}
-      		>
-        		<i className='format image' />
-      		</button>
+				}}
+				className={'toolbar-item spaced '}
+			>
+				<i className='format image' />
+			</button>
 			{modal}
 		</div>
 	);

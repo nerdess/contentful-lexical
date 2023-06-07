@@ -12,7 +12,6 @@ const ImageDialog = ({ editor, onClose, onOK }) => {
 	const [src, setSrc] = useState('');
 	const [title, setTitle] = useState('');
 	const [altText, setAltText] = useState('');
-	const isDisabled = src === '';
 
 	const addImage = (payload) => {
 		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);

@@ -33,17 +33,22 @@ export class CustomParagraphNode extends ParagraphNode {
     };
   }
 
-  exportDOM(editor) {
     
+  exportDOM(editor) {
+
     const element = super.createDOM(editor._config, editor);
+
+    //only apply style=text-align if it is not default (=left)
+    const formatType = this.getFormatType();
+    if (formatType !== 'left') element.style.textAlign = formatType;
 
     element.removeAttribute('dir');
     element.removeAttribute('class');
-    element.removeAttribute('style');
 
     return {
       element,
     };
   }
+  
 
 }

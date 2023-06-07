@@ -1,6 +1,4 @@
 import {
-	$isParentElementRTL,
-	$wrapNodes,
 	$isAtNodeEnd,
 } from '@lexical/selection';
 

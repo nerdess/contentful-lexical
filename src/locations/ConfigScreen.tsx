@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { AppExtensionSDK } from '@contentful/app-sdk';
 import { Heading, Form, Paragraph, Flex } from '@contentful/f36-components';
-import { css } from 'emotion';
 import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
 
 export interface AppInstallationParameters {}
@@ -57,7 +56,7 @@ const ConfigScreen = () => {
   }, [sdk]);
 
   return (
-    <Flex flexDirection="column" className={css({ margin: '80px', maxWidth: '800px' })}>
+    <Flex flexDirection="column" style={{ margin: '80px', maxWidth: '800px' }}>
       <Form>
         <Heading>Blog Post Metrics Config</Heading>
         <Paragraph>Welcome to your contentful app. This is your config page.</Paragraph>

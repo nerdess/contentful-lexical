@@ -11,14 +11,11 @@ import {
   $getNodeByKey,
   $getSelection,
   $isNodeSelection,
-  $setSelection,
   CLICK_COMMAND,
   COMMAND_PRIORITY_LOW,
   DRAGSTART_COMMAND,
   KEY_BACKSPACE_COMMAND,
   KEY_DELETE_COMMAND,
-  KEY_ENTER_COMMAND,
-  KEY_ESCAPE_COMMAND,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
 import {useLexicalNodeSelection} from '@lexical/react/useLexicalNodeSelection';
