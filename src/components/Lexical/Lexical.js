@@ -129,8 +129,6 @@ const ContentEditableContainer = () => {
 };
 
 const Editor = ({ initialValue = '', setValue = () => {} }) => {
-
-	const initialChangeDone = useRef(false);	// To avoid to setValue on initial load so article stays as "published" in Contentful
 	
 	return (
 		<LexicalComposer initialConfig={editorConfig}>
@@ -158,15 +156,16 @@ const Editor = ({ initialValue = '', setValue = () => {} }) => {
 				
 							editor.update(() => {
 								const html = $generateHtmlFromNodes(editor, null);
-								let value = '';
+								let newValue = '';
 
 								if (html !== '<p></p>') {
-									value = html.replace(regex, '');
+									newValue = html.replace(regex, '');
 								}
-								//console.log('html: ', value);
-								initialChangeDone.current && setValue(value);
+
+								setValue(newValue);
+
 							});
-							initialChangeDone.current = true;
+		
 						}}
 					/>
 				</div>
