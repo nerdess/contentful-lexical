@@ -20,7 +20,8 @@ const InitialContentPlugin = ({htmlString}) => {
 		// Once you have the DOM instance it's easy to generate LexicalNodes.
 		const nodes = $generateNodesFromDOM(editor, dom)
 			.map((node) => {
-				if (node.getType() === 'text') {
+
+				if (node.getType() === 'text' || node.getType() === 'custom-text') {
 					if (node.getTextContent().trim() === '') {
 						return null;
 					} else {
