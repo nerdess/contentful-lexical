@@ -18,8 +18,8 @@ import { $generateHtmlFromNodes } from '@lexical/html';
 import { ImageNode } from './nodes/ImageNode';
 import { CustomParagraphNode } from './nodes/CustomParagraphNode';
 import { CustomTextNode } from './nodes/CustomTextNode';
+import { CustomLinkNode } from './nodes/CustomLinkNode';
 
-//import TreeViewPlugin from './plugins/TreeViewPlugin';
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
@@ -33,14 +33,15 @@ import { Resizable } from 're-resizable';
 import { ParagraphNode, TextNode } from 'lexical';
 
 import './lexical.scss';
+import TreeViewPlugin from './plugins/TreeViewPlugin';
+import { Note, Stack, Box, Tooltip, Paragraph, Text } from '@contentful/f36-components';
+import {HelpCircleIcon} from '@contentful/f36-icons';
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
 }
 
-const regex = /<\/?span>/g;
-
-const editorConfig = {
+const initialConfig = {
 	theme,
 	// Handling of errors during update
 	onError(error) {
@@ -51,7 +52,7 @@ const editorConfig = {
 		ListNode,
 		ListItemNode,
 		AutoLinkNode,
-		LinkNode,
+		//LinkNode,
 		ImageNode,
 		CustomTextNode,
 		//ParagraphNode,
@@ -69,6 +70,40 @@ const editorConfig = {
 				return new CustomTextNode(node.__text);
 			},
 		},
+		CustomLinkNode,
+		{
+		  replace: LinkNode,
+		  with: (node) => {
+			//return new CustomLinkNode("https://google.com", { rel: "fdsfgds", target: "_blank" }, node.getKey());
+			return new CustomLinkNode(
+                node.getURL(),
+                {
+					target: node.getTarget(), 
+					rel: node.getRel(), 
+					title: node.getTitle()
+				},
+                node.getKey()
+              );
+		  },
+		},
+		/*{
+			replace: LinkNode,
+			with: (node) => {
+				return new CustomLinkNode(node.__text);
+			},
+		},*/
+		/*{
+            replace: LinkNode,
+            with: (node) => {
+              node.setTarget('_blank'); //maybe delete this and simply use "_blank" on target property of new node
+              return new LinkNode(
+                node.getURL(),
+                { target: '_blank', rel: node.getRel(), title: node.getTitle()},
+                undefined
+              );
+            },
+          },*/ 
+
 	],
 };
 
@@ -128,49 +163,85 @@ const ContentEditableContainer = () => {
 	);
 };
 
-const Editor = ({ initialValue = '', setValue = () => {} }) => {
+const Editor = ({ 
+	initialValue = '',
+	initalContentHasBeenTransformed = false,
+	setValue = () => {} 
+}) => {
 	
 	return (
-		<LexicalComposer initialConfig={editorConfig}>
-			<div className='editor-container'>
-				<ToolbarPlugin />
-				<div className='editor-inner'>
-					<RichTextPlugin
-						contentEditable={<ContentEditableContainer />}
-						placeholder={<Placeholder />}
-						ErrorBoundary={LexicalErrorBoundary}
-					/>
+		<Stack flexDirection="column" flex="0" spacing="spacingS">
+			{initalContentHasBeenTransformed && (
+				<Box style={{width: '100%'}}>
+					<Note variant="warning">
+						<Stack spacing="spacing2Xs" flexDirection="column" alignItems="start">
+							<Stack spacing="spacing2Xs">
+								<Text>Der Originaltext wurde vom WYSIWYG-Editor gesäubert.</Text>
+								<Text fontColor="red500">Bitte Text prüfen und erneut publishen!</Text>
+							</Stack>
+							<Tooltip 
+								content="Der WYSIWYG-Editor hat automatisch unnötige HTML-Tags entfernt. Der Inhalt selbst wurde nicht verändert, lediglich Sonderzeichen oder spezielle HTML-Entities wie &amp;nbsp; oder &amp;ndash; können Probleme bereiten und sollten jetzt manuell überprüft werden. Die verbesserte HTML-Struktur macht ein erneutes publishen notwendig."
+							>
+								<Text 
+									fontSize="fontSizeS"
+									style={{
+										textDecoration: 'underline',
+										textDecorationStyle: 'dashed',
+										textDecorationThickness: '0.5px',
+										textDecorationColor: 'gray'
+									}}
+								>
+									Was bedeutet das?
+								</Text>
+							</Tooltip>
+						</Stack>
+					</Note>
+				</Box>
+			)}
 
-					<HistoryPlugin />
-					{/*<TreeViewPlugin />*/}
-					<AutoFocusPlugin />
-					<ListPlugin />
-					<ClickableLinkPlugin />
-					<LinkPlugin />
-					<FloatingLinkEditorPlugin />
-					<ListMaxIndentLevelPlugin maxDepth={7} />
-					<ImagePlugin />
-					<InitialContentPlugin htmlString={initialValue} />
-					<OnChangePlugin
-						onChange={(editorState, editor) => {
-				
-							editor.update(() => {
-								const html = $generateHtmlFromNodes(editor, null);
-								let newValue = '';
+			<Box style={{width: '100%'}}>
+			<LexicalComposer initialConfig={initialConfig}>
+				<div className='editor-container'>
+					<ToolbarPlugin />
+					<div className='editor-inner'>
+						<RichTextPlugin
+							contentEditable={<ContentEditableContainer />}
+							placeholder={<Placeholder />}
+							ErrorBoundary={LexicalErrorBoundary}
+						/>
 
-								if (html !== '<p></p>') {
-									newValue = html.replace(regex, '');
-								}
+						<HistoryPlugin />
+						<TreeViewPlugin />
+						<AutoFocusPlugin />
+						<ListPlugin />
+						<ClickableLinkPlugin />
+						<LinkPlugin />
+						<FloatingLinkEditorPlugin />
+						<ListMaxIndentLevelPlugin maxDepth={7} />
+						<ImagePlugin />
+						{<InitialContentPlugin htmlString={initialValue} />}
+						<OnChangePlugin
+							onChange={(editorState, editor) => {
 
-								setValue(newValue);
+								console.log('onChange');
+					
+								editor.update(() => {
 
-							});
-		
-						}}
-					/>
+									console.log('editorState', editor);
+
+									const html = $generateHtmlFromNodes(editor, null);
+
+									setValue(html);
+
+								});
+			
+							}}
+						/>
+					</div>
 				</div>
-			</div>
-		</LexicalComposer>
+			</LexicalComposer>
+			</Box>
+		</Stack>
 	);
 };
 

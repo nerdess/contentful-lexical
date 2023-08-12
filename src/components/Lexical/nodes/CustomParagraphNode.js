@@ -47,6 +47,9 @@ export class CustomParagraphNode extends ParagraphNode {
 
     return {
       element,
+      /*after: (el) => {
+        return el;
+      }*/
     };
   }
   

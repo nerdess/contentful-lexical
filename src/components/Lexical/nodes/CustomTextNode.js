@@ -45,11 +45,12 @@ export class CustomTextNode extends TextNode {
 
     let element = super.createDOM(editor._config, editor);
 
+    element.removeAttribute('class');
+
+
     // This is the only way to properly add support for most clients,
     // even if it's semantically incorrect to have to resort to using
     // <b>, <u>, <s>, <i> elements.
-
-    element.removeAttribute('class');
     
     if (element !== null) {
       if (this.hasFormat('strikethrough')) {
@@ -62,9 +63,15 @@ export class CustomTextNode extends TextNode {
 
     return {
       element,
-      /*after: (element) => {
+      after: (element) => {
+
+        //remove those empty <span>tags created by lexical
+        if (element.tagName === 'SPAN' && element.attributes.length === 0) {
+          return element.innerHTML;
+        }
+  
         return element;
-      }*/
+      }
     };
   }
 

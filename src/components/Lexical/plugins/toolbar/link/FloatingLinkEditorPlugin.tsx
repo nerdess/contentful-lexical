@@ -46,19 +46,24 @@ function FloatingLinkEditor({
   const editorRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [linkUrl, setLinkUrl] = useState('');
-  const [linkOpenNewWindow, setLinkOpenNewWindow] = useState(false);
+  const [linkOpenNewWindow, setLinkOpenNewWindow] = useState(true);
   const [editedLinkUrl, setEditedLinkUrl] = useState('');
-  const [editedLinkOpenNewWindow, setEditedLinkOpenNewWindow] = useState(false);
+  const [editedLinkOpenNewWindow, setEditedLinkOpenNewWindow] = useState(true);
   const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState<
     RangeSelection | GridSelection | NodeSelection | null
   >(null);
+
+  //console.log('editedLinkOpenNewWindow', editedLinkOpenNewWindow, linkOpenNewWindow);
 
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       const node = getSelectedNode(selection);
       const parent = node.getParent();
+
+      //console.log('init', $isLinkNode(parent), parent.getTarget());
+
       if ($isLinkNode(parent)) {
         setLinkUrl(parent.getURL());
         setLinkOpenNewWindow(parent.getTarget() === '_blank');
@@ -66,6 +71,7 @@ function FloatingLinkEditor({
         setLinkUrl(node.getURL());
         setLinkOpenNewWindow(node.getTarget() === '_blank');
       } else {
+        //console.log('aaaa');
         setLinkUrl('');
         setLinkOpenNewWindow(false);
       }
@@ -217,6 +223,7 @@ function FloatingLinkEditor({
             <label>
               <input 
                 type="checkbox"
+                //defaultChecked={true}
                 checked={editedLinkOpenNewWindow}
                 onChange={(event) => {
                   setEditedLinkOpenNewWindow((prev) => !prev);
@@ -250,7 +257,7 @@ function FloatingLinkEditor({
           
           <div className="link-details">
             <a href={linkUrl} target="_blank" rel="noopener noreferrer">
-              {linkUrl}
+            {linkUrl}
             </a>
           </div>
 
