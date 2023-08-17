@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import Lexical from '../components/Lexical/Lexical';
 import useAutoResizer from '../hooks/useAutoResizer';
@@ -7,58 +7,37 @@ import { cleanup } from '../components/Lexical/helper';
 const Field = () => {
 
 	const sdk = useSDK();
-
-	const [isInitialised, setIsInitialised] = useState(false);
-	const [initalContentHasBeenTransformed, setInitalContentHasBeenTransformed] = useState(false);
-
-	//const initialValue = useRef(cleanup(sdk.field.getValue()));
-
-	const initialValue = cleanup(sdk.field.getValue());
-
-	console.log('initalContentHasBeenTransformed', initalContentHasBeenTransformed);
+	const countChanges = useRef(0);
+	const initialValue = sdk.field.getValue();
 
 	useAutoResizer();
 
 	return (
 		<Lexical
 			initialValue={initialValue}
-			initalContentHasBeenTransformed={initalContentHasBeenTransformed}
 			setValue={(value) => {
 
-				console.log('current value', sdk.field.getValue());
-				console.log('incoming value', value);
+				//setCountChanges((prev) => prev + 1);
+				countChanges.current = countChanges.current + 1;
 			
-
 				//incoming value is empty and current value is empty
 				if (value === '<p></p>' && (!sdk.field.getValue() || sdk.field.getValue() === '')) {
-					console.log('setting A');
-					setIsInitialised(true)
-				};
-
-				if (value === initialValue) {
-					console.log('setting B');
-					setIsInitialised(true)
+					//console.log('setting A');
 					return;
-				}
+				};
 
 				//incoming value is empty and current value is not empty
 				if (value === '<p></p>') {
-					setIsInitialised(true);
-					console.log('setting C')
-					//sdk.field.setValue();
+					//console.log('setting C')
+					sdk.field.setValue();
 					return;
 				}
 
-				//incoming value is different to current value
-				if (value !== sdk.field.getValue()) {
+				//it is not the initial value and incoming value is different to current value
+				if (countChanges.current > 1 && value !== sdk.field.getValue()) {
 					console.log('setting D');
-					//sdk.field.setValue(value);
-
-					if (!isInitialised) {
-						setInitalContentHasBeenTransformed(true);	
-					}
-
-					setIsInitialised(true);
+					sdk.field.setValue(value);
+					return;
 				}
 			}}
 		/>

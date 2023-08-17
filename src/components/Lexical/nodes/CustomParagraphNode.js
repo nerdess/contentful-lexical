@@ -17,14 +17,6 @@ export class CustomParagraphNode extends ParagraphNode {
   }
 
 
-  static importJSON(serializedNode){
-    const node = $createParagraphNode();
-    node.setFormat(serializedNode.format);
-    node.setIndent(serializedNode.indent);
-    node.setDirection(serializedNode.direction);
-    return node;
-  }
-
   exportJSON() {
     return {
       ...super.exportJSON(),

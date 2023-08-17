@@ -11,7 +11,8 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { ListItemNode, ListNode } from '@lexical/list';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
 
-import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+//import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { OnChangePlugin } from './plugins/LexicalOnChangePlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { $generateHtmlFromNodes } from '@lexical/html';
 
@@ -35,7 +36,6 @@ import { ParagraphNode, TextNode } from 'lexical';
 import './lexical.scss';
 import TreeViewPlugin from './plugins/TreeViewPlugin';
 import { Note, Stack, Box, Tooltip, Paragraph, Text } from '@contentful/f36-components';
-import {HelpCircleIcon} from '@contentful/f36-icons';
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
@@ -52,15 +52,12 @@ const initialConfig = {
 		ListNode,
 		ListItemNode,
 		AutoLinkNode,
-		//LinkNode,
 		ImageNode,
 		CustomTextNode,
-		//ParagraphNode,
 		CustomParagraphNode,
 		{
 			replace: ParagraphNode,
 			with: (node) => {
-				//console.log('node....', node);
 				return new CustomParagraphNode();
 			},
 		},
@@ -163,15 +160,17 @@ const ContentEditableContainer = () => {
 	);
 };
 
+
+
 const Editor = ({ 
 	initialValue = '',
-	initalContentHasBeenTransformed = false,
+	//initalContentHasBeenTransformed = false,
 	setValue = () => {} 
 }) => {
 	
 	return (
 		<Stack flexDirection="column" flex="0" spacing="spacingS">
-			{initalContentHasBeenTransformed && (
+			{/*initalContentHasBeenTransformed && (
 				<Box style={{width: '100%'}}>
 					<Note variant="warning">
 						<Stack spacing="spacing2Xs" flexDirection="column" alignItems="start">
@@ -180,7 +179,7 @@ const Editor = ({
 								<Text fontColor="red500">Bitte Text prüfen und erneut publishen!</Text>
 							</Stack>
 							<Tooltip 
-								content="Der WYSIWYG-Editor hat automatisch unnötige HTML-Tags entfernt. Der Inhalt selbst wurde nicht verändert, lediglich Sonderzeichen oder spezielle HTML-Entities wie &amp;nbsp; oder &amp;ndash; können Probleme bereiten und sollten jetzt manuell überprüft werden. Die verbesserte HTML-Struktur macht ein erneutes publishen notwendig."
+								content="Der WYSIWYG-Editor hat automatisch unnötige HTML-Tags entfernt. Der Inhalt selbst wurde nicht verändert, lediglich Sonderzeichen oder spezielle HTML-Entities wie &amp;nbsp; oder &amp;ndash; können Probleme bereiten und sollten jetzt manuell überprüft werden. Die verbesserte HTML-Struktur macht ein erneutes Publishen notwendig."
 							>
 								<Text 
 									fontSize="fontSizeS"
@@ -197,7 +196,7 @@ const Editor = ({
 						</Stack>
 					</Note>
 				</Box>
-			)}
+			)*/}
 
 			<Box style={{width: '100%'}}>
 			<LexicalComposer initialConfig={initialConfig}>
@@ -221,16 +220,10 @@ const Editor = ({
 						<ImagePlugin />
 						{<InitialContentPlugin htmlString={initialValue} />}
 						<OnChangePlugin
+							ignoreNonChanges={true}
 							onChange={(editorState, editor) => {
-
-								console.log('onChange');
-					
 								editor.update(() => {
-
-									console.log('editorState', editor);
-
 									const html = $generateHtmlFromNodes(editor, null);
-
 									setValue(html);
 
 								});

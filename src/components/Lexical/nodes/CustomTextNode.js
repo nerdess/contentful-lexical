@@ -16,7 +16,7 @@ export class CustomTextNode extends TextNode {
         return new CustomTextNode(node.__text);
     }
 
-    static importJSON(serializedNode) {
+    /*static importJSON(serializedNode) {
       const node = $createTextNode(serializedNode.text);
       node.setFormat(serializedNode.format);
       node.setDetail(serializedNode.detail);
@@ -35,7 +35,7 @@ export class CustomTextNode extends TextNode {
         type: 'custom-text',
         version: 1,
       };
-    }
+    }*/
 
 
   // This improves Lexical's basic text output in copy+paste plus
@@ -67,7 +67,7 @@ export class CustomTextNode extends TextNode {
 
         //remove those empty <span>tags created by lexical
         if (element.tagName === 'SPAN' && element.attributes.length === 0) {
-          return element.innerHTML;
+          return element.textContent;
         }
   
         return element;
