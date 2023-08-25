@@ -616,7 +616,8 @@ body {
     background-image: url(../../images/icons/arrow-clockwise.svg);
   }
   
-  .icon.paragraph {
+  .icon.paragraph,
+  .icon.custom-paragraph {
     background-image: url(../../images/icons/text-paragraph.svg);
   }
   
@@ -632,12 +633,14 @@ body {
   
   .icon.bullet-list,
   .icon.ul,
+  .icon.block-type.bullet,
   i.ul {
     background-image: url(../../images/icons/list-ul.svg);
   }
   
   .icon.numbered-list,
   .icon.ol,
+  .icon.block-type.number,
   i.ol {
     background-image: url(../../images/icons/list-ol.svg);
   }
@@ -744,4 +747,14 @@ html .modal-image {
     margin: 1px auto;
     width: 20px;
   }
+}
+
+// custom headings
+.ts-tpm-h2 {
+  color: #E30A18;
+  text-transform: uppercase;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 4px;
+  font-weight: bold;
 }

@@ -1,0 +1,12 @@
+.dropdown {
+	& &-header {
+        font-weight: bold;
+	}
+
+    & hr {
+        height: 1px;
+        border: 0;
+        height: 0;
+        border-top: 1px solid #eee;
+    } 
+}

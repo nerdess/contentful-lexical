@@ -16,7 +16,7 @@ export class CustomTextNode extends TextNode {
         return new CustomTextNode(node.__text);
     }
 
-    /*static importJSON(serializedNode) {
+    static importJSON(serializedNode) {
       const node = $createTextNode(serializedNode.text);
       node.setFormat(serializedNode.format);
       node.setDetail(serializedNode.detail);
@@ -35,7 +35,7 @@ export class CustomTextNode extends TextNode {
         type: 'custom-text',
         version: 1,
       };
-    }*/
+    }
 
 
   // This improves Lexical's basic text output in copy+paste plus
@@ -47,12 +47,17 @@ export class CustomTextNode extends TextNode {
 
     element.removeAttribute('class');
 
-
     // This is the only way to properly add support for most clients,
     // even if it's semantically incorrect to have to resort to using
     // <b>, <u>, <s>, <i> elements.
     
     if (element !== null) {
+      /*if (this.hasFormat('bold')) {
+        element = wrapElementWith(element, 'b');
+      }*/
+      if (this.hasFormat('italic')) {
+        element = wrapElementWith(element, 'i');
+      }
       if (this.hasFormat('strikethrough')) {
         element = wrapElementWith(element, 's');
       }
@@ -60,6 +65,7 @@ export class CustomTextNode extends TextNode {
         element = wrapElementWith(element, 'u');
       }
     }
+
 
     return {
       element,

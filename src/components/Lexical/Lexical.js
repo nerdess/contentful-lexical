@@ -28,14 +28,12 @@ import FloatingLinkEditorPlugin from './plugins/toolbar/link/FloatingLinkEditorP
 import LinkPlugin from './plugins/toolbar/link/LinkPlugin';
 import ImagePlugin from './plugins/ImagePlugin.ts';
 import InitialContentPlugin from './plugins/InitialContentPlugin';
-
 import { Resizable } from 're-resizable';
-
 import { ParagraphNode, TextNode } from 'lexical';
-
-import './lexical.scss';
 import TreeViewPlugin from './plugins/TreeViewPlugin';
-import { Note, Stack, Box, Tooltip, Paragraph, Text } from '@contentful/f36-components';
+import { Stack, Box } from '@contentful/f36-components';
+import {HeadingNode, QuoteNode} from '@lexical/rich-text';
+import './lexical.scss';
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
@@ -49,11 +47,19 @@ const initialConfig = {
 	},
 	// Any custom nodes go here
 	nodes: [
+		HeadingNode,
 		ListNode,
 		ListItemNode,
 		AutoLinkNode,
 		ImageNode,
-		CustomTextNode,
+		HeadingNode,
+		/*CustomHeadingNode,
+		{
+			replace: HeadingNode,
+			with: (node) => {
+				return new CustomHeadingNode();
+			},
+		},*/
 		CustomParagraphNode,
 		{
 			replace: ParagraphNode,
@@ -61,6 +67,7 @@ const initialConfig = {
 				return new CustomParagraphNode();
 			},
 		},
+		CustomTextNode,
 		{
 			replace: TextNode,
 			with: (node) => {

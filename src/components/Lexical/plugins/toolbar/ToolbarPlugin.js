@@ -8,6 +8,7 @@ import {
 	SELECTION_CHANGE_COMMAND,
 	FORMAT_TEXT_COMMAND,
 	FORMAT_ELEMENT_COMMAND,
+	COMMAND_PRIORITY_CRITICAL,
 	$getSelection,
 	$isRangeSelection,
 	$setSelection,
@@ -21,7 +22,9 @@ import {
 	$isListNode,
 	ListNode,
 } from '@lexical/list';
-import { $isHeadingNode } from '@lexical/rich-text';
+//import { $isHeadingNode } from '@lexical/rich-text';
+import {$isHeadingNode} from '@lexical/rich-text';
+//import { $isHeadingNode} from '../../nodes/CustomHeadingNode';
 
 import { getSelectedNode } from '../utils/getSelectedNode';
 import { LowPriority } from './const';
@@ -34,6 +37,9 @@ import useModal from '../../../../hooks/useModal';
 //import { $isCodeNode, getDefaultCodeLanguage } from '@lexical/code';
 //import { $isImageNode } from '../../nodes/ImageNode';
 //import { $isParentElementRTL } from '@lexical/selection';
+
+import BlockFormatDropDown from './formatsDropdown/formatsDropdown';
+import { blockTypeToBlockName} from './formatsDropdown/const';
 
 
 const wrap = ({ left = '', right = '', editor }) => {
@@ -99,12 +105,16 @@ const ToolbarPlugin = () => {
 	const [isUnderline, setIsUnderline] = useState(false);
 	const [isStrikethrough, setIsStrikethrough] = useState(false);
 	const [modal, showModal] = useModal();
-	//const [selectedElementKey, setSelectedElementKey] = useState(null);
+	const [isEditable, setIsEditable] = useState(() => editor.isEditable());
+	const [activeEditor, setActiveEditor] = useState(editor);
+	const [selectedElementKey, setSelectedElementKey] = useState(null);
+	const [rootType, setRootType] = useState('root');
 	//const [codeLanguage, setCodeLanguage] = useState('');
 	//const [isRTL, setIsRTL] = useState(false);
 	//const [isImage, setIsImage] = useState(false);
 
-	const updateToolbar = useCallback(() => {
+
+	const $updateToolbar = useCallback(() => {
 		const selection = $getSelection();
 		if ($isRangeSelection(selection)) {
 			const anchorNode = selection.anchor.getNode();
@@ -147,6 +157,36 @@ const ToolbarPlugin = () => {
 				setIsLink(false);
 			}
 
+			if (elementDOM !== null) {
+				setSelectedElementKey(elementKey);
+				if ($isListNode(element)) {
+				  const parentList = $getNearestNodeOfType(
+					anchorNode,
+					ListNode,
+				  );
+				  const type = parentList
+					? parentList.getListType()
+					: element.getListType();
+				  setBlockType(type);
+				} else {
+
+				  const type = $isHeadingNode(element)
+					? element.getTag()
+					: element.getType();
+				  if (type in blockTypeToBlockName) {
+					setBlockType(type);
+				  }
+				  /*if ($isCodeNode(element)) {
+					const language =
+					  element.getLanguage();
+					setCodeLanguage(
+					  language ? CODE_LANGUAGE_MAP[language] || language : '',
+					);
+					return;
+				  }*/
+				}
+			  }
+
 			/*if ($isImageNode(parent) || $isImageNode(node)) {
 				setIsImage(true);
 			} else {
@@ -159,13 +199,13 @@ const ToolbarPlugin = () => {
 		return mergeRegister(
 			editor.registerUpdateListener(({ editorState }) => {
 				editorState.read(() => {
-					updateToolbar();
+					$updateToolbar();
 				});
 			}),
 			editor.registerCommand(
 				SELECTION_CHANGE_COMMAND,
 				(_payload, newEditor) => {
-					updateToolbar();
+					$updateToolbar();
 					return false;
 				},
 				LowPriority
@@ -187,7 +227,49 @@ const ToolbarPlugin = () => {
 				LowPriority
 			)
 		);
-	}, [editor, updateToolbar]);
+	}, [editor, $updateToolbar]);
+
+
+	useEffect(() => {
+		return editor.registerCommand(
+		  SELECTION_CHANGE_COMMAND,
+		  (_payload, newEditor) => {
+			$updateToolbar();
+			setActiveEditor(newEditor);
+			return false;
+		  },
+		  COMMAND_PRIORITY_CRITICAL,
+		);
+	  }, [editor, $updateToolbar]);
+
+	useEffect(() => {
+		return mergeRegister(
+		  editor.registerEditableListener((editable) => {
+			setIsEditable(editable);
+		  }),
+		  activeEditor.registerUpdateListener(({editorState}) => {
+			editorState.read(() => {
+			  $updateToolbar();
+			});
+		  }),
+		  activeEditor.registerCommand(
+			CAN_UNDO_COMMAND,
+			(payload) => {
+			  setCanUndo(payload);
+			  return false;
+			},
+			COMMAND_PRIORITY_CRITICAL,
+		  ),
+		  activeEditor.registerCommand(
+			CAN_REDO_COMMAND,
+			(payload) => {
+			  setCanRedo(payload);
+			  return false;
+			},
+			COMMAND_PRIORITY_CRITICAL,
+		  ),
+		);
+	  }, [$updateToolbar, activeEditor, editor]);
 
 	const formatBulletList = () => {
 		if (blockType !== 'ul') {
@@ -238,6 +320,15 @@ const ToolbarPlugin = () => {
 
 			<Divider />
 
+			<BlockFormatDropDown
+				disabled={!isEditable}
+				blockType={blockType}
+				rootType={rootType}
+				editor={editor}
+          	/>
+
+			<Divider />
+
 			<button
 				onClick={() => {
 					editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
@@ -274,7 +365,7 @@ const ToolbarPlugin = () => {
 			>
 				<i className='format strikethrough' />
 			</button>
-			<Divider />
+			{/*<Divider />
 			<button
 				className={`toolbar-item spaced ${blockType === 'ul' ? 'active' : ''}`}
 				onClick={formatBulletList}
@@ -286,7 +377,7 @@ const ToolbarPlugin = () => {
 				onClick={formatNumberedList}
 			>
 				<i className='format ol' />
-			</button>
+			</button>*/}
 			<Divider />
 				<button
 					className={`toolbar-item spaced`}

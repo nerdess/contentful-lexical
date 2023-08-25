@@ -16,12 +16,27 @@ import {
   } from 'react';
   import * as React from 'react';
   import {createPortal} from 'react-dom';
+  import './DropDown.scss';
   
   type DropDownContextType = {
     registerItem: (ref: React.RefObject<HTMLButtonElement>) => void;
   };
   
   const DropDownContext = React.createContext<DropDownContextType | null>(null);
+
+  export function DropDownHeader({
+    children
+  } : {
+    children: React.ReactNode;
+  }) {
+
+    return (
+      <div className="item dropdown-header">
+        {children}
+      </div>
+    );
+
+  }
   
   export function DropDownItem({
     children,
