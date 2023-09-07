@@ -32,8 +32,10 @@ import { Resizable } from 're-resizable';
 import { ParagraphNode, TextNode } from 'lexical';
 import TreeViewPlugin from './plugins/TreeViewPlugin';
 import { Stack, Box } from '@contentful/f36-components';
-import {HeadingNode, QuoteNode} from '@lexical/rich-text';
+import { HeadingNode, QuoteNode } from '@lexical/rich-text';
+import { CharacterCountPlugin } from './plugins/CharacterCountPlugin';
 import './lexical.scss';
+//import { CustomHeadingNode } from './nodes/stub.CustomHeadingNode';
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
@@ -53,8 +55,8 @@ const initialConfig = {
 		AutoLinkNode,
 		ImageNode,
 		HeadingNode,
-		/*CustomHeadingNode,
-		{
+		//CustomHeadingNode,
+		/*{
 			replace: HeadingNode,
 			with: (node) => {
 				return new CustomHeadingNode();
@@ -76,19 +78,19 @@ const initialConfig = {
 		},
 		CustomLinkNode,
 		{
-		  replace: LinkNode,
-		  with: (node) => {
-			//return new CustomLinkNode("https://google.com", { rel: "fdsfgds", target: "_blank" }, node.getKey());
-			return new CustomLinkNode(
-                node.getURL(),
-                {
-					target: node.getTarget(), 
-					rel: node.getRel(), 
-					title: node.getTitle()
-				},
-                node.getKey()
-              );
-		  },
+			replace: LinkNode,
+			with: (node) => {
+				//return new CustomLinkNode("https://google.com", { rel: "fdsfgds", target: "_blank" }, node.getKey());
+				return new CustomLinkNode(
+					node.getURL(),
+					{
+						target: node.getTarget(),
+						rel: node.getRel(),
+						title: node.getTitle(),
+					},
+					node.getKey()
+				);
+			},
 		},
 		/*{
 			replace: LinkNode,
@@ -106,8 +108,7 @@ const initialConfig = {
                 undefined
               );
             },
-          },*/ 
-
+          },*/
 	],
 };
 
@@ -120,7 +121,6 @@ const BottomRightHandle = () => (
 );
 
 const ContentEditableContainer = () => {
-
 	const [height, setHeight] = useState(320);
 	const ref = useRef(null);
 
@@ -146,15 +146,15 @@ const ContentEditableContainer = () => {
 				}}
 				handleStyles={{
 					bottom: {
-						bottom: -10
-					}
+						bottom: -10,
+					},
 				}}
 				onResize={() => setHeight(ref.current.clientHeight)}
 				style={{
-					marginBottom: 10
+					marginBottom: 10,
 				}}
 			>
-				<div 
+				<div
 					style={{
 						overflow: 'auto',
 						height,
@@ -167,16 +167,13 @@ const ContentEditableContainer = () => {
 	);
 };
 
-
-
-const Editor = ({ 
+const Editor = ({
 	initialValue = '',
 	//initalContentHasBeenTransformed = false,
-	setValue = () => {} 
+	setValue = () => {},
 }) => {
-	
 	return (
-		<Stack flexDirection="column" flex="0" spacing="spacingS">
+		<Stack flexDirection='column' flex='0' spacing='spacingS'>
 			{/*initalContentHasBeenTransformed && (
 				<Box style={{width: '100%'}}>
 					<Note variant="warning">
@@ -205,41 +202,46 @@ const Editor = ({
 				</Box>
 			)*/}
 
-			<Box style={{width: '100%'}}>
-			<LexicalComposer initialConfig={initialConfig}>
-				<div className='editor-container'>
-					<ToolbarPlugin />
-					<div className='editor-inner'>
-						<RichTextPlugin
-							contentEditable={<ContentEditableContainer />}
-							placeholder={<Placeholder />}
-							ErrorBoundary={LexicalErrorBoundary}
-						/>
+			<Box style={{ width: '100%' }}>
+				<LexicalComposer initialConfig={initialConfig}>
+					<Stack flexDirection='column' spacing='spacing2Xs' alignItems='end'>
+						<Box style={{width: '100%'}}>
+							<div className='editor-container'>
+								<ToolbarPlugin />
+								<div className='editor-inner'>
+									<RichTextPlugin
+										contentEditable={<ContentEditableContainer />}
+										placeholder={<Placeholder />}
+										ErrorBoundary={LexicalErrorBoundary}
+									/>
 
-						<HistoryPlugin />
-						<TreeViewPlugin />
-						<AutoFocusPlugin />
-						<ListPlugin />
-						<ClickableLinkPlugin />
-						<LinkPlugin />
-						<FloatingLinkEditorPlugin />
-						<ListMaxIndentLevelPlugin maxDepth={7} />
-						<ImagePlugin />
-						{<InitialContentPlugin htmlString={initialValue} />}
-						<OnChangePlugin
-							ignoreNonChanges={true}
-							onChange={(editorState, editor) => {
-								editor.update(() => {
-									const html = $generateHtmlFromNodes(editor, null);
-									setValue(html);
-
-								});
-			
-							}}
-						/>
-					</div>
-				</div>
-			</LexicalComposer>
+									<HistoryPlugin />
+									{/*<TreeViewPlugin />*/}
+									<AutoFocusPlugin />
+									<ListPlugin />
+									<ClickableLinkPlugin />
+									<LinkPlugin />
+									<FloatingLinkEditorPlugin />
+									<ListMaxIndentLevelPlugin maxDepth={7} />
+									<ImagePlugin />
+									{<InitialContentPlugin htmlString={initialValue} />}
+									<OnChangePlugin
+										ignoreNonChanges={true}
+										onChange={(editorState, editor) => {
+											editor.update(() => {
+												const html = $generateHtmlFromNodes(editor, null);
+												setValue(html);
+											});
+										}}
+									/>
+								</div>
+							</div>
+						</Box>
+						<Box>
+							<CharacterCountPlugin maxLength={100} />
+						</Box>
+					</Stack>
+				</LexicalComposer>
 			</Box>
 		</Stack>
 	);
