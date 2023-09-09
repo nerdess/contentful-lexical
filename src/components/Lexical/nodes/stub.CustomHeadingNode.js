@@ -5,7 +5,7 @@ note to self: might be of use one day when more than one custom h2 is needed
 */
 
 
-import {HeadingNode, QuoteNode} from '@lexical/rich-text';
+import {HeadingNode} from '@lexical/rich-text';
 import { 
     //ParagraphNode, 
     $applyNodeReplacement 
@@ -43,7 +43,6 @@ import {
   
       element.removeAttribute('dir');
       element.removeAttribute('class');*/
-      console.log('!!!!!!!!!!!!!');
   
       return {
         element,

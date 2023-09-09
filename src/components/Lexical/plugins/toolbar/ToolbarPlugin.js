@@ -25,6 +25,7 @@ import {
 //import { $isHeadingNode } from '@lexical/rich-text';
 import {$isHeadingNode} from '@lexical/rich-text';
 //import { $isHeadingNode} from '../../nodes/CustomHeadingNode';
+import { Modal } from '@contentful/f36-components';
 
 import { getSelectedNode } from '../utils/getSelectedNode';
 import { LowPriority } from './const';
@@ -40,6 +41,7 @@ import useModal from '../../../../hooks/useModal';
 
 import BlockFormatDropDown from './formatsDropdown/formatsDropdown';
 import { blockTypeToBlockName} from './formatsDropdown/const';
+import { useSDK } from '@contentful/react-apps-toolkit';
 
 
 const wrap = ({ left = '', right = '', editor }) => {
@@ -112,6 +114,8 @@ const ToolbarPlugin = () => {
 	//const [codeLanguage, setCodeLanguage] = useState('');
 	//const [isRTL, setIsRTL] = useState(false);
 	//const [isImage, setIsImage] = useState(false);
+
+	const sdk = useSDK();
 
 
 	const $updateToolbar = useCallback(() => {
@@ -271,7 +275,7 @@ const ToolbarPlugin = () => {
 		);
 	  }, [$updateToolbar, activeEditor, editor]);
 
-	const formatBulletList = () => {
+	/*const formatBulletList = () => {
 		if (blockType !== 'ul') {
 			editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND);
 		} else {
@@ -285,7 +289,7 @@ const ToolbarPlugin = () => {
 		} else {
 			editor.dispatchCommand(REMOVE_LIST_COMMAND);
 		}
-	};
+	};*/
 
 	const insertLink = useCallback(() => {
 		if (!isLink) {

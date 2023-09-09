@@ -54,15 +54,11 @@ function FloatingLinkEditor({
     RangeSelection | GridSelection | NodeSelection | null
   >(null);
 
-  //console.log('editedLinkOpenNewWindow', editedLinkOpenNewWindow, linkOpenNewWindow);
-
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       const node = getSelectedNode(selection);
       const parent = node.getParent();
-
-      //console.log('init', $isLinkNode(parent), parent.getTarget());
 
       if ($isLinkNode(parent)) {
         setLinkUrl(parent.getURL());
@@ -71,7 +67,6 @@ function FloatingLinkEditor({
         setLinkUrl(node.getURL());
         setLinkOpenNewWindow(node.getTarget() === '_blank');
       } else {
-        //console.log('aaaa');
         setLinkUrl('');
         setLinkOpenNewWindow(false);
       }

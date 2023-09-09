@@ -11,9 +11,10 @@ export function CharacterCountPlugin() {
 
   const [editor] = useLexicalComposerContext();
   const [characterCount, setCharacterCount] = useState(0);
+
+  //todo: use this to count html characters
   //const [htmlCount, setHtmlCount] = useState(0);
   //const htmlCount = (sdk.field.getValue() || '').length;
-  //console.log('htmlCount', htmlCount);
 
   useEffect(() => {
 
