@@ -1,10 +1,10 @@
 import { TextNode, $createTextNode } from "lexical";
 
-function wrapElementWith(element, tag) {
+/*function wrapElementWith(element, tag) {
     const el = document.createElement(tag);
     el.appendChild(element);
     return el;
-}
+}*/
 
 export class CustomTextNode extends TextNode {
 
@@ -51,11 +51,12 @@ export class CustomTextNode extends TextNode {
     // even if it's semantically incorrect to have to resort to using
     // <b>, <u>, <s>, <i> elements.
     
-    if (element !== null) {
-      /*if (this.hasFormat('bold')) {
-        element = wrapElementWith(element, 'b');
-      }*/
+    /*if (element !== null) {
+      if (this.hasFormat('bold')) {
+        //element = wrapElementWith(element, 'b');
+      }
       if (this.hasFormat('italic')) {
+        console.log('element', element);
         element = wrapElementWith(element, 'i');
       }
       if (this.hasFormat('strikethrough')) {
@@ -64,7 +65,7 @@ export class CustomTextNode extends TextNode {
       if (this.hasFormat('underline')) {
         element = wrapElementWith(element, 'u');
       }
-    }
+    }*/
 
 
     return {

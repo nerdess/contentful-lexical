@@ -11,7 +11,7 @@ import { Modal } from '@contentful/f36-components';
 
 export default function useModal(): [
   JSX.Element | null,
-  (title: string, showModal: (onClose: () => void) => JSX.Element) => void,
+  (title: string, showModal: (onClose: () => void, onOK: () => void) => JSX.Element) => void,
 ] {
 
   const [modalContent, setModalContent] = useState<null | {

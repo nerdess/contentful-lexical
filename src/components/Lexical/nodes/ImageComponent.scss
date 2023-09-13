@@ -1,0 +1,26 @@
+.image-component {
+
+    //position: relative;
+
+    & img.focused {
+        outline: 2px solid rgb(60, 132, 244);
+        user-select: none;
+        position: relative;
+
+
+        &.draggable {
+            cursor: grab;
+
+            &:active {
+                cursor: grabbing;
+            }
+        }
+    }
+
+    &-tools {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+    }
+}
+

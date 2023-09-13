@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import theme from '../../themes/defaultTheme';
 
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
@@ -26,7 +26,7 @@ import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
 import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 import FloatingLinkEditorPlugin from './plugins/toolbar/link/FloatingLinkEditorPlugin';
 import LinkPlugin from './plugins/toolbar/link/LinkPlugin';
-import ImagePlugin from './plugins/ImagePlugin.ts';
+import ImagePlugin from './plugins/image/ImagePlugin';
 import InitialContentPlugin from './plugins/InitialContentPlugin';
 import { Resizable } from 're-resizable';
 import { ParagraphNode, TextNode } from 'lexical';
@@ -34,8 +34,11 @@ import TreeViewPlugin from './plugins/TreeViewPlugin';
 import { Stack, Box } from '@contentful/f36-components';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import { CharacterCountPlugin } from './plugins/CharacterCountPlugin';
+import {useLexicalNodeSelection} from '@lexical/react/useLexicalNodeSelection';
+import CopyPasteEnhancementPlugin from './plugins/CopyPasteEnhancementPlugin';
 import './lexical.scss';
 //import { CustomHeadingNode } from './nodes/stub.CustomHeadingNode';
+
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
@@ -81,6 +84,7 @@ const initialConfig = {
 			replace: LinkNode,
 			with: (node) => {
 				//return new CustomLinkNode("https://google.com", { rel: "fdsfgds", target: "_blank" }, node.getKey());
+
 				return new CustomLinkNode(
 					node.getURL(),
 					{
@@ -111,6 +115,8 @@ const initialConfig = {
           },*/
 	],
 };
+
+
 
 const BottomRightHandle = () => (
 	<div className='editor-resize-handle'>
@@ -156,6 +162,7 @@ const ContentEditableContainer = () => {
 			>
 				<div
 					style={{
+						display: 'flex',
 						overflow: 'auto',
 						height,
 					}}
@@ -172,6 +179,8 @@ const Editor = ({
 	//initalContentHasBeenTransformed = false,
 	setValue = () => {},
 }) => {
+
+
 	return (
 		<Stack flexDirection='column' flex='0' spacing='spacingS'>
 			{/*initalContentHasBeenTransformed && (
@@ -208,7 +217,7 @@ const Editor = ({
 						<Box style={{width: '100%'}}>
 							<div className='editor-container'>
 								<ToolbarPlugin />
-								<div className='editor-inner'>
+								<div className="editor-inner">
 									<RichTextPlugin
 										contentEditable={<ContentEditableContainer />}
 										placeholder={<Placeholder />}
@@ -216,10 +225,9 @@ const Editor = ({
 									/>
 
 									<HistoryPlugin />
-									{/*<TreeViewPlugin />*/}
-									<AutoFocusPlugin />
+									<TreeViewPlugin />
+									{/*<AutoFocusPlugin/>*/}
 									<ListPlugin />
-									<ClickableLinkPlugin />
 									<LinkPlugin />
 									<FloatingLinkEditorPlugin />
 									<ListMaxIndentLevelPlugin maxDepth={7} />
@@ -230,10 +238,12 @@ const Editor = ({
 										onChange={(editorState, editor) => {
 											editor.update(() => {
 												const html = $generateHtmlFromNodes(editor, null);
+												//console.log('html', html)
 												setValue(html);
 											});
 										}}
 									/>
+									<CopyPasteEnhancementPlugin />
 								</div>
 							</div>
 						</Box>

@@ -5,17 +5,33 @@ import {
 	FormControl,
 	Button,
 } from '@contentful/f36-components';
-import { INSERT_IMAGE_COMMAND } from '../ImagePlugin';
+import { 
+	INSERT_IMAGE_COMMAND
+ } from './ImagePlugin';
+ import { $isImageNode } from '../../nodes/ImageNode';
+ import { $getNodeByKey } from 'lexical';
 
-const ImageDialog = ({ editor, onClose, onOK }) => {
+const ImageDialog = ({ editor, onClose, onOK, mode, nodeKey, image = {} }) => {
 
-	const [src, setSrc] = useState('');
-	const [title, setTitle] = useState('');
-	const [altText, setAltText] = useState('');
+	const [src, setSrc] = useState(image.src || '');
+	const [title, setTitle] = useState(image.title || '');
+	const [altText, setAltText] = useState(image.altText || '');
 
 	const addImage = (payload) => {
 		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
-    onClose();
+    	onClose();
+	};
+
+	const editImage = (payload) => {
+		editor.update(() => {
+			const node = $getNodeByKey(nodeKey);
+			if ($isImageNode(node)) {
+			node.remove();
+			}
+		});
+		
+		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
+    	onClose();
 	};
 
 	return (
@@ -29,12 +45,6 @@ const ImageDialog = ({ editor, onClose, onOK }) => {
 					placeholder='http://images.ctfassets.net/...'
 					onChange={(e) => setSrc(e.target.value)}
 				/>
-				{/*<FormControl.HelpText>Provide your email address</FormControl.HelpText>
-            {!src && (
-              <FormControl.ValidationMessage>
-                Please, provide your email
-              </FormControl.ValidationMessage>
-            )}*/}
 			</FormControl>
 			<FormControl>
 				<FormControl.Label>Titel</FormControl.Label>
@@ -65,6 +75,16 @@ const ImageDialog = ({ editor, onClose, onOK }) => {
 					size='small'
 					variant='positive'
 					onClick={() => {
+
+						if (mode === 'edit') {
+							editImage({
+								altText,
+								src,
+								title,
+							});
+							return;
+						}
+
 						addImage({
 							altText,
 							src,
@@ -75,32 +95,6 @@ const ImageDialog = ({ editor, onClose, onOK }) => {
 					OK
 				</Button>
 			</Modal.Controls>
-
-			{/*<input
-          label="Image URL"
-          placeholder="i.e. https://source.unsplash.com/random"
-          onChange={setSrc}
-          value={src}
-          data-test-id="image-modal-url-input"
-        />
-       
-        <input
-          label="Alt Text"
-          placeholder="Random unsplash image"
-          onChange={setAltText}
-          value={altText}
-          data-test-id="image-modal-alt-text-input"
-        />*/}
-
-			{/*<DialogActions>
-          <button
-            data-test-id="image-modal-confirm-btn"
-            disabled={isDisabled}
-            //onClick={() => onClick({altText, src})}
-           >
-            Confirm
-          </button>
-      </DialogActions>*/}
 		</>
 	);
 };

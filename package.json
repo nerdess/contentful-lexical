@@ -8,6 +8,7 @@
     "@contentful/f36-tokens": "^4.0.1",
     "@contentful/react-apps-toolkit": "^1.2.15",
     "@lexical/react": "^0.11.1",
+    "@lexical/rich-text": "^0.12.2",
     "contentful-management": "^10.35.6",
     "craco": "^0.0.3",
     "lexical": "^0.11.1",

@@ -27,6 +27,8 @@ const LexicalToContentful = ({
 
 				//it is not the initial value and incoming value is different to current value
 				if (countChanges.current > 1 && value !== sdk.field.getValue()) {
+
+                    //console.log('value', value);
 					sdk.field.setValue(value);
 					return;
 				}
