@@ -225,7 +225,7 @@ const Editor = ({
 									/>
 
 									<HistoryPlugin />
-									<TreeViewPlugin />
+									{/*<TreeViewPlugin />*/}
 									{/*<AutoFocusPlugin/>*/}
 									<ListPlugin />
 									<LinkPlugin />

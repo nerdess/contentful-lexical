@@ -16,11 +16,11 @@ const Field = () => {
 
 	return (
 		<>
-			<Button
+			{/*<Button
 				onClick={() => {sdk.dialogs.openCurrentApp()}}
 			>
 				Open Dialog
-			</Button>
+			</Button>*/}
 			<LexicalToContentful
 				initialValue={initialValue}
 				countChanges={countChanges}

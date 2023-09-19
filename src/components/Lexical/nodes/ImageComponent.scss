@@ -1,12 +1,11 @@
 .image-component {
 
-    //position: relative;
+    position: relative;
 
     & img.focused {
         outline: 2px solid rgb(60, 132, 244);
         user-select: none;
         position: relative;
-
 
         &.draggable {
             cursor: grab;
@@ -21,6 +20,13 @@
         position: absolute;
         top: 2px;
         left: 2px;
+    }
+
+}
+
+.editor-image {
+    & + br {
+        display: none;
     }
 }
 

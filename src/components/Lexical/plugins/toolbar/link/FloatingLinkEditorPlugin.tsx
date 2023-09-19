@@ -246,7 +246,7 @@ function FloatingLinkEditor({
             <Box>
               <ButtonGroup>
                 <IconButton
-                  aria-label='Edit link'
+                  aria-label='Close'
                   size='small'
                   icon={<CloseIcon />}
                   tabIndex={0}
@@ -317,7 +317,7 @@ function FloatingLinkEditor({
 									}}
 								/>
 								<IconButton
-									aria-label='Edit link'
+									aria-label='Delete link'
 									size='small'
 									icon={<DeleteIcon />}
 									tabIndex={0}
@@ -333,7 +333,7 @@ function FloatingLinkEditor({
 					</Stack>
 					<Stack>
 						<Badge startIcon={<ExternalLinkIcon />} variant='secondary'>
-							{linkOpenNewWindow ? 'Link opens in new tab' : 'Link opens in same tab'}
+							{linkOpenNewWindow ? 'this link opens in a new tab' : 'this link opens in the same tab'}
 						</Badge>
 					</Stack>
 				</Stack>

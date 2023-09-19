@@ -16,7 +16,6 @@ export class CustomParagraphNode extends ParagraphNode {
     return new CustomParagraphNode(node.__key);
   }
 
-
   exportJSON() {
     return {
       ...super.exportJSON(),

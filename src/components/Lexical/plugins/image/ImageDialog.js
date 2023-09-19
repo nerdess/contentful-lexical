@@ -9,16 +9,31 @@ import {
 	INSERT_IMAGE_COMMAND
  } from './ImagePlugin';
  import { $isImageNode } from '../../nodes/ImageNode';
- import { $getNodeByKey } from 'lexical';
+ import { 
+	$getNodeByKey,
+	$getSelection
+ } from 'lexical';
 
 const ImageDialog = ({ editor, onClose, onOK, mode, nodeKey, image = {} }) => {
 
+	
 	const [src, setSrc] = useState(image.src || '');
 	const [title, setTitle] = useState(image.title || '');
 	const [altText, setAltText] = useState(image.altText || '');
 
 	const addImage = (payload) => {
+
+		/*editor.getEditorState().read(() => {
+			const selection = $getSelection();
+			console.log('selection', selection, selection.length)
+			//const first = selection[0];
+			//console.log('first', first, first.getType());
+		});*/
+
 		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
+
+
+
     	onClose();
 	};
 
@@ -26,11 +41,11 @@ const ImageDialog = ({ editor, onClose, onOK, mode, nodeKey, image = {} }) => {
 		editor.update(() => {
 			const node = $getNodeByKey(nodeKey);
 			if ($isImageNode(node)) {
-			node.remove();
+				node.selectNext();
+				node.remove();
 			}
 		});
-		
-		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
+		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload)
     	onClose();
 	};
 

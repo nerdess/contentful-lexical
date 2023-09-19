@@ -3,6 +3,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import {
     PASTE_COMMAND,
 	  COMMAND_PRIORITY_EDITOR,
+    COMMAND_PRIORITY_HIGH,
     $isRangeSelection,
     $isGridSelection,
     $getSelection
@@ -74,7 +75,7 @@ const CopyPasteEnhancementPlugin = () => {
                     console.log('paste', payload);
                     return true;
                 },
-                COMMAND_PRIORITY_EDITOR,
+                COMMAND_PRIORITY_HIGH,
               ),
         );
 	
