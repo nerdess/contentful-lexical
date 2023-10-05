@@ -238,12 +238,11 @@ const Editor = ({
 										onChange={(editorState, editor) => {
 											editor.update(() => {
 												const html = $generateHtmlFromNodes(editor, null);
-												//console.log('html', html)
 												setValue(html);
 											});
 										}}
 									/>
-									<CopyPasteEnhancementPlugin />
+									{/*<CopyPasteEnhancementPlugin />*/}
 								</div>
 							</div>
 						</Box>

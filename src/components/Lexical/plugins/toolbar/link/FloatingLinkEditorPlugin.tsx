@@ -87,7 +87,7 @@ function FloatingLinkEditor({
 				);
 			} else if ($isLinkNode(node)) {
 				setLinkUrl(node.getURL());
-				setLinkOpenNewWindow(node.getTarget() === '_blank');
+				setLinkOpenNewWindow(node.getTarget() === '_blank' || !node.getTarget());
 			} else {
 				setLinkUrl('');
 				setLinkOpenNewWindow(false);

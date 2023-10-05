@@ -24,8 +24,10 @@ export class CustomParagraphNode extends ParagraphNode {
     };
   }
 
-    
+  //here
   exportDOM(editor) {
+
+    console.log('foo');
 
     const element = super.createDOM(editor._config, editor);
 
