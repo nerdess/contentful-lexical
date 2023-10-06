@@ -14,13 +14,23 @@ const Field = () => {
 
 	useAutoResizer();
 
+	console.log('xxx', sdk);
+
 	return (
 		<>
-			{/*<Button
-				onClick={() => {sdk.dialogs.openCurrentApp()}}
+			{<Button
+				onClick={() => sdk.dialogs.openCurrentApp({
+					width: 'fullWidth',
+					minHeight: '100vh',
+					parameters: {
+						entryId: sdk.entry.getSys().id,
+						fieldId: sdk.field.id,
+						countChanges: countChanges.current
+					}
+				})}
 			>
 				Open Dialog
-			</Button>*/}
+			</Button>}
 			<LexicalToContentful
 				initialValue={initialValue}
 				countChanges={countChanges}

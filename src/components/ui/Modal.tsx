@@ -91,7 +91,7 @@ const Modal = ({
   closeOnClickOutside?: boolean;
   onClose: () => void;
   title: string;
-}): JSX.Element => {
+}): any => {
 
   return createPortal(
     <PortalImpl

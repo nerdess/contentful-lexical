@@ -1,5 +1,5 @@
 import Lexical from './Lexical';
-
+import { Button } from '@contentful/f36-components';
 
 const LexicalToContentful = ({ 
     initialValue,
@@ -7,7 +7,15 @@ const LexicalToContentful = ({
     sdk
  }) => {
 
+	/*
+	
+	are you doing something weird like onClick={sdk.field.openCurrentApp()} where it's calling inline or something?
+it needs to be wrapped in a handler function like onClick={() => sdk.field.openCurrentApp()} for sure
+	
+	*/
+
     return (
+
         <Lexical
 			initialValue={initialValue}
 			setValue={(value) => {
@@ -34,6 +42,7 @@ const LexicalToContentful = ({
 				}
 			}}
 		/>
+	
     )
 
 };

@@ -345,7 +345,7 @@ function FloatingLinkEditor({
 function useFloatingLinkEditorToolbar(
 	editor: LexicalEditor,
 	anchorElem: HTMLElement
-): JSX.Element | null {
+): any {
 	const [activeEditor, setActiveEditor] = useState(editor);
 	const [isLink, setIsLink] = useState(false);
 
