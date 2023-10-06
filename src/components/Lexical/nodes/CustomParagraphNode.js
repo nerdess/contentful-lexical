@@ -27,8 +27,6 @@ export class CustomParagraphNode extends ParagraphNode {
   //here
   exportDOM(editor) {
 
-    console.log('foo');
-
     const element = super.createDOM(editor._config, editor);
 
     //only apply style=text-align if it is not default (=left)

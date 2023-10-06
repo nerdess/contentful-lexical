@@ -10,8 +10,7 @@ import {
  } from './ImagePlugin';
  import { $isImageNode } from '../../nodes/ImageNode';
  import { 
-	$getNodeByKey,
-	$getSelection
+	$getNodeByKey
  } from 'lexical';
 
 const ImageDialog = ({ editor, onClose, onOK, mode, nodeKey, image = {} }) => {
@@ -23,16 +22,7 @@ const ImageDialog = ({ editor, onClose, onOK, mode, nodeKey, image = {} }) => {
 
 	const addImage = (payload) => {
 
-		/*editor.getEditorState().read(() => {
-			const selection = $getSelection();
-			console.log('selection', selection, selection.length)
-			//const first = selection[0];
-			//console.log('first', first, first.getType());
-		});*/
-
 		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
-
-
 
     	onClose();
 	};

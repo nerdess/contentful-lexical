@@ -15,7 +15,7 @@ const LexicalToContentful = ({
 				countChanges.current = countChanges.current + 1;
 			
 				//incoming value is empty and current value is empty
-				/*if (value === '<p></p>' && (!sdk.field.getValue() || sdk.field.getValue() === '')) {
+				if (value === '<p></p>' && (!sdk.field.getValue() || sdk.field.getValue() === '')) {
 					return;
 				};
 
@@ -23,11 +23,12 @@ const LexicalToContentful = ({
 				if (value === '<p></p>') {
 					sdk.field.setValue();
 					return;
-				}*/
+				}
 
 				//it is not the initial value and incoming value is different to current value
 				if (countChanges.current > 1 && value !== sdk.field.getValue()) {
-					console.log('setting new value', value);
+					//console.log('prev', sdk.field.getValue());
+					//console.log('next', value);
 					sdk.field.setValue(value);
 					return;
 				}

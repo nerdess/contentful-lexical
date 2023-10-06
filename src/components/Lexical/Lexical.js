@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import theme from '../../themes/defaultTheme';
 
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
+//import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 
 import { ListItemNode, ListNode } from '@lexical/list';
@@ -23,18 +23,17 @@ import { CustomLinkNode } from './nodes/CustomLinkNode';
 
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
-import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
+//import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 import FloatingLinkEditorPlugin from './plugins/toolbar/link/FloatingLinkEditorPlugin';
 import LinkPlugin from './plugins/toolbar/link/LinkPlugin';
 import ImagePlugin from './plugins/image/ImagePlugin';
 import InitialContentPlugin from './plugins/InitialContentPlugin';
 import { Resizable } from 're-resizable';
 import { ParagraphNode, TextNode } from 'lexical';
-import TreeViewPlugin from './plugins/TreeViewPlugin';
+//import TreeViewPlugin from './plugins/TreeViewPlugin';
 import { Stack, Box } from '@contentful/f36-components';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
+import { HeadingNode} from '@lexical/rich-text';
 import { CharacterCountPlugin } from './plugins/CharacterCountPlugin';
-import {useLexicalNodeSelection} from '@lexical/react/useLexicalNodeSelection';
 import CopyPasteEnhancementPlugin from './plugins/CopyPasteEnhancementPlugin';
 import './lexical.scss';
 //import { CustomHeadingNode } from './nodes/stub.CustomHeadingNode';
@@ -242,7 +241,7 @@ const Editor = ({
 											});
 										}}
 									/>
-									{/*<CopyPasteEnhancementPlugin />*/}
+									{<CopyPasteEnhancementPlugin />}
 								</div>
 							</div>
 						</Box>

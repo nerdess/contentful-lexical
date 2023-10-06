@@ -17,8 +17,7 @@ import {
 	DROP_COMMAND,
 	createCommand,
 	LexicalCommand,
-	LexicalEditor,
-  $getNodeByKey
+	LexicalEditor
 } from 'lexical';
 import { CAN_USE_DOM } from '../../shared/canUseDom';
 import {
@@ -227,11 +226,6 @@ declare global {
 
 function canDropImage(event: DragEvent): boolean {
 	const target = event.target;
-	/*console.log('target', target);
-  console.log('1111',  !target?.closest('code, span.editor-image'));
-  console.log('target.parentElement ',target?.parentElement );
-  console.log('clsoest',  target?.parentElement?.closest('div.ContentEditable__root'));
-  */
 	return !!(
 		target &&
 		target instanceof HTMLElement &&
