@@ -31,12 +31,11 @@ import InitialContentPlugin from './plugins/InitialContentPlugin';
 import { Resizable } from 're-resizable';
 import { ParagraphNode, TextNode } from 'lexical';
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
-import { Stack, Box } from '@contentful/f36-components';
+import { Stack, Box, Button, Flex } from '@contentful/f36-components';
 import { HeadingNode} from '@lexical/rich-text';
 import { CharacterCountPlugin } from './plugins/CharacterCountPlugin';
 import CopyPasteEnhancementPlugin from './plugins/CopyPasteEnhancementPlugin';
 import './lexical.scss';
-//import { CustomHeadingNode } from './nodes/stub.CustomHeadingNode';
 
 
 function Placeholder() {
@@ -125,9 +124,19 @@ const BottomRightHandle = () => (
 	</div>
 );
 
-const ContentEditableContainer = () => {
+const ContentEditableContainer = ({
+	resizable = true,
+}) => {
+
 	const [height, setHeight] = useState(320);
 	const ref = useRef(null);
+
+
+	if (!resizable) {
+		return (
+			<ContentEditable className='editor-input' />
+		)
+	}
 
 	return (
 		<div ref={ref}>
@@ -175,83 +184,51 @@ const ContentEditableContainer = () => {
 
 const Editor = ({
 	initialValue = '',
-	//initalContentHasBeenTransformed = false,
-	setValue = () => {},
+	setValue = (value) => {},
+	resizable = true
 }) => {
 
 
 	return (
-		<Stack flexDirection='column' flex='0' spacing='spacingS'>
-			{/*initalContentHasBeenTransformed && (
-				<Box style={{width: '100%'}}>
-					<Note variant="warning">
-						<Stack spacing="spacing2Xs" flexDirection="column" alignItems="start">
-							<Stack spacing="spacing2Xs">
-								<Text>Der Originaltext wurde vom WYSIWYG-Editor gesäubert.</Text>
-								<Text fontColor="red500">Bitte Text prüfen und erneut publishen!</Text>
-							</Stack>
-							<Tooltip 
-								content="Der WYSIWYG-Editor hat automatisch unnötige HTML-Tags entfernt. Der Inhalt selbst wurde nicht verändert, lediglich Sonderzeichen oder spezielle HTML-Entities wie &amp;nbsp; oder &amp;ndash; können Probleme bereiten und sollten jetzt manuell überprüft werden. Die verbesserte HTML-Struktur macht ein erneutes Publishen notwendig."
-							>
-								<Text 
-									fontSize="fontSizeS"
-									style={{
-										textDecoration: 'underline',
-										textDecorationStyle: 'dashed',
-										textDecorationThickness: '0.5px',
-										textDecorationColor: 'gray'
-									}}
-								>
-									Was bedeutet das?
-								</Text>
-							</Tooltip>
-						</Stack>
-					</Note>
+	
+		<LexicalComposer initialConfig={initialConfig}>
+			<Stack fullWidth flexDirection='column' spacing='spacing2Xs' alignItems='end'>
+					<Flex  flexDirection='column' className='editor-container'>
+						<ToolbarPlugin />
+						<Box className="editor-inner">
+							<RichTextPlugin
+								contentEditable={<ContentEditableContainer resizable={resizable} /*editorInnerHeight={editorInnerHeight}*/ />}
+								placeholder={<Placeholder />}
+								ErrorBoundary={LexicalErrorBoundary}
+							/>
+
+							<HistoryPlugin />
+							{/*<TreeViewPlugin />*/}
+							{/*<AutoFocusPlugin/>*/}
+							<ListPlugin />
+							<LinkPlugin />
+							<FloatingLinkEditorPlugin />
+							<ListMaxIndentLevelPlugin maxDepth={7} />
+							<ImagePlugin />
+							<InitialContentPlugin htmlString={initialValue} />
+							<OnChangePlugin
+								ignoreNonChanges={true}
+								onChange={(editorState, editor) => {
+									editor.update(() => {
+										const html = $generateHtmlFromNodes(editor, null);
+										setValue(html);
+									});
+								}}
+							/>
+							{<CopyPasteEnhancementPlugin />}
+						</Box>
+				</Flex>
+				<Box>
+					<CharacterCountPlugin maxLength={100} />
 				</Box>
-			)*/}
+			</Stack>
+		</LexicalComposer>
 
-			<Box style={{ width: '100%' }}>
-				<LexicalComposer initialConfig={initialConfig}>
-					<Stack flexDirection='column' spacing='spacing2Xs' alignItems='end'>
-						<Box style={{width: '100%'}}>
-							<div className='editor-container'>
-								<ToolbarPlugin />
-								<div className="editor-inner">
-									<RichTextPlugin
-										contentEditable={<ContentEditableContainer />}
-										placeholder={<Placeholder />}
-										ErrorBoundary={LexicalErrorBoundary}
-									/>
-
-									<HistoryPlugin />
-									{/*<TreeViewPlugin />*/}
-									{/*<AutoFocusPlugin/>*/}
-									<ListPlugin />
-									<LinkPlugin />
-									<FloatingLinkEditorPlugin />
-									<ListMaxIndentLevelPlugin maxDepth={7} />
-									<ImagePlugin />
-									{<InitialContentPlugin htmlString={initialValue} />}
-									<OnChangePlugin
-										ignoreNonChanges={true}
-										onChange={(editorState, editor) => {
-											editor.update(() => {
-												const html = $generateHtmlFromNodes(editor, null);
-												setValue(html);
-											});
-										}}
-									/>
-									{<CopyPasteEnhancementPlugin />}
-								</div>
-							</div>
-						</Box>
-						<Box>
-							<CharacterCountPlugin maxLength={100} />
-						</Box>
-					</Stack>
-				</LexicalComposer>
-			</Box>
-		</Stack>
 	);
 };
 

@@ -49,14 +49,22 @@ body {
     border: 1px solid rgb(207, 217, 224);
     border-radius: 10px;
     overflow: hidden;
-    //border-bottom-right-radius: 0;
+    flex: 1;
+    width: 100%;
   }
   
   .editor-inner {
-    //background: #fff;
     position: relative;
+    flex: 1;
+    overflow: auto;
+   //overflow: hidden;
   }
 
+
+  .editor-inner li {
+    font-size: 0.875rem;
+    font-weight: 400;
+  }
   
   .editor-input {
     font-size: 15px;
@@ -201,11 +209,6 @@ body {
   
   .editor-tokenFunction {
     color: #dd4a68;
-  }
-
-  .editor-inner li {
-       font-size: 0.875rem;
-      font-weight: 400;
   }
   
   .editor-paragraph {

@@ -25,8 +25,6 @@ import {
 //import { $isHeadingNode } from '@lexical/rich-text';
 import {$isHeadingNode} from '@lexical/rich-text';
 //import { $isHeadingNode} from '../../nodes/CustomHeadingNode';
-import { Modal } from '@contentful/f36-components';
-
 import { getSelectedNode } from '../utils/getSelectedNode';
 import { LowPriority } from './const';
 import { sanitizeUrl } from '../utils/url';
@@ -458,6 +456,7 @@ const ToolbarPlugin = () => {
 			>
 				<i className='format image' />
 			</button>
+			
 			{modal}
 		</div>
 	);
