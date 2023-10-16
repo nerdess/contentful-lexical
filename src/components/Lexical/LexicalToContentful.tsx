@@ -1,25 +1,21 @@
-import React, {RefObject} from 'react';
+import React from 'react';
 import Lexical from './Lexical';
-//import { useSDK } from '@contentful/react-apps-toolkit';
-//import { FieldAppSDK } from '@contentful/app-sdk';
 
 interface LexicalToContentfulProps {
 	initialValue: string;
 	currentValue?: string;
-	countChanges: any;		//countChanges: RefObject<number>;
-	resizable?: boolean
+	countChanges: any;
 	setValue: (value: string) => void;
+	resizable?: boolean
 }
 
 const LexicalToContentful: React.FC<LexicalToContentfulProps> = ({
 	initialValue,
 	currentValue,
 	countChanges,
-	resizable,
 	setValue,
+	resizable
 }) => {
-
-	//const sdk = useSDK<FieldAppSDK>();
 
 	return (
 		<Lexical
@@ -39,16 +35,12 @@ const LexicalToContentful: React.FC<LexicalToContentfulProps> = ({
 
 				//incoming value is empty and current value is not empty
 				if (value === '<p></p>') {
-					//sdk.field.setValue();
 					setValue('');
 					return;
 				}
 
 				//it is not the initial value and incoming value is different to current value
 				if (countChanges.current > 1 && value !== currentValue) {
-					//console.log('prev', sdk.field.getValue());
-					//console.log('next', value);
-					//sdk.field.setValue(value);
 					setValue(value);
 					return;
 				}

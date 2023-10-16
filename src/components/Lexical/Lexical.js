@@ -23,18 +23,18 @@ import { CustomLinkNode } from './nodes/CustomLinkNode';
 
 import ToolbarPlugin from './plugins/toolbar/ToolbarPlugin';
 import ListMaxIndentLevelPlugin from './plugins/ListMaxIndentLevelPlugin';
-//import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 import FloatingLinkEditorPlugin from './plugins/toolbar/link/FloatingLinkEditorPlugin';
 import LinkPlugin from './plugins/toolbar/link/LinkPlugin';
 import ImagePlugin from './plugins/image/ImagePlugin';
 import InitialContentPlugin from './plugins/InitialContentPlugin';
 import { Resizable } from 're-resizable';
 import { ParagraphNode, TextNode } from 'lexical';
-//import TreeViewPlugin from './plugins/TreeViewPlugin';
-import { Stack, Box, Button, Flex } from '@contentful/f36-components';
+import { Stack, Box, Flex } from '@contentful/f36-components';
 import { HeadingNode} from '@lexical/rich-text';
 import { CharacterCountPlugin } from './plugins/CharacterCountPlugin';
 import CopyPasteEnhancementPlugin from './plugins/CopyPasteEnhancementPlugin';
+//import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
+//import TreeViewPlugin from './plugins/TreeViewPlugin';
 import './lexical.scss';
 
 
@@ -94,23 +94,6 @@ const initialConfig = {
 				);
 			},
 		},
-		/*{
-			replace: LinkNode,
-			with: (node) => {
-				return new CustomLinkNode(node.__text);
-			},
-		},*/
-		/*{
-            replace: LinkNode,
-            with: (node) => {
-              node.setTarget('_blank'); //maybe delete this and simply use "_blank" on target property of new node
-              return new LinkNode(
-                node.getURL(),
-                { target: '_blank', rel: node.getRel(), title: node.getTitle()},
-                undefined
-              );
-            },
-          },*/
 	],
 };
 
@@ -188,7 +171,6 @@ const Editor = ({
 	resizable = true
 }) => {
 
-
 	return (
 	
 		<LexicalComposer initialConfig={initialConfig}>
@@ -197,14 +179,12 @@ const Editor = ({
 						<ToolbarPlugin />
 						<Box className="editor-inner">
 							<RichTextPlugin
-								contentEditable={<ContentEditableContainer resizable={resizable} /*editorInnerHeight={editorInnerHeight}*/ />}
+								contentEditable={<ContentEditableContainer resizable={resizable} />}
 								placeholder={<Placeholder />}
 								ErrorBoundary={LexicalErrorBoundary}
 							/>
 
 							<HistoryPlugin />
-							{/*<TreeViewPlugin />*/}
-							{/*<AutoFocusPlugin/>*/}
 							<ListPlugin />
 							<LinkPlugin />
 							<FloatingLinkEditorPlugin />
@@ -221,6 +201,8 @@ const Editor = ({
 								}}
 							/>
 							{<CopyPasteEnhancementPlugin />}
+							{/*<TreeViewPlugin />*/}
+							{/*<AutoFocusPlugin/>*/}
 						</Box>
 				</Flex>
 				<Box>
