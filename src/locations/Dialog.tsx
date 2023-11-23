@@ -33,24 +33,30 @@ const Wrapper: React.FC<{
 					flexDirection='column'
 					alignItems='end'
 				>
-					<Box style={{width: '100%'}}>
-						<Note
-							variant='warning'
-						>
-							Please note: In fullscreen-mode any changes are <strong>not saved automatically</strong>!<br />To auto-save or publish you need to close this dialog. Upon closing, any changes will be transferred to the original field. ✨
-						</Note>
-					</Box>
 					<Flex
 						style={{
 							width: '100%',
-							height: 'calc(100vh - 48px - 48px - 49px - 190px)' //todo: calculate dynamically
+							height: 'calc(100vh - 48px - 48px - 49px - 142px)' //todo: calculate dynamically
 						}}
 					>
 						{children}
 					</Flex>
-					<Stack flexDirection='row' spacing='spacingS'>
+					<Stack 
+						flexDirection='row' 
+						spacing='spacingS'
+					>
+						<Note
+							variant='warning'
+							style={{
+								maxHeight: 74,
+								overflow: 'auto'
+							}}
+						>
+							Please note: In fullscreen-mode changes are <strong>not saved automatically</strong>!<br />
+							To auto-save hit the 'Close & Save'-Button ➡️&nbsp;➡️&nbsp;➡️ 
+						</Note>
 						<Button
-							variant='secondary'
+							variant="primary"
 							onClick={() => {
 
 									sdk.close({
@@ -59,7 +65,7 @@ const Wrapper: React.FC<{
 								}
 							}
 						>
-							Close
+							Close & Save
 						</Button>
 					</Stack>
 				</Stack>

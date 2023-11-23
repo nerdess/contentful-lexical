@@ -41,6 +41,7 @@ const LexicalToContentful: React.FC<LexicalToContentfulProps> = ({
 
 				//it is not the initial value and incoming value is different to current value
 				if (countChanges.current > 1 && value !== currentValue) {
+					//console.log('v', value);
 					setValue(value);
 					return;
 				}
