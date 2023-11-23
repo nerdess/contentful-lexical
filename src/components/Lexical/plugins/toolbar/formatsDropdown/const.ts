@@ -1,4 +1,11 @@
-export const blockTypeToBlockName = {
+export interface BlockTypeToBlockName {
+    bullet: string;
+    h2: string;
+    number: string;
+    'custom-paragraph': string;
+}
+
+export const blockTypeToBlockName: BlockTypeToBlockName = {
     bullet: 'Liste (einfach)',
     //check: 'Check List',
     //code: 'Code Block',

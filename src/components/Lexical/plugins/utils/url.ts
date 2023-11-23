@@ -7,6 +7,7 @@
  */
 
 export function sanitizeUrl(url: string): string {
+
     /** A pattern that matches safe  URLs. */
     const SAFE_URL_PATTERN =
       /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^&:/?#]*(?:[/?#]|$))/gi;
@@ -18,8 +19,8 @@ export function sanitizeUrl(url: string): string {
     url = String(url).trim();
   
     if (url.match(SAFE_URL_PATTERN) || url.match(DATA_URL_PATTERN)) return url;
-  
-    return 'https://';
+
+    return '';
   }
   
   // Source: https://stackoverflow.com/a/8234912/2013580
@@ -29,6 +30,9 @@ export function sanitizeUrl(url: string): string {
   export function validateUrl(url: string): boolean {
     // TODO Fix UI for link insertion; it should never default to an invalid URL such as https://.
     // Maybe show a dialog where they user can type the URL before inserting it.
-    return url === 'https://' || urlRegExp.test(url);
+    //return url === 'https://' || urlRegExp.test(url);
+
+    if (url === '') return true;
+    return urlRegExp.test(url);
   }
   

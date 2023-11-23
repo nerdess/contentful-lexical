@@ -10,22 +10,8 @@ import type {
     EditorState,
     LexicalEditor
 } from 'lexical';
-import { 
-    $getSelection,
-    $isRangeSelection,
-    $getRoot
- } from 'lexical';
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import { mapToObj } from '../helper';
-
-
-/*const mapToObj = (map: Map<number, object>): => {
-    const obj = {}
-    for (let [k,v] of map)
-      obj[k] = v
-    return obj
-  }*/
-
 
 export function OnChangePlugin({
   ignoreHistoryMergeTagChange = true,

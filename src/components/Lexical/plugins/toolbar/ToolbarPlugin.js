@@ -16,30 +16,17 @@ import {
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
-	INSERT_ORDERED_LIST_COMMAND,
-	INSERT_UNORDERED_LIST_COMMAND,
-	REMOVE_LIST_COMMAND,
 	$isListNode,
 	ListNode,
 } from '@lexical/list';
-//import { $isHeadingNode } from '@lexical/rich-text';
 import {$isHeadingNode} from '@lexical/rich-text';
-//import { $isHeadingNode} from '../../nodes/CustomHeadingNode';
 import { getSelectedNode } from '../utils/getSelectedNode';
 import { LowPriority } from './const';
-import { sanitizeUrl } from '../utils/url';
 import Divider from './divider/Divider';
-
 import ImageDialog from '../image/ImageDialog';
 import useModal from '../../../../hooks/useModal';
-
-//import { $isCodeNode, getDefaultCodeLanguage } from '@lexical/code';
-//import { $isImageNode } from '../../nodes/ImageNode';
-//import { $isParentElementRTL } from '@lexical/selection';
-
 import BlockFormatDropDown from './formatsDropdown/formatsDropdown';
 import { blockTypeToBlockName} from './formatsDropdown/const';
-import { useSDK } from '@contentful/react-apps-toolkit';
 
 
 const wrap = ({ left = '', right = '', editor }) => {
@@ -107,14 +94,9 @@ const ToolbarPlugin = () => {
 	const [modal, showModal] = useModal();
 	const [isEditable, setIsEditable] = useState(() => editor.isEditable());
 	const [activeEditor, setActiveEditor] = useState(editor);
-	const [selectedElementKey, setSelectedElementKey] = useState(null);
-	const [rootType, setRootType] = useState('root');
 	//const [codeLanguage, setCodeLanguage] = useState('');
 	//const [isRTL, setIsRTL] = useState(false);
 	//const [isImage, setIsImage] = useState(false);
-
-	const sdk = useSDK();
-
 
 	const $updateToolbar = useCallback(() => {
 		const selection = $getSelection();
@@ -160,7 +142,7 @@ const ToolbarPlugin = () => {
 			}
 
 			if (elementDOM !== null) {
-				setSelectedElementKey(elementKey);
+				//setSelectedElementKey(elementKey);
 				if ($isListNode(element)) {
 				  const parentList = $getNearestNodeOfType(
 					anchorNode,
@@ -291,7 +273,8 @@ const ToolbarPlugin = () => {
 
 	const insertLink = useCallback(() => {
 		if (!isLink) {
-			editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl('https://'));
+			//editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl('https://'));
+			editor.dispatchCommand(TOGGLE_LINK_COMMAND, '');
 		} else {
 			editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
 		}
@@ -325,7 +308,6 @@ const ToolbarPlugin = () => {
 			<BlockFormatDropDown
 				disabled={!isEditable}
 				blockType={blockType}
-				rootType={rootType}
 				editor={editor}
           	/>
 

@@ -1,4 +1,4 @@
-import { AutoLinkNode, LinkNode } from '@lexical/link';
+import { LinkNode } from '@lexical/link';
 
 export class CustomLinkNode extends LinkNode {
   static getType() {

@@ -5,7 +5,6 @@ import { DialogAppSDK } from '@contentful/app-sdk';
 import LexicalToContentful from '../components/Lexical/LexicalToContentful';
 import { InvocationParameters } from './Field';
 import {
-	Box,
 	Button,
 	Flex,
 	Modal,

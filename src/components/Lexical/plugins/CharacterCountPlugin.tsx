@@ -3,9 +3,8 @@ import {RootNode} from 'lexical';
 //import { $generateHtmlFromNodes } from '@lexical/html';
 import {useEffect, useState} from 'react';
 import { Badge } from '@contentful/f36-components';
-import { useSDK } from '@contentful/react-apps-toolkit';
 
-export function CharacterCountPlugin() {
+const CharacterCountPlugin = () => {
 
   //const sdk = useSDK();
 
@@ -32,3 +31,5 @@ export function CharacterCountPlugin() {
     </Badge>
   );
 }
+
+export default CharacterCountPlugin;

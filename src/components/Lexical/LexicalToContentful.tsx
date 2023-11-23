@@ -9,13 +9,13 @@ interface LexicalToContentfulProps {
 	resizable?: boolean
 }
 
-const LexicalToContentful: React.FC<LexicalToContentfulProps> = ({
+const LexicalToContentful = ({
 	initialValue,
 	currentValue,
 	countChanges,
 	setValue,
-	resizable
-}) => {
+	resizable = true
+}:LexicalToContentfulProps) => {
 
 	return (
 		<Lexical

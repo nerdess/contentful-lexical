@@ -15,6 +15,7 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { $findMatchingParent, mergeRegister } from '@lexical/utils';
 import {
 	$getSelection,
+	$setSelection,
 	$isRangeSelection,
 	COMMAND_PRIORITY_CRITICAL,
 	COMMAND_PRIORITY_HIGH,
@@ -34,20 +35,16 @@ import { getSelectedNode } from '../../utils/getSelectedNode';
 import { sanitizeUrl } from '../../utils/url';
 import { setFloatingElemPositionForLinkEditor } from '../../utils/setFloatingElemPositionForLinkEditor';
 import {
-	ExternalLinkIcon,
-	EditIcon,
 	DeleteIcon,
 	CloseIcon,
 	DoneIcon,
 } from '@contentful/f36-icons';
-import { TextInput, Checkbox, TextLink } from '@contentful/f36-components';
+import { TextInput, Checkbox } from '@contentful/f36-components';
 
 import './floatingLinkEditorPlugin.css';
 import {
-	Badge,
 	Box,
 	ButtonGroup,
-	Caption,
 	IconButton,
 	Stack,
 } from '@contentful/f36-components';
@@ -57,19 +54,23 @@ function FloatingLinkEditor({
 	isLink,
 	setIsLink,
 	anchorElem,
+	isEditMode,
+	setEditMode
 }: {
 	editor: LexicalEditor;
 	isLink: boolean;
 	setIsLink: Dispatch<boolean>;
 	anchorElem: HTMLElement;
+	isEditMode: boolean;
+	setEditMode: Dispatch<boolean>;
 }): JSX.Element {
 	const editorRef = useRef<HTMLDivElement | null>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [linkUrl, setLinkUrl] = useState('');
-	const [linkOpenNewWindow, setLinkOpenNewWindow] = useState(true);
-	const [editedLinkUrl, setEditedLinkUrl] = useState('');
+	//const [linkOpenNewWindow, setLinkOpenNewWindow] = useState(true);
+	//const [editedLinkUrl, setEditedLinkUrl] = useState('');
 	const [editedLinkOpenNewWindow, setEditedLinkOpenNewWindow] = useState(true);
-	const [isEditMode, setEditMode] = useState(false);
+	//const [isEditMode, setEditMode] = useState(false);
 	const [lastSelection, setLastSelection] = useState<
 		RangeSelection | GridSelection | NodeSelection | null
 	>(null);
@@ -82,15 +83,17 @@ function FloatingLinkEditor({
 
 			if ($isLinkNode(parent)) {
 				setLinkUrl(parent.getURL());
-				setLinkOpenNewWindow(
+				setEditedLinkOpenNewWindow(
 					parent.getTarget() === '_blank' || !parent.getTarget()
 				);
 			} else if ($isLinkNode(node)) {
 				setLinkUrl(node.getURL());
-				setLinkOpenNewWindow(node.getTarget() === '_blank' || !node.getTarget());
+				setEditedLinkOpenNewWindow(
+					node.getTarget() === '_blank' || !node.getTarget()
+				);
 			} else {
 				setLinkUrl('');
-				setLinkOpenNewWindow(false);
+				setEditedLinkOpenNewWindow(false);
 			}
 		}
 		const editorElem = editorRef.current;
@@ -128,7 +131,7 @@ function FloatingLinkEditor({
 		}
 
 		return true;
-	}, [anchorElem, editor]);
+	}, [anchorElem, editor, setEditMode]);
 
 	useEffect(() => {
 		const scrollerElem = anchorElem.parentElement;
@@ -210,20 +213,26 @@ function FloatingLinkEditor({
 
 	const handleLinkSubmission = () => {
 		if (lastSelection !== null) {
-			if (linkUrl !== '') {
+			if (!!linkUrl) {
 				editor.dispatchCommand(TOGGLE_LINK_COMMAND, {
-					url: sanitizeUrl(editedLinkUrl),
+					url: sanitizeUrl(linkUrl),
 					target: editedLinkOpenNewWindow ? '_blank' : '_self',
 					rel: editedLinkOpenNewWindow ? 'noopener noreferrer' : '',
 				});
+			} else {
+				editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
 			}
-			setEditMode(false);
 		}
+		editor.update(() => {
+			$setSelection(null);
+			setEditMode(false);
+		});
+
 	};
 
 	return (
 		<div ref={editorRef} className='link-editor'>
-			{!isLink ? null : isEditMode ? (
+			{isEditMode && (
 				<Stack
 					flexDirection='column'
 					alignItems='start'
@@ -234,86 +243,42 @@ function FloatingLinkEditor({
 						<Box style={{ flex: 1 }}>
 							<TextInput
 								ref={inputRef}
-								value={editedLinkUrl}
+								value={linkUrl}
 								onChange={(event) => {
-									setEditedLinkUrl(event.target.value);
+									setLinkUrl(event.target.value);
 								}}
 								onKeyDown={(event: any) => {
 									monitorInputInteraction(event);
 								}}
 							/>
 						</Box>
-            <Box>
-              <ButtonGroup>
-                <IconButton
-                  aria-label='Close'
-                  size='small'
-                  icon={<CloseIcon />}
-                  tabIndex={0}
-                  onMouseDown={(event: React.MouseEvent) =>
-                    event.preventDefault()
-                  }
-                  onClick={() => {
-                    setEditMode(false);
-                  }}
-                />
-                <IconButton
-                  aria-label='Edit link'
-                  size='small'
-                  icon={<DoneIcon />}
-                  tabIndex={0}
-                  onMouseDown={(event: React.MouseEvent) =>
-                    event.preventDefault()
-                  }
-                  onClick={handleLinkSubmission}
-                />
-              </ButtonGroup>
-            </Box>
-					</Stack>
-					<Stack>
-						<Checkbox
-							isChecked={editedLinkOpenNewWindow}
-							onChange={() => {
-								setEditedLinkOpenNewWindow((prev) => !prev);
-							}}
-						>
-							Open in new tab
-						</Checkbox>
-					</Stack>
-				</Stack>
-			) : (
-				<Stack
-					flexDirection='column'
-					alignItems='start'
-					spacing='spacingXs'
-					fullWidth
-				>
-					<Stack flexDirection='row' fullWidth>
-						<Box style={{ flex: 1 }}>
-							{
-								<TextLink
-									href={linkUrl}
-									target='_blank'
-									rel='noopener noreferrer'
-								>
-									{linkUrl}
-								</TextLink>
-							}
-						</Box>
 						<Box>
 							<ButtonGroup>
 								<IconButton
-									aria-label='Edit link'
+									aria-label='Save'
+									//variant='primary'
 									size='small'
-									icon={<EditIcon />}
+									icon={<DoneIcon />}
+									tabIndex={0}
+									onMouseDown={(event: React.MouseEvent) =>
+										event.preventDefault()
+									}
+									onClick={handleLinkSubmission}
+								/>
+							
+								<IconButton
+									aria-label='Cancel'
+									size='small'
+									icon={<CloseIcon />}
 									tabIndex={0}
 									onMouseDown={(event: React.MouseEvent) =>
 										event.preventDefault()
 									}
 									onClick={() => {
-										setEditedLinkUrl(linkUrl);
-										setEditedLinkOpenNewWindow(linkOpenNewWindow);
-										setEditMode(true);
+										if (!linkUrl) {
+											editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+										}
+										setEditMode(false);
 									}}
 								/>
 								<IconButton
@@ -332,12 +297,18 @@ function FloatingLinkEditor({
 						</Box>
 					</Stack>
 					<Stack>
-						<Badge startIcon={<ExternalLinkIcon />} variant='secondary'>
-							{linkOpenNewWindow ? 'this link opens in a new tab' : 'this link opens in the same tab'}
-						</Badge>
+						<Checkbox
+							isChecked={editedLinkOpenNewWindow}
+							onChange={() => {
+								setEditedLinkOpenNewWindow((prev) => !prev);
+							}}
+						>
+							Open in new tab
+						</Checkbox>
 					</Stack>
 				</Stack>
-			)}
+			)} 
+			
 		</div>
 	);
 }
@@ -348,6 +319,7 @@ function useFloatingLinkEditorToolbar(
 ): any {
 	const [activeEditor, setActiveEditor] = useState(editor);
 	const [isLink, setIsLink] = useState(false);
+	const [isEditMode, setEditMode] = useState(false);
 
 	const updateToolbar = useCallback(() => {
 		const selection = $getSelection();
@@ -357,11 +329,14 @@ function useFloatingLinkEditorToolbar(
 			const autoLinkParent = $findMatchingParent(node, $isAutoLinkNode);
 
 			// We don't want this menu to open for auto links.
-			if (linkParent != null && autoLinkParent == null) {
+			if (linkParent != null && autoLinkParent === null) {
 				setIsLink(true);
+				setEditMode(true);
 			} else {
 				setIsLink(false);
+				setEditMode(false);
 			}
+
 		}
 	}, []);
 
@@ -388,6 +363,8 @@ function useFloatingLinkEditorToolbar(
 		<FloatingLinkEditor
 			editor={activeEditor}
 			isLink={isLink}
+			isEditMode={isEditMode}
+			setEditMode={setEditMode}
 			anchorElem={anchorElem}
 			setIsLink={setIsLink}
 		/>,

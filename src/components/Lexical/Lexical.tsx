@@ -31,7 +31,7 @@ import { Resizable } from 're-resizable';
 import { ParagraphNode, TextNode } from 'lexical';
 import { Stack, Box, Flex } from '@contentful/f36-components';
 import { HeadingNode} from '@lexical/rich-text';
-import { CharacterCountPlugin } from './plugins/CharacterCountPlugin';
+import CharacterCountPlugin from './plugins/CharacterCountPlugin';
 import CopyPasteEnhancementPlugin from './plugins/CopyPasteEnhancementPlugin';
 //import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
@@ -43,9 +43,10 @@ function Placeholder() {
 }
 
 const initialConfig = {
+	namespace:"Contentful",
 	theme,
 	// Handling of errors during update
-	onError(error) {
+	onError(error: Error) {
 		throw error;
 	},
 	// Any custom nodes go here
@@ -66,21 +67,21 @@ const initialConfig = {
 		CustomParagraphNode,
 		{
 			replace: ParagraphNode,
-			with: (node) => {
+			with: () => {
 				return new CustomParagraphNode();
 			},
 		},
 		CustomTextNode,
 		{
 			replace: TextNode,
-			with: (node) => {
+			with: (node:TextNode) => {
 				return new CustomTextNode(node.__text);
 			},
 		},
 		CustomLinkNode,
 		{
 			replace: LinkNode,
-			with: (node) => {
+			with: (node: LinkNode) => {
 				//return new CustomLinkNode("https://google.com", { rel: "fdsfgds", target: "_blank" }, node.getKey());
 
 				return new CustomLinkNode(
@@ -112,7 +113,7 @@ const ContentEditableContainer = ({
 }) => {
 
 	const [height, setHeight] = useState(320);
-	const ref = useRef(null);
+	const ref = useRef<HTMLDivElement>(null);
 
 
 	if (!resizable) {
@@ -127,6 +128,7 @@ const ContentEditableContainer = ({
 				minHeight={200}
 				defaultSize={{
 					height: 320,
+					width: '100%'
 				}}
 				enable={{
 					top: false,
@@ -146,7 +148,7 @@ const ContentEditableContainer = ({
 						bottom: -10,
 					},
 				}}
-				onResize={() => setHeight(ref.current.clientHeight)}
+				onResize={() => ref.current && setHeight( ref.current.clientHeight)}
 				style={{
 					marginBottom: 10,
 				}}
@@ -166,14 +168,20 @@ const ContentEditableContainer = ({
 };
 
 const Editor = ({
-	initialValue = '',
-	setValue = (value) => {},
-	resizable = true
+	initialValue,
+	setValue,
+	resizable
+}:{
+	initialValue: string,
+	setValue: (value: string) => void,
+	resizable: boolean
 }) => {
 
 	return (
 	
-		<LexicalComposer initialConfig={initialConfig}>
+		<LexicalComposer 
+			initialConfig={initialConfig}
+		>
 			<Stack fullWidth flexDirection='column' spacing='spacing2Xs' alignItems='end'>
 					<Flex  flexDirection='column' className='editor-container'>
 						<ToolbarPlugin />
@@ -206,7 +214,7 @@ const Editor = ({
 						</Box>
 				</Flex>
 				<Box>
-					<CharacterCountPlugin maxLength={100} />
+					<CharacterCountPlugin />
 				</Box>
 			</Stack>
 		</LexicalComposer>
