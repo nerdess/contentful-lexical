@@ -232,7 +232,7 @@ body {
     padding: 0;
   }
   
-  .editor-heading-h2 {
+  .editor-heading-h4 {
     font-size: 15px;
     color: rgb(101, 103, 107);
     font-weight: 700;
@@ -633,6 +633,10 @@ body {
   .icon.h2 {
     background-image: url(../../images/icons/type-h2.svg);
   }
+
+  .icon.h4 {
+    background-image: url(../../images/icons/type-h4.svg);
+  }
   
   .icon.bullet-list,
   .icon.ul,
@@ -753,7 +757,7 @@ html .modal-image {
 }
 
 // custom headings
-.ts-tpm-h2 {
+.ts-tpm-h4 {
   color: #E30A18;
   text-transform: uppercase;
   font-size: 1rem;

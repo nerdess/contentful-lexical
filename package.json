@@ -9,7 +9,7 @@
     "@contentful/react-apps-toolkit": "^1.2.16",
     "@lexical/react": "^0.12.2",
     "@lexical/rich-text": "^0.12.2",
-    "contentful-management": "^10.46.4",
+    "contentful-management": "^11.5.4",
     "craco": "^0.0.3",
     "lexical": "^0.12.2",
     "re-resizable": "^6.9.11",

@@ -1,17 +1,23 @@
-import { TextNode, $createTextNode, isHTMLElement } from 'lexical';
+import { TextNode, $createTextNode, isHTMLElement, LexicalEditor, DOMExportOutput } from 'lexical';
 import invariant from '../shared/invariant';
+
+interface Formatting extends Record<string, any> {};
+
+type Mapping = {
+	[key: string]: string;
+}
 
 const MAPPING = {
 	bold: 'strong',
 	italic: 'em',
 	strikethrough: 's',
 	underline: 'u',
-};
+} as Mapping;
 
-function applyFormatting(element, formatting) {
+const applyFormatting = (element: HTMLElement, formatting: Formatting): HTMLElement => {
 
 	//no formatting needed;
-	if (Object.keys(formatting).every((key) => formatting[key] === false)) {
+	if (Object.values(formatting).every((value: boolean) => !value)) {
 		return element;
 	}
 
@@ -21,8 +27,8 @@ function applyFormatting(element, formatting) {
 	el.innerText = text;
 
 	const tagNames = Object.keys(formatting)
-		.filter((key) => formatting[key])
-		.map((key) => MAPPING[key]);
+		.filter((key: string) => formatting[key])
+		.map((key: string) => MAPPING[key]);
 
 	const wrappedElement = tagNames.reduceRight((wrapped, tagName) => {
 		const el = document.createElement(tagName);
@@ -40,11 +46,11 @@ export class CustomTextNode extends TextNode {
 		return 'custom-text';
 	}
 
-	static clone(node) {
+	static clone(node: TextNode) {
 		return new CustomTextNode(node.__text);
 	}
 
-	static importJSON(serializedNode) {
+	static importJSON(serializedNode: any) {
 		const node = $createTextNode(serializedNode.text);
 		node.setFormat(serializedNode.format);
 		node.setDetail(serializedNode.detail);
@@ -68,8 +74,8 @@ export class CustomTextNode extends TextNode {
 	// This improves Lexical's basic text output in copy+paste plus
 	// for headless mode where people might use Lexical to generate
 	// HTML content and not have the ability to use CSS classes.
-	exportDOM(editor) {
-		let element = super.createDOM(editor._config, editor);
+	exportDOM(editor: LexicalEditor) {
+		let element = super.createDOM(editor._config) as HTMLElement;
 
 		invariant(
 			element !== null && isHTMLElement(element),
@@ -78,7 +84,7 @@ export class CustomTextNode extends TextNode {
 
 		element.removeAttribute('class');
 
-		const formatting = {
+		const formatting: Formatting = {
 			bold: this.hasFormat('bold'),
 			italic: this.hasFormat('italic'),
 			strikethrough: this.hasFormat('strikethrough'),
@@ -89,8 +95,8 @@ export class CustomTextNode extends TextNode {
 
 		return {
 			element,
-			after: (element) => {
-        
+			after: (element: any): any => {
+
 				//remove those empty <span>tags created by lexical
 				if (element.tagName === 'SPAN' && element.attributes.length === 0) {
 					return element.textContent;

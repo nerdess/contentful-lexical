@@ -25,15 +25,7 @@ const LexicalToContentful = ({
 
 				countChanges.current = countChanges.current + 1;
 
-				//incoming value is empty and current value is empty
-				if (
-					value === '<p></p>' &&
-					(!currentValue || currentValue === '')
-				) {
-					return;
-				}
-
-				//incoming value is empty and current value is not empty
+				//incoming value is empty
 				if (value === '<p></p>') {
 					setValue('');
 					return;

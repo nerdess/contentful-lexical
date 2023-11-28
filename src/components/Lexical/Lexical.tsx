@@ -36,6 +36,7 @@ import CopyPasteEnhancementPlugin from './plugins/CopyPasteEnhancementPlugin';
 //import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
 import './lexical.scss';
+import TreeViewPlugin from './plugins/TreeViewPlugin';
 
 
 function Placeholder() {

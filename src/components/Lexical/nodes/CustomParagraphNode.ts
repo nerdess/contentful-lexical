@@ -1,6 +1,7 @@
 import { 
   ParagraphNode, 
-  $applyNodeReplacement 
+  $applyNodeReplacement,
+  LexicalEditor, 
 } from "lexical";
 
 export function $createParagraphNode() {
@@ -12,7 +13,7 @@ export class CustomParagraphNode extends ParagraphNode {
     return "custom-paragraph";
   }
 
-  static clone(node) {
+  static clone(node: ParagraphNode) {
     return new CustomParagraphNode(node.__key);
   }
 
@@ -25,9 +26,9 @@ export class CustomParagraphNode extends ParagraphNode {
   }
 
   //here
-  exportDOM(editor) {
+  exportDOM(editor: LexicalEditor) {
 
-    const element = super.createDOM(editor._config, editor);
+    const element = super.createDOM(editor._config);
 
     //only apply style=text-align if it is not default (=left)
     const formatType = this.getFormatType();
@@ -37,10 +38,7 @@ export class CustomParagraphNode extends ParagraphNode {
     element.removeAttribute('class');
 
     return {
-      element,
-      /*after: (el) => {
-        return el;
-      }*/
+      element
     };
   }
   

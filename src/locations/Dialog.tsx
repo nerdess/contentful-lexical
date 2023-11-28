@@ -78,7 +78,7 @@ const Dialog = () => {
 	const invocationParams: InvocationParameters = sdk.parameters.invocation as any;
 	const { name, initialValue } = invocationParams;
 	const countChanges = useRef(0);
-	const [currentValue, setCurrentValue] = useState<string | undefined>(initialValue);
+	const [currentValue, setCurrentValue] = useState<string>(initialValue);
 
 	return (
 		<Wrapper
