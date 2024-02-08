@@ -20,12 +20,10 @@ import {
 	COMMAND_PRIORITY_CRITICAL,
 	COMMAND_PRIORITY_HIGH,
 	COMMAND_PRIORITY_LOW,
-	GridSelection,
 	KEY_ESCAPE_COMMAND,
 	LexicalEditor,
-	NodeSelection,
-	RangeSelection,
 	SELECTION_CHANGE_COMMAND,
+	BaseSelection,
 } from 'lexical';
 import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
@@ -72,7 +70,7 @@ function FloatingLinkEditor({
 	const [editedLinkOpenNewWindow, setEditedLinkOpenNewWindow] = useState(true);
 	//const [isEditMode, setEditMode] = useState(false);
 	const [lastSelection, setLastSelection] = useState<
-		RangeSelection | GridSelection | NodeSelection | null
+		BaseSelection | null
 	>(null);
 
 	const updateLinkEditor = useCallback(() => {

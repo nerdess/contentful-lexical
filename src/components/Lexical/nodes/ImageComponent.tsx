@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import type {
+	BaseSelection,
 	LexicalEditor,
 	NodeKey,
-	GridSelection,
 	NodeSelection,
 	RangeSelection,
 } from 'lexical';
@@ -109,8 +109,11 @@ export default function ImageComponent({
 		nodeKey
 	);
 	//const [isResizing, setIsResizing] = useState<boolean>(false);
+	/*const [selection, setSelection] = useState<
+		RangeSelection | NodeSelection | null
+	>(null);*/
 	const [selection, setSelection] = useState<
-		RangeSelection | NodeSelection | GridSelection | null
+		BaseSelection | null
 	>(null);
 
 	const [editor] = useLexicalComposerContext();

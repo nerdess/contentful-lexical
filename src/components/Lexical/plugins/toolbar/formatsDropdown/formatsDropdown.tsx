@@ -13,7 +13,6 @@ import {
   $createParagraphNode,
   $getSelection,
   $isRangeSelection,
-  DEPRECATED_$isGridSelection,
   LexicalEditor,
 } from 'lexical';
 //import DropDown, {DropDownItem} from '../../ui/DropDown';
@@ -40,8 +39,7 @@ const BlockFormatDropDown = ({
       editor.update(() => {
         const selection = $getSelection();
         if (
-          $isRangeSelection(selection) ||
-          DEPRECATED_$isGridSelection(selection)
+          $isRangeSelection(selection)
         ) {
           $setBlocksType(selection, () => $createParagraphNode());
         }
@@ -53,8 +51,7 @@ const BlockFormatDropDown = ({
         editor.update(() => {
           const selection = $getSelection();
           if (
-            $isRangeSelection(selection) ||
-            DEPRECATED_$isGridSelection(selection)
+            $isRangeSelection(selection)
           ) {
             $setBlocksType(selection, () => $createHeadingNode(headingSize));
           }
