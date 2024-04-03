@@ -122,7 +122,7 @@ const BlockFormatDropDown = ({
     };*/
   
     return (
-      <DropDown
+      <DropDown 
         disabled={disabled}
         buttonClassName="toolbar-item block-controls"
         buttonIconClassName={'icon block-type ' + blockType}

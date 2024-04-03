@@ -4,8 +4,8 @@ import type {
 	BaseSelection,
 	LexicalEditor,
 	NodeKey,
-	NodeSelection,
-	RangeSelection,
+	//NodeSelection,
+	//RangeSelection,
 } from 'lexical';
 import {
 	$getNodeByKey,

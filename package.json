@@ -3,20 +3,28 @@
   "version": "0.1.1",
   "homepage": ".",
   "dependencies": {
-    "@contentful/app-sdk": "^4.23.1",
-    "@contentful/f36-components": "^4.52.1",
-    "@contentful/f36-tokens": "^4.0.2",
+    "@contentful/app-scripts": "^1.18.0",
+    "@contentful/app-sdk": "^4.25.0",
+    "@contentful/f36-components": "^4.61.0",
+    "@contentful/f36-tokens": "^4.0.5",
     "@contentful/react-apps-toolkit": "^1.2.16",
-    "@lexical/react": "^0.13.1",
-    "@lexical/rich-text": "^0.13.1",
-    "contentful-management": "^11.14.4",
+    "@lexical/react": "^0.14.2",
+    "@lexical/rich-text": "^0.14.2",
+    "@testing-library/react": "^14.2.2",
+    "@tsconfig/create-react-app": "^2.0.4",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.3",
+    "@types/react": "^18.2.74",
+    "@types/react-dom": "^18.2.23",
+    "contentful-management": "^11.24.3",
     "craco": "^0.0.3",
-    "lexical": "^0.13.1",
+    "lexical": "^0.14.2",
     "re-resizable": "^6.9.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "5.0.1",
-    "usehooks-ts": "^2.9.1"
+    "typescript": "^5.4.3",
+    "usehooks-ts": "^3.0.2"
   },
   "scripts": {
     "start": "cross-env BROWSER=none craco start",
@@ -43,16 +51,8 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^1.14.0",
     "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^14.2.1",
-    "@tsconfig/create-react-app": "2.0.1",
-    "@types/jest": "29.5.5",
-    "@types/node": "20.8.2",
-    "@types/react": "18.2.25",
-    "@types/react-dom": "18.2.10",
     "cross-env": "7.0.3",
-    "node-sass": "^9.0.0",
-    "typescript": "5.2.2"
+    "node-sass": "^9.0.0"
   }
 }

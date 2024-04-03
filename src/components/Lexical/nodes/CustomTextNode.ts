@@ -1,4 +1,4 @@
-import { TextNode, $createTextNode, isHTMLElement, LexicalEditor, DOMExportOutput } from 'lexical';
+import { TextNode, $createTextNode, isHTMLElement, LexicalEditor } from 'lexical';
 import invariant from '../shared/invariant';
 
 interface Formatting extends Record<string, any> {};

@@ -11,7 +11,6 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { ListItemNode, ListNode } from '@lexical/list';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
 
-//import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { OnChangePlugin } from './plugins/LexicalOnChangePlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { $generateHtmlFromNodes } from '@lexical/html';
@@ -35,8 +34,8 @@ import CharacterCountPlugin from './plugins/CharacterCountPlugin';
 import CopyPasteEnhancementPlugin from './plugins/CopyPasteEnhancementPlugin';
 //import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
+import { cleanup } from './helper';
 import './lexical.scss';
-import TreeViewPlugin from './plugins/TreeViewPlugin';
 
 
 function Placeholder() {
@@ -204,12 +203,12 @@ const Editor = ({
 								ignoreNonChanges={true}
 								onChange={(editorState, editor) => {
 									editor.update(() => {
-										const html = $generateHtmlFromNodes(editor, null);
+										const html = cleanup($generateHtmlFromNodes(editor, null));
 										setValue(html);
 									});
 								}}
 							/>
-							{<CopyPasteEnhancementPlugin />}
+							<CopyPasteEnhancementPlugin />
 							{/*<TreeViewPlugin />*/}
 							{/*<AutoFocusPlugin/>*/}
 						</Box>

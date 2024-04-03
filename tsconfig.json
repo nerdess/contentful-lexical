@@ -2,6 +2,7 @@
   "extends": "@tsconfig/create-react-app/tsconfig.json",
   "compilerOptions": {
     "target": "es5",
+    "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
     "downlevelIteration": true,
   },

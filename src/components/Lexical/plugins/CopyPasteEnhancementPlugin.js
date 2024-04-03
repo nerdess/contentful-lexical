@@ -4,7 +4,7 @@ import {
     PASTE_COMMAND,
     COMMAND_PRIORITY_HIGH,
     $isRangeSelection,
-    $isGridSelection,
+    //$isGridSelection,
     $getSelection
 } from 'lexical';
 import { $insertDataTransferForRichText } from "./utils/clipboard";
@@ -19,7 +19,7 @@ function onPasteForRichText(
       const selection = $getSelection();
       const clipboardData = event.clipboardData;
       if (
-        clipboardData != null && ($isRangeSelection(selection) || $isGridSelection(selection))
+        clipboardData != null && ($isRangeSelection(selection) /*|| $isGridSelection(selection)*/)
       ) {
         $insertDataTransferForRichText(clipboardData, selection, editor);
       }
@@ -37,7 +37,7 @@ const CopyPasteEnhancementPlugin = () => {
                 (event) => {
         
                     const selection = $getSelection();
-                    if ($isRangeSelection(selection) || $isGridSelection(selection)) {
+                    if ($isRangeSelection(selection) /*|| $isGridSelection(selection)*/) {
                       onPasteForRichText(event, editor);
                       return true;
                     }
