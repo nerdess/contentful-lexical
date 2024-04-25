@@ -371,14 +371,14 @@ const ToolbarPlugin = () => {
 				>
 					<i className='format left-align' />
 				</button>
-				<button
+				{/*<button
 					className={`toolbar-item spaced`}
 					onClick={() => {
 						editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
 					}}
 				>
 					<i className='format center-align' />
-				</button>
+				</button>*/}
 			
 			<Divider />
 			<button
