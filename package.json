@@ -2,6 +2,7 @@
   "name": "contentful-lexical",
   "version": "0.1.1",
   "homepage": ".",
+  "license": "MIT",
   "dependencies": {
     "@contentful/app-scripts": "^1.18.0",
     "@contentful/app-sdk": "^4.25.0",
@@ -20,8 +21,8 @@
     "craco": "^0.0.3",
     "lexical": "^0.14.2",
     "re-resizable": "^6.9.11",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-scripts": "^5.0.1",
     "typescript": "^5.4.3",
     "usehooks-ts": "^3.0.2"

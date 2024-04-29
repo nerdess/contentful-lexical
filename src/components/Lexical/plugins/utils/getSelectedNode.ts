@@ -1,8 +1,7 @@
-import {
-	$isAtNodeEnd,
-} from '@lexical/selection';
+import { $isAtNodeEnd } from '@lexical/selection';
+import { RangeSelection } from 'lexical';
 
-export const getSelectedNode = (selection) => {
+export const getSelectedNode = (selection: RangeSelection) => {
 	const anchor = selection.anchor;
 	const focus = selection.focus;
 	const anchorNode = selection.anchor.getNode();

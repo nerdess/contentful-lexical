@@ -5,11 +5,11 @@ export class CustomLinkNode extends LinkNode {
     return "custom-link";
   }
 
-  static clone(node) {
+  static clone(node: any) {
     return new CustomLinkNode(node.getURL(), { rel: node.getRel(), target: node.getTarget() }, node.getKey());
   }
 
-  createDOM(config) {
+  createDOM(config: any) {
     return super.createDOM(config);
   }
 }

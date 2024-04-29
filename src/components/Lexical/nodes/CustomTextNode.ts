@@ -46,9 +46,11 @@ export class CustomTextNode extends TextNode {
 		return 'custom-text';
 	}
 
-	static clone(node: TextNode) {
+	//this causes whole paragraph being copied and not just the selected text - why?
+	//is this even needed?
+	/*static clone(node: TextNode) {
 		return new CustomTextNode(node.__text);
-	}
+	}*/
 
 	static importJSON(serializedNode: any) {
 		const node = $createTextNode(serializedNode.text);
@@ -103,7 +105,7 @@ export class CustomTextNode extends TextNode {
 				}
 
 				return element;
-			},
+			}
 		};
 	}
 }
