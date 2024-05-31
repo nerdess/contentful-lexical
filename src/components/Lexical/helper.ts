@@ -2,8 +2,14 @@ import { LexicalNode, NodeMap } from "lexical";
 
 export const cleanup = (html: string) => {
 
-	//replace &nbsp; with space
-	return html.replace(/&nbsp;/g, ' ');
+	const htmlCleanedUp = html
+	.replace(/&nbsp;/g, ' ')			//replace &nbsp; with space
+	.replace(/"(.*?)"/g, '„$1“')		//replace "..." with „...“
+	.replace(/“(.*?)“/g, '„$1“')		//replace “...“ with „...“
+	.replace(/“(.*?)”/g, '„$1“')		//replace “...” with „...“
+	.replace(/“(.*?)”/g, '„$1“')	
+
+	return htmlCleanedUp;
 	
 	//remove empty <p>-tags
 	//return html.replace(/<p[^>]*>\s*<\/p[^>]*>/g, '');
@@ -16,3 +22,17 @@ export const mapToObj = (map: NodeMap) => {
 	}
 	return obj
 }
+
+/*
+	let notification = '';
+
+	if (htmlCleanedUp !== html) {
+		console.log('....', html, htmlCleanedUp);
+		notification = notification + `${html} wurde bereinigt mit ${htmlCleanedUp} <br />`
+	}
+
+	if (notification.length > 0) Notification.success(notification)
+
+
+
+*/

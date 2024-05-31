@@ -12,15 +12,15 @@ import {
 	Stack,
 } from '@contentful/f36-components';
 
-const Wrapper: React.FC<{
-	name?: string;
-	children?: ReactNode;
-	currentValue?: string;
-}> = ({ 
+const Wrapper = ({
+	children,
 	name = '',
-	children, 
-	currentValue, 
- }) => {
+	currentValue,
+} : { 
+	children: ReactNode; 
+	name?: string;
+	currentValue?: string;
+}) => {
 
 	const sdk = useSDK<DialogAppSDK>();
 

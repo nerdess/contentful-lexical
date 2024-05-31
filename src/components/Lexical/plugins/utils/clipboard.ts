@@ -35,6 +35,8 @@ import {
 import { CAN_USE_DOM } from '../../shared/canUseDom';
 //import invariant from 'shared/invariant';
 import invariant from '../../shared/invariant';
+import { cleanup } from '../../helper';
+import { Notification } from '@contentful/f36-components';
 
 const getDOMSelection = (targetWindow: Window | null): Selection | null =>
   CAN_USE_DOM ? (targetWindow || window).getSelection() : null;
@@ -114,6 +116,44 @@ export function $insertDataTransferForPlainText(
 }
 
 /**
+ * Traverses the DOM from a root node and cleans up the text content of all text nodes.
+ *
+ * @param node a DOM node
+ */
+const traverseAndCleanup = (node: Node, cleanups: any):void => {
+  if (node.nodeType === Node.TEXT_NODE) {
+      if (node.nodeValue) {
+
+        const nodeValueCleaned = cleanup(node.nodeValue);
+
+        if (node.nodeValue !== nodeValueCleaned) {
+
+          console.log('xxxxx');
+          cleanups.push({
+            original: node.nodeValue,
+            cleaned: nodeValueCleaned
+          });
+
+          node.nodeValue = nodeValueCleaned;
+        }
+      }
+  }
+  node.childNodes.forEach(child => traverseAndCleanup(child, cleanups));
+}
+
+const notificateCleanups = (cleanups: any):void => {
+
+  //let notification = '';
+  const notification = cleanups.map((cleanup: any) => {
+    return `${cleanup.original} => ${cleanup.cleaned}, `
+  })
+
+  notification && Notification.info(notification, { duration: 0 })
+
+}
+
+
+/**
  * Attempts to insert content of the mime-types application/x-lexical-editor, text/html,
  * text/plain, or text/uri-list (in descending order of priority) from the provided DataTransfer
  * object into the editor at the provided selection.
@@ -136,6 +176,7 @@ export function $insertDataTransferForRichText(
         payload.namespace === editor._config.namespace &&
         Array.isArray(payload.nodes)
       ) {
+
         const nodes = $generateNodesFromSerializedNodes(payload.nodes);
         return $insertGeneratedNodes(editor, nodes, selection);
       }
@@ -145,10 +186,17 @@ export function $insertDataTransferForRichText(
   }
 
   const htmlString = dataTransfer.getData('text/html');
+
   if (htmlString) {
+
     try {
       const parser = new DOMParser();
       const dom = parser.parseFromString(htmlString, 'text/html');
+
+      const cleanups = [] as Array<any>;
+      traverseAndCleanup(dom, cleanups);
+      //notificateCleanups(cleanups);
+
       const nodes = $generateNodesFromDOM(editor, dom);
       return $insertGeneratedNodes(editor, nodes, selection);
     } catch {
@@ -204,6 +252,14 @@ export function $insertGeneratedNodes(
       selection,
     })
   ) {
+
+    /*nodes.forEach((node) => {
+
+      console.log('node', node., node.getTextContent())
+      node.set
+    });*/
+
+
     selection.insertNodes(nodes);
   }
   return;

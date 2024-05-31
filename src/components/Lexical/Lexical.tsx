@@ -34,7 +34,6 @@ import CharacterCountPlugin from './plugins/CharacterCountPlugin';
 import CopyPasteEnhancementPlugin from './plugins/CopyPasteEnhancementPlugin';
 //import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
-import { cleanup } from './helper';
 import './lexical.scss';
 
 
@@ -177,6 +176,8 @@ const Editor = ({
 	resizable: boolean
 }) => {
 
+	const [html, setHtml] = useState<string>('');
+
 	return (
 	
 		<LexicalComposer 
@@ -203,8 +204,10 @@ const Editor = ({
 								ignoreNonChanges={true}
 								onChange={(editorState, editor) => {
 									editor.update(() => {
-										const html = cleanup($generateHtmlFromNodes(editor, null));
-										setValue(html);
+										const foo = $generateHtmlFromNodes(editor, null);
+										console.log(foo);
+										setHtml(foo);
+										setValue($generateHtmlFromNodes(editor, null));
 									});
 								}}
 							/>
@@ -213,6 +216,19 @@ const Editor = ({
 							{/*<AutoFocusPlugin/>*/}
 						</Box>
 				</Flex>
+				
+				<p style={{
+					fontSize: '18px',
+					lineHeight: '29px', 
+					color: '#2a2a2a', 
+					fontFamily: 'AbrilText-Regular, Georgia, serif',
+					marginTop: '1em',
+					marginBottom:'1em'
+				}}>
+				<div dangerouslySetInnerHTML={{ __html:html}} />
+				</p>
+
+				<div dangerouslySetInnerHTML={{ __html: '<p style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif; margin-top: 1em; margin-bottom: 1em;">wie weiter mit der <b style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif; font-weight: bold; ">Gemeinsamen Agrarpolitik</b>(GAP) der Europäischen Union? Das ist die Klammer zu mehreren Texten der heutigen Ausgabe. Die Zukunft der GAP wird einerseits vom möglichen<b style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif; font-weight: bold; ">Beitritt der Ukraine</b>bestimmt. Das Land hat nach Einschätzung der Bundesregierung sämtliche Reformvorgaben dafür umgesetzt, hieß es gestern. Zwar wird es noch dauern, bis die Ukraine politisch Teil von Europa wird. Aber es gibt schon Untersuchungen, die die <b style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif; font-weight: bold; ">Folgen für den Agrarsektor</b><span style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif;"> durchspielen. Theresa Crysmann analysiert die Zusammenhänge.</span></p>' }} />
 				<Box>
 					<CharacterCountPlugin />
 				</Box>

@@ -79,6 +79,8 @@ export class CustomTextNode extends TextNode {
 	exportDOM(editor: LexicalEditor) {
 		let element = super.createDOM(editor._config) as HTMLElement;
 
+		//console.log('element', element);
+
 		invariant(
 			element !== null && isHTMLElement(element),
 			'Expected TextNode createDOM to always return a HTMLElement'
