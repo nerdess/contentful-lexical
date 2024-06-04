@@ -33,6 +33,7 @@ const DialogCleanup = ({
 						style={{
                             width: "100%",
 							height: "calc(100vh - 253px)", //todo: calculate dynamically
+                            whiteSpace: "pre-line",
 						}}
 						flexDirection="column"
                         gap="spacingS"
