@@ -1,26 +1,31 @@
 import React from 'react';
 import Lexical from './Lexical';
-
-interface LexicalToContentfulProps {
-	initialValue: string;
-	currentValue?: string;
-	countChanges: any;
-	setValue: (value: string) => void;
-	resizable?: boolean
-}
+import { Cleanup } from './plugins/copyPasteEnhancement/types';
 
 const LexicalToContentful = ({
 	initialValue,
 	currentValue,
 	countChanges,
 	setValue,
+	cleanups,
+	setCleanups,
 	resizable = true
-}:LexicalToContentfulProps) => {
+}:{
+	initialValue: string;
+	currentValue?: string;
+	countChanges: any;
+	setValue: (value: string) => void;
+	cleanups: Cleanup[];
+	setCleanups: React.Dispatch<React.SetStateAction<Cleanup[]>>;
+	resizable?: boolean
+}) => {
 
 	return (
 		<Lexical
 			initialValue={initialValue}
 			resizable={resizable}
+			cleanups={cleanups}
+			setCleanups={setCleanups}
 			setValue={(value: string): void => {
 
 				countChanges.current = countChanges.current + 1;

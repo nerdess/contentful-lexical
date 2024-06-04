@@ -167,14 +167,18 @@ const Editor = ({
 	initialValue,
 	setValue,
 	resizable,
+	cleanups,
+	setCleanups,
 }: {
 	initialValue: string;
-	setValue: (value: string) => void;
+	setValue: (value:string) => void;
 	resizable: boolean;
+	cleanups: Cleanup[];
+	setCleanups: React.Dispatch<React.SetStateAction<Cleanup[]>>;
 }) => {
 
 	//const [html, setHtml] = useState<string>('');
-	const [cleanups, setCleanups] = useState<Cleanup[]>([]);
+
 
 	return (
 		<LexicalComposer initialConfig={initialConfig}>
@@ -194,7 +198,6 @@ const Editor = ({
 							placeholder={<Placeholder />}
 							ErrorBoundary={LexicalErrorBoundary}
 						/>
-
 						<HistoryPlugin />
 						<ListPlugin />
 						<LinkPlugin />

@@ -10,16 +10,18 @@ import {
 	Note,
 	Stack,
 } from '@contentful/f36-components';
-import { InvocationParameters_LexicalFullScreen } from '../plugins/copyPasteEnhancement/types';
+import { Cleanup, InvocationParameters_LexicalFullScreen } from '../plugins/copyPasteEnhancement/types';
 
 const Wrapper = ({
 	children,
-	name = '',
 	currentValue,
+	cleanups,
+	name = ''
 } : { 
 	children: ReactNode; 
-	name?: string;
 	currentValue?: string;
+	cleanups: Cleanup[];
+	name?: string;
 }) => {
 
 	const sdk = useSDK<DialogAppSDK>();
@@ -59,12 +61,13 @@ const Wrapper = ({
 							onClick={() => {
 
 									sdk.close({
-										value: currentValue
+										value: currentValue,
+										cleanups
 									})
 								}
 							}
 						>
-							Close & Save
+							Close &amp; Save
 						</Button>
 					</Stack>
 				</Stack>
@@ -80,14 +83,16 @@ const DialogLexicalFullScreen = ({
     invocationParams: InvocationParameters_LexicalFullScreen;
 }) => {
 
-    const { name, initialValue } = invocationParams;
+    const { name, initialValue, cleanups } = invocationParams;
 	const countChanges = useRef(0);
 	const [currentValue, setCurrentValue] = useState<string>(initialValue);
+	const [cleanupsState, setCleanupsState] = useState<Cleanup[]>(cleanups);
 
 	return (
 		<Wrapper
 			name={name}
 			currentValue={currentValue}
+			cleanups={cleanupsState}
 		>
 			<LexicalToContentful
 				initialValue={initialValue}
@@ -95,6 +100,8 @@ const DialogLexicalFullScreen = ({
 				countChanges={countChanges}
 				setValue={setCurrentValue}
 				resizable={false}
+				cleanups={cleanupsState}
+				setCleanups={setCleanupsState}
 			/>
 		</Wrapper>
 	);

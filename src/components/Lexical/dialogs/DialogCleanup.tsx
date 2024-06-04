@@ -31,6 +31,7 @@ const DialogCleanup = ({
 				<Stack flexDirection="column" alignItems="end">
 					<Flex
 						style={{
+                            width: "100%",
 							height: "calc(100vh - 253px)", //todo: calculate dynamically
 						}}
 						flexDirection="column"

@@ -5,7 +5,7 @@ import useAutoResizer from '../hooks/useAutoResizer';
 import LexicalToContentful from '../components/Lexical/LexicalToContentful';
 import { Box, Button, Stack } from '@contentful/f36-components';
 import { FieldAppSDK } from '@contentful/app-sdk';
-import { InvocationParameters_LexicalFullScreen } from '../components/Lexical/plugins/copyPasteEnhancement/types';
+import { Cleanup, InvocationParameters_LexicalFullScreen } from '../components/Lexical/plugins/copyPasteEnhancement/types';
 
 
 
@@ -15,6 +15,7 @@ const Field = () => {
 	const sdk = useSDK<FieldAppSDK>();
 	const countChanges = useRef<number>(0);
 	const [initialValue, setInitialValue] = useState(sdk.field.getValue());
+	const [cleanups, setCleanups] = useState<Cleanup[]>([]);
 
 	const setValue = useCallback((value: string) => {
 		sdk.field.setValue(value);
@@ -41,19 +42,20 @@ const Field = () => {
 								ids: sdk.ids,
 								locale: sdk.field.locale,
 								name: sdk.field.name,
-								initialValue
+								initialValue,
+								cleanups
 							};
 
 							sdk.dialogs.openCurrentApp({
 								width: 'fullWidth',
 								minHeight: '100vh',
 								parameters
-								//parameters: parameters as unknown as SerializedJSONValue
-							}).then(({value}) => {
+							}).then(({value, cleanups}) => {
 
 								if (value !== initialValue) {
 									setInitialValue(value);
 									setValue(value);
+									setCleanups(cleanups);
 								}
 		
 							})
@@ -71,6 +73,8 @@ const Field = () => {
 					currentValue={sdk.field.getValue()}
 					countChanges={countChanges}
 					setValue={setValue}
+					cleanups={cleanups}
+					setCleanups={setCleanups}
 				/>
 			</Box>
 		</Stack>

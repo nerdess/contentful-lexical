@@ -14,6 +14,7 @@ export type InvocationParameters_LexicalFullScreen = {
 	locale: string;
 	name: string;
 	initialValue: string;
+	cleanups: Cleanup[];
 }
 
 export type InvocationParameters_Cleanup = {
