@@ -1,24 +1,15 @@
-import React, {useState, useCallback} from 'react';
+import {useState, useCallback} from 'react';
 import { useRef } from 'react';
 import { useSDK } from '@contentful/react-apps-toolkit';
 import useAutoResizer from '../hooks/useAutoResizer';
 import LexicalToContentful from '../components/Lexical/LexicalToContentful';
 import { Box, Button, Stack } from '@contentful/f36-components';
-import { FieldAppSDK, SerializedJSONValue } from '@contentful/app-sdk';
+import { FieldAppSDK } from '@contentful/app-sdk';
+import { InvocationParameters_LexicalFullScreen } from '../components/Lexical/plugins/copyPasteEnhancement/types';
 
-export interface InvocationParameters {
-	ids: { 
-	  space: string; 
-	  environment: string; 
-	  entry: string; 
-	  field: string 
-	};
-	locale: string;
-	name: string;
-	initialValue: string;
-}
 
-const Field: React.FC = () => {
+
+const Field = () => {
 
 	useAutoResizer();
 	const sdk = useSDK<FieldAppSDK>();
@@ -45,7 +36,8 @@ const Field: React.FC = () => {
 
 							const initialValue = sdk.field.getValue();
 	
-							const parameters: InvocationParameters = {
+							const parameters: InvocationParameters_LexicalFullScreen = {
+								type: 'lexicalFullScreen',
 								ids: sdk.ids,
 								locale: sdk.field.locale,
 								name: sdk.field.name,
@@ -55,7 +47,8 @@ const Field: React.FC = () => {
 							sdk.dialogs.openCurrentApp({
 								width: 'fullWidth',
 								minHeight: '100vh',
-								parameters: parameters as unknown as SerializedJSONValue
+								parameters
+								//parameters: parameters as unknown as SerializedJSONValue
 							}).then(({value}) => {
 
 								if (value !== initialValue) {

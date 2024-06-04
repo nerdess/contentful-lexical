@@ -36,7 +36,7 @@ import { CAN_USE_DOM } from '../../shared/canUseDom';
 //import invariant from 'shared/invariant';
 import invariant from '../../shared/invariant';
 import { cleanup } from '../../helper';
-import { Notification } from '@contentful/f36-components';
+import { Cleanup } from '../copyPasteEnhancement/types';
 
 const getDOMSelection = (targetWindow: Window | null): Selection | null =>
   CAN_USE_DOM ? (targetWindow || window).getSelection() : null;
@@ -120,15 +120,14 @@ export function $insertDataTransferForPlainText(
  *
  * @param node a DOM node
  */
-const traverseAndCleanup = (node: Node, cleanups: any):void => {
+/*const traverseAndCleanup = (node: Node, cleanups: Cleanup[]):void => {
+
   if (node.nodeType === Node.TEXT_NODE) {
       if (node.nodeValue) {
 
         const nodeValueCleaned = cleanup(node.nodeValue);
 
-        if (node.nodeValue !== nodeValueCleaned) {
-
-          console.log('xxxxx');
+        if (node.nodeValue.trim() !== nodeValueCleaned.trim()) {
           cleanups.push({
             original: node.nodeValue,
             cleaned: nodeValueCleaned
@@ -139,17 +138,28 @@ const traverseAndCleanup = (node: Node, cleanups: any):void => {
       }
   }
   node.childNodes.forEach(child => traverseAndCleanup(child, cleanups));
-}
+}*/
 
-const notificateCleanups = (cleanups: any):void => {
+const cleanupHTML = (html: string, cleanups: Cleanup[]): string => {
 
-  //let notification = '';
-  const notification = cleanups.map((cleanup: any) => {
-    return `${cleanup.original} => ${cleanup.cleaned}, `
-  })
+    const nodeValueCleaned = cleanup(html);
 
-  notification && Notification.info(notification, { duration: 0 })
+    if (html.trim() !== nodeValueCleaned.trim()) {
 
+      const tempHTMLElement = document.createElement('div');
+      tempHTMLElement.innerHTML = html;
+
+      const tempHTMLElementCleaned = document.createElement('div');
+      tempHTMLElementCleaned.innerHTML = nodeValueCleaned;
+
+
+      cleanups.push({
+        original: tempHTMLElement.textContent || '',
+        cleaned: tempHTMLElementCleaned.textContent || ''
+      });
+    }
+    return nodeValueCleaned;
+      
 }
 
 
@@ -166,8 +176,9 @@ export function $insertDataTransferForRichText(
   dataTransfer: DataTransfer,
   selection: BaseSelection,
   editor: LexicalEditor,
-): void {
+): any {
   const lexicalString = dataTransfer.getData('application/x-lexical-editor');
+  const cleanups = [] as Array<any>;
 
   if (lexicalString) {
     try {
@@ -178,7 +189,8 @@ export function $insertDataTransferForRichText(
       ) {
 
         const nodes = $generateNodesFromSerializedNodes(payload.nodes);
-        return $insertGeneratedNodes(editor, nodes, selection);
+        $insertGeneratedNodes(editor, nodes, selection);
+        return cleanups;
       }
     } catch {
       // Fail silently.
@@ -193,16 +205,17 @@ export function $insertDataTransferForRichText(
       const parser = new DOMParser();
       const dom = parser.parseFromString(htmlString, 'text/html');
 
-      const cleanups = [] as Array<any>;
-      traverseAndCleanup(dom, cleanups);
-      //notificateCleanups(cleanups);
+      dom.body.innerHTML = cleanupHTML(dom.body.innerHTML, cleanups);
 
       const nodes = $generateNodesFromDOM(editor, dom);
-      return $insertGeneratedNodes(editor, nodes, selection);
+      $insertGeneratedNodes(editor, nodes, selection);
+      return cleanups;
     } catch {
       // Fail silently.
     }
+
   }
+
 
   // Multi-line plain text in rich text mode pasted as separate paragraphs
   // instead of single paragraph with linebreaks.
@@ -229,6 +242,9 @@ export function $insertDataTransferForRichText(
       selection.insertRawText(text);
     }
   }
+
+  return cleanups;
+
 }
 
 /**
@@ -253,10 +269,8 @@ export function $insertGeneratedNodes(
     })
   ) {
 
+    //console.log('nodes', nodes);
     /*nodes.forEach((node) => {
-
-      console.log('node', node., node.getTextContent())
-      node.set
     });*/
 
 

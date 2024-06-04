@@ -1,18 +1,48 @@
 import { LexicalNode, NodeMap } from "lexical";
 
+
 export const cleanup = (html: string) => {
 
-	const htmlCleanedUp = html
-	.replace(/&nbsp;/g, ' ')			//replace &nbsp; with space
-	.replace(/"(.*?)"/g, '„$1“')		//replace "..." with „...“
-	.replace(/“(.*?)“/g, '„$1“')		//replace “...“ with „...“
-	.replace(/“(.*?)”/g, '„$1“')		//replace “...” with „...“
-	.replace(/“(.*?)”/g, '„$1“')	
+	//replace empty nonbreaking-spaces
+	const removeNbsp = html
+	.replace(/&nbsp;/g, ' ')			//replace &nbsp; with empty space
+	.replace(/\u00A0/g, ' ')			//replace utf-8 representation of &nbsp; with empty space
 
-	return htmlCleanedUp;
 	
-	//remove empty <p>-tags
-	//return html.replace(/<p[^>]*>\s*<\/p[^>]*>/g, '');
+	//replace wrong quotes with „...“
+	const split = removeNbsp.split(/(["“„”><])/).filter(Boolean);
+	let checkQuotes = 0;
+	let checkTags = 0;
+	let lastTag = '';
+
+	const result = split.map((item) => {
+
+		if (item.match(/["“„”]/)) {
+			checkQuotes++;
+			if (checkTags !== 0 && checkTags % 2 !== 0) {
+				return item;
+			}
+			if (checkQuotes % 2 !== 0) {
+				return '„';
+			} else {
+				return '“';
+			}
+		}
+
+		if (item === '<' && lastTag !== '<') {
+			checkTags++;
+			lastTag = '<';
+		}
+		
+		if (item === '>' && lastTag !== '>') {
+			checkTags++;
+			lastTag = '>';
+		}
+
+		return item;
+	});
+	return result.join('');
+	
 }
 
 export const mapToObj = (map: NodeMap) => {
@@ -22,17 +52,3 @@ export const mapToObj = (map: NodeMap) => {
 	}
 	return obj
 }
-
-/*
-	let notification = '';
-
-	if (htmlCleanedUp !== html) {
-		console.log('....', html, htmlCleanedUp);
-		notification = notification + `${html} wurde bereinigt mit ${htmlCleanedUp} <br />`
-	}
-
-	if (notification.length > 0) Notification.success(notification)
-
-
-
-*/

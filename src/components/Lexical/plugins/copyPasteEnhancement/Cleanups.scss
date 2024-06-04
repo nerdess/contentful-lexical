@@ -1,0 +1,9 @@
+.cleanups {
+    &--active {
+        cursor: pointer;
+
+        &:hover {
+            background-color: #AEC1CC; //todo: use token
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import theme from '../../themes/defaultTheme';
 
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
@@ -28,21 +28,26 @@ import ImagePlugin from './plugins/image/ImagePlugin';
 import InitialContentPlugin from './plugins/InitialContentPlugin';
 import { Resizable } from 're-resizable';
 import { ParagraphNode, TextNode } from 'lexical';
-import { Stack, Box, Flex } from '@contentful/f36-components';
-import { HeadingNode} from '@lexical/rich-text';
+import {
+	Stack,
+	Box,
+	Flex
+} from '@contentful/f36-components';
+import { HeadingNode } from '@lexical/rich-text';
 import CharacterCountPlugin from './plugins/CharacterCountPlugin';
-import CopyPasteEnhancementPlugin from './plugins/CopyPasteEnhancementPlugin';
+import CopyPasteEnhancementPlugin from './plugins/copyPasteEnhancement/CopyPasteEnhancementPlugin';
 //import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
+import Cleanups from './plugins/copyPasteEnhancement/Cleanups';
+import { Cleanup } from './plugins/copyPasteEnhancement/types';
 import './lexical.scss';
-
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
 }
 
 const initialConfig = {
-	namespace:"Contentful",
+	namespace: 'Contentful',
 	theme,
 	// Handling of errors during update
 	onError(error: Error) {
@@ -73,7 +78,7 @@ const initialConfig = {
 		CustomTextNode,
 		{
 			replace: TextNode,
-			with: (node:TextNode) => {
+			with: (node: TextNode) => {
 				return new CustomTextNode(node.__text);
 			},
 		},
@@ -97,8 +102,6 @@ const initialConfig = {
 	],
 };
 
-
-
 const BottomRightHandle = () => (
 	<div className='editor-resize-handle'>
 		<span />
@@ -107,18 +110,12 @@ const BottomRightHandle = () => (
 	</div>
 );
 
-const ContentEditableContainer = ({
-	resizable = true,
-}) => {
-
+const ContentEditableContainer = ({ resizable = true }) => {
 	const [height, setHeight] = useState(320);
 	const ref = useRef<HTMLDivElement>(null);
 
-
 	if (!resizable) {
-		return (
-			<ContentEditable className='editor-input' />
-		)
+		return <ContentEditable className='editor-input' />;
 	}
 
 	return (
@@ -127,7 +124,7 @@ const ContentEditableContainer = ({
 				minHeight={200}
 				defaultSize={{
 					height: 320,
-					width: '100%'
+					width: '100%',
 				}}
 				enable={{
 					top: false,
@@ -147,7 +144,7 @@ const ContentEditableContainer = ({
 						bottom: -10,
 					},
 				}}
-				onResize={() => ref.current && setHeight( ref.current.clientHeight)}
+				onResize={() => ref.current && setHeight(ref.current.clientHeight)}
 				style={{
 					marginBottom: 10,
 				}}
@@ -169,72 +166,72 @@ const ContentEditableContainer = ({
 const Editor = ({
 	initialValue,
 	setValue,
-	resizable
-}:{
-	initialValue: string,
-	setValue: (value: string) => void,
-	resizable: boolean
+	resizable,
+}: {
+	initialValue: string;
+	setValue: (value: string) => void;
+	resizable: boolean;
 }) => {
 
-	const [html, setHtml] = useState<string>('');
+	//const [html, setHtml] = useState<string>('');
+	const [cleanups, setCleanups] = useState<Cleanup[]>([]);
 
 	return (
-	
-		<LexicalComposer 
-			initialConfig={initialConfig}
-		>
-			<Stack fullWidth flexDirection='column' spacing='spacing2Xs' alignItems='end'>
-					<Flex  flexDirection='column' className='editor-container'>
-						<ToolbarPlugin />
-						<Box className="editor-inner">
-							<RichTextPlugin
-								contentEditable={<ContentEditableContainer resizable={resizable} />}
-								placeholder={<Placeholder />}
-								ErrorBoundary={LexicalErrorBoundary}
-							/>
+		<LexicalComposer initialConfig={initialConfig}>
+			<Stack
+				fullWidth
+				flexDirection='column'
+				spacing='spacing2Xs'
+				alignItems='end'
+			>
+				<Flex flexDirection='column' className='editor-container'>
+					<ToolbarPlugin />
+					<Box className='editor-inner'>
+						<RichTextPlugin
+							contentEditable={
+								<ContentEditableContainer resizable={resizable} />
+							}
+							placeholder={<Placeholder />}
+							ErrorBoundary={LexicalErrorBoundary}
+						/>
 
-							<HistoryPlugin />
-							<ListPlugin />
-							<LinkPlugin />
-							<FloatingLinkEditorPlugin />
-							<ListMaxIndentLevelPlugin maxDepth={7} />
-							<ImagePlugin />
-							<InitialContentPlugin htmlString={initialValue} />
-							<OnChangePlugin
-								ignoreNonChanges={true}
-								onChange={(editorState, editor) => {
-									editor.update(() => {
-										const foo = $generateHtmlFromNodes(editor, null);
-										console.log(foo);
-										setHtml(foo);
-										setValue($generateHtmlFromNodes(editor, null));
-									});
-								}}
-							/>
-							<CopyPasteEnhancementPlugin />
-							{/*<TreeViewPlugin />*/}
-							{/*<AutoFocusPlugin/>*/}
-						</Box>
+						<HistoryPlugin />
+						<ListPlugin />
+						<LinkPlugin />
+						<FloatingLinkEditorPlugin />
+						<ListMaxIndentLevelPlugin maxDepth={7} />
+						<ImagePlugin />
+						<InitialContentPlugin htmlString={initialValue} />
+						<OnChangePlugin
+							ignoreNonChanges={true}
+							onChange={(editorState, editor) => {
+								editor.update(() => {
+									const html = $generateHtmlFromNodes(editor, null);
+									setValue(html);
+								});
+							}}
+						/>
+						<CopyPasteEnhancementPlugin setCleanups={setCleanups} />
+						{/*<TreeViewPlugin />*/}
+						{/*<AutoFocusPlugin/>*/}
+					</Box>
 				</Flex>
-				
-				<p style={{
-					fontSize: '18px',
-					lineHeight: '29px', 
-					color: '#2a2a2a', 
-					fontFamily: 'AbrilText-Regular, Georgia, serif',
-					marginTop: '1em',
-					marginBottom:'1em'
-				}}>
-				<div dangerouslySetInnerHTML={{ __html:html}} />
-				</p>
 
-				<div dangerouslySetInnerHTML={{ __html: '<p style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif; margin-top: 1em; margin-bottom: 1em;">wie weiter mit der <b style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif; font-weight: bold; ">Gemeinsamen Agrarpolitik</b>(GAP) der Europäischen Union? Das ist die Klammer zu mehreren Texten der heutigen Ausgabe. Die Zukunft der GAP wird einerseits vom möglichen<b style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif; font-weight: bold; ">Beitritt der Ukraine</b>bestimmt. Das Land hat nach Einschätzung der Bundesregierung sämtliche Reformvorgaben dafür umgesetzt, hieß es gestern. Zwar wird es noch dauern, bis die Ukraine politisch Teil von Europa wird. Aber es gibt schon Untersuchungen, die die <b style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif; font-weight: bold; ">Folgen für den Agrarsektor</b><span style="font-size: 18px; line-height: 29px; color: #2a2a2a; font-family: AbrilText-Regular, Georgia, serif;"> durchspielen. Theresa Crysmann analysiert die Zusammenhänge.</span></p>' }} />
-				<Box>
-					<CharacterCountPlugin />
-				</Box>
+
+				<Stack
+					flexDirection='row'
+					justifyContent='space-between'
+					style={{ width: '100%' }}
+				>
+					<Box>
+						<Cleanups cleanups={cleanups} />
+					</Box>
+					<Box>
+						<CharacterCountPlugin />
+					</Box>
+				</Stack>
 			</Stack>
 		</LexicalComposer>
-
 	);
 };
 

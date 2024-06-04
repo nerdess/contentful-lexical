@@ -3394,9 +3394,9 @@
     undici-types "~5.26.4"
 
 "@types/node@^20.12.3":
-  version "20.12.13"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.12.13.tgz#90ed3b8a4e52dd3c5dc5a42dde5b85b74ad8ed88"
-  integrity sha512-gBGeanV41c1L171rR7wjbMiEpEI/l5XFQdLLfhr/REwpgDy/4U8y89+i8kRiLzDyZdOkXh+cRaTetUnCYutoXA==
+  version "20.14.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.14.0.tgz#49ceec7b34f8621470cff44677fa9d461a477f17"
+  integrity sha512-5cHBxFGJx6L4s56Bubp4fglrEpmyJypsqI6RgzMfBHWUJQGWAAi8cWcgetEbZXHYXo9C2Fa4EEds/uSyS4cxmA==
   dependencies:
     undici-types "~5.26.4"
 
@@ -6128,6 +6128,11 @@ diff-sequences@^29.6.3:
   version "29.6.3"
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-29.6.3.tgz#4deaf894d11407c51efc8418012f9e70b84ea921"
   integrity sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==
+
+diff@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
+  integrity sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
 
 diffie-hellman@^5.0.0:
   version "5.0.3"
@@ -11713,6 +11718,13 @@ react-scripts@^5.0.1:
     workbox-webpack-plugin "^6.4.1"
   optionalDependencies:
     fsevents "^2.3.2"
+
+react-string-diff@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-string-diff/-/react-string-diff-0.2.0.tgz#4afd8705ab4cbc92c576ce7c8f0d0c78a4a54242"
+  integrity sha512-wB8Dr2T8CD/nuRMSEs9PHQ08e+o4a65SmkMZYrZRIEFzrbFpyrb9GuDmBwE7dxqcw06CqrLWXEuibUDJQX60LQ==
+  dependencies:
+    diff "^4.0.2"
 
 react@^18.3.1:
   version "18.3.1"
