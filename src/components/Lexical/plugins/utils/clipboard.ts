@@ -181,6 +181,7 @@ export function $insertDataTransferForRichText(
   const cleanups = [] as Array<any>;
 
   if (lexicalString) {
+
     try {
       const payload = JSON.parse(lexicalString);
       if (
@@ -220,6 +221,7 @@ export function $insertDataTransferForRichText(
   // Multi-line plain text in rich text mode pasted as separate paragraphs
   // instead of single paragraph with linebreaks.
   // Webkit-specific: Supports read 'text/uri-list' in clipboard.
+
   const text =
     dataTransfer.getData('text/plain') || dataTransfer.getData('text/uri-list');
   if (text != null) {
@@ -235,11 +237,13 @@ export function $insertDataTransferForRichText(
         } else if (part === '\t') {
           selection.insertNodes([$createTabNode()]);
         } else {
-          selection.insertText(part);
+          const _part = cleanupHTML(part, cleanups);
+          selection.insertText(_part);
         }
       }
     } else {
-      selection.insertRawText(text);
+      const _text = cleanupHTML(text, cleanups);
+      selection.insertRawText(_text);
     }
   }
 
