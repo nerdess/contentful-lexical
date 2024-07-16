@@ -1,7 +1,15 @@
-import { TextNode, $createTextNode, isHTMLElement, LexicalEditor } from 'lexical';
+import { 
+	TextNode,
+	$createTextNode,
+	isHTMLElement,
+	LexicalEditor,
+	SerializedTextNode
+} from 'lexical';
 import invariant from '../shared/invariant';
 
 interface Formatting extends Record<string, any> {};
+
+export type SerializedCustomTextNode = SerializedTextNode;
 
 type Mapping = {
 	[key: string]: string;
@@ -42,9 +50,11 @@ const applyFormatting = (element: HTMLElement, formatting: Formatting): HTMLElem
 }
 
 export class CustomTextNode extends TextNode {
-	static getType() {
-		return 'custom-text';
-	}
+
+	/*constructor(text: string, key?: NodeKey) {
+		super(text, key);
+		super.toggleDirectionless();
+	}*/
 
 	//this causes whole paragraph being copied and not just the selected text - why?
 	//is this even needed?
@@ -52,16 +62,24 @@ export class CustomTextNode extends TextNode {
 		return new CustomTextNode(node.__text);
 	}*/
 
-	static importJSON(serializedNode: any) {
+	static clone(node: CustomTextNode): CustomTextNode {
+		return new CustomTextNode(node.__text, node.__key);
+	}
+	
+	static getType(): string {
+		return 'custom-text';
+	}
+
+	static importJSON(serializedNode: SerializedCustomTextNode): CustomTextNode {
 		const node = $createTextNode(serializedNode.text);
 		node.setFormat(serializedNode.format);
 		node.setDetail(serializedNode.detail);
 		node.setMode(serializedNode.mode);
 		node.setStyle(serializedNode.style);
-		return node;
+		return node as CustomTextNode;
 	}
 
-	exportJSON() {
+	exportJSON(): SerializedCustomTextNode {
 		return {
 			detail: this.getDetail(),
 			format: this.getFormat(),
@@ -99,7 +117,7 @@ export class CustomTextNode extends TextNode {
 
 		return {
 			element,
-			after: (element: any): any => {
+			/*after: (element: any): any => {
 
 				//remove those empty <span>tags created by lexical
 				if (element.tagName === 'SPAN' && element.attributes.length === 0) {
@@ -107,7 +125,7 @@ export class CustomTextNode extends TextNode {
 				}
 
 				return element;
-			}
+			}*/
 		};
 	}
 }

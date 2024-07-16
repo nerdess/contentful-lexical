@@ -3,12 +3,20 @@ import { LexicalNode, NodeMap } from "lexical";
 
 export const cleanup = (html: string) => {
 
-	//replace empty nonbreaking-spaces
+	/*
+	1) replace empty nonbreaking-spaces
+	2) remove text-align: right;
+	3) remove text-align: center;
+	*/
 	const removeNbsp = html
-	.replace(/&nbsp;/g, ' ')			//replace &nbsp; with empty space
-	.replace(/\u00A0/g, ' ')			//replace utf-8 representation of &nbsp; with empty space
+	.replace(/&nbsp;/g, ' ')				//replace &nbsp; with empty space
+	.replace(/\u00A0/g, ' ')				//replace utf-8 representation of &nbsp; with empty space
+	.replace(/text-align: right;/g, '')		//remove text-align: right;
+	.replace(/text-align:right;/g, '')		//remove text-align: right;
+	.replace(/text-align: center;/g, '')	//remove text-align: center;
+	.replace(/text-align:center;/g, '');	//remove text-align: center;
 
-	
+
 	//replace wrong quotes with „...“
 	const split = removeNbsp.split(/(["“„”><])/).filter(Boolean);
 	let checkQuotes = 0;

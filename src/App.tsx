@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { locations } from '@contentful/app-sdk';
-//import {locations} from 'contentful-ui-extensions-sdk';
 import ConfigScreen from './locations/ConfigScreen';
 import Field from './locations/Field';
 import EntryEditor from './locations/EntryEditor';

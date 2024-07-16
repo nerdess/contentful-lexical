@@ -140,6 +140,13 @@ export function $insertDataTransferForPlainText(
   node.childNodes.forEach(child => traverseAndCleanup(child, cleanups));
 }*/
 
+/**
+ * Cleanup a string of HTML and save the original and cleaned up versions in the cleanups array.
+ *
+ * @param node a DOM node
+ * @param cleanups an array of Cleanup[] to append to
+ * @returns a cleaned up string of HTML
+ */
 const cleanupHTML = (html: string, cleanups: Cleanup[]): string => {
 
     const nodeValueCleaned = cleanup(html);
@@ -272,12 +279,6 @@ export function $insertGeneratedNodes(
       selection,
     })
   ) {
-
-    //console.log('nodes', nodes);
-    /*nodes.forEach((node) => {
-    });*/
-
-
     selection.insertNodes(nodes);
   }
   return;

@@ -86,16 +86,13 @@ const initialConfig = {
 		{
 			replace: LinkNode,
 			with: (node: LinkNode) => {
-				//return new CustomLinkNode("https://google.com", { rel: "fdsfgds", target: "_blank" }, node.getKey());
-
 				return new CustomLinkNode(
 					node.getURL(),
 					{
 						target: node.getTarget(),
 						rel: node.getRel(),
 						title: node.getTitle(),
-					},
-					node.getKey()
+					}
 				);
 			},
 		},
