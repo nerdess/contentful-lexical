@@ -12,6 +12,8 @@ import {
 	$getSelection,
 	$isRangeSelection,
 	$setSelection,
+	LexicalEditor,
+	TextNode,
 } from 'lexical';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
@@ -29,13 +31,21 @@ import BlockFormatDropDown from './formatsDropdown/formatsDropdown';
 import { blockTypeToBlockName} from './formatsDropdown/const';
 
 
-const wrap = ({ left = '', right = '', editor }) => {
+const wrap = ({ 
+	editor,
+	left = '', 
+	right = ''
+}: {
+	editor: LexicalEditor;
+	left: string;
+	right?: string;
+}) => {
 	editor.update(() => {
-		const selection = $getSelection();
+		const selection = $getSelection() as any;
 		if (!selection) return null;
 
-		let _left = {};
-		let _right = {};
+		let _left = {key: null, offset: 0};
+		let _right = {key: null, offset: 0};
 
 		if (selection.getNodes().length === 1) {
 			_left =
@@ -58,7 +68,7 @@ const wrap = ({ left = '', right = '', editor }) => {
 					: { ...selection.anchor };
 		}
 
-		selection.getNodes().forEach((node) => {
+		selection.getNodes().forEach((node: TextNode) => {
 			if (node.getKey() === _left.key) {
 				node.setTextContent(
 					node.getTextContent().substring(0, _left.offset) +
@@ -94,9 +104,6 @@ const ToolbarPlugin = () => {
 	const [modal, showModal] = useModal();
 	const [isEditable, setIsEditable] = useState(() => editor.isEditable());
 	const [activeEditor, setActiveEditor] = useState(editor);
-	//const [codeLanguage, setCodeLanguage] = useState('');
-	//const [isRTL, setIsRTL] = useState(false);
-	//const [isImage, setIsImage] = useState(false);
 
 	const $updateToolbar = useCallback(() => {
 		const selection = $getSelection();
@@ -285,7 +292,7 @@ const ToolbarPlugin = () => {
 			<button
 				disabled={!canUndo}
 				onClick={() => {
-					editor.dispatchCommand(UNDO_COMMAND);
+					editor.dispatchCommand(UNDO_COMMAND, undefined);
 				}}
 				className='toolbar-item spaced'
 				aria-label='Undo'
@@ -295,7 +302,7 @@ const ToolbarPlugin = () => {
 			<button
 				disabled={!canRedo}
 				onClick={() => {
-					editor.dispatchCommand(REDO_COMMAND);
+					editor.dispatchCommand(REDO_COMMAND, undefined);
 				}}
 				className='toolbar-item'
 				aria-label='Redo'
@@ -431,7 +438,7 @@ const ToolbarPlugin = () => {
 			<button
 				onClick={() => {
 					showModal('Insert Image', (onClose, onOK) => (
-						<ImageDialog editor={editor} onClose={onClose} onOK={onOK} />
+						<ImageDialog editor={editor} onClose={onClose} /*onOK={onOK}*/ />
 					));
 				}}
 				className={'toolbar-item spaced '}

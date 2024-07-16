@@ -68,13 +68,13 @@ const initialConfig = {
 				return new CustomHeadingNode();
 			},
 		},*/
-		CustomParagraphNode,
+		/*CustomParagraphNode,
 		{
 			replace: ParagraphNode,
 			with: () => {
 				return new CustomParagraphNode();
 			},
-		},
+		},*/
 		CustomTextNode,
 		{
 			replace: TextNode,

@@ -6,33 +6,49 @@ import {
 	Button,
 } from '@contentful/f36-components';
 import { 
-	INSERT_IMAGE_COMMAND
+	INSERT_IMAGE_COMMAND,
+	InsertImagePayload
  } from './ImagePlugin';
  import { $isImageNode } from '../../nodes/ImageNode';
  import { 
-	$getNodeByKey
+	$getNodeByKey,
+	LexicalEditor
  } from 'lexical';
 
-const ImageDialog = ({ editor, onClose, onOK, mode, nodeKey, image = {} }) => {
+const ImageDialog = ({ 
+	editor,
+	onClose,
+	mode, 
+	nodeKey,
+	image = {}
+}:{
+	editor: LexicalEditor,
+	onClose: () => void,
+	mode?: 'edit' | null,
+	nodeKey?: string,
+	image?: any
+}) => {
 
 	
 	const [src, setSrc] = useState(image.src || '');
 	const [title, setTitle] = useState(image.title || '');
 	const [altText, setAltText] = useState(image.altText || '');
 
-	const addImage = (payload) => {
+	const addImage = (payload: InsertImagePayload) => {
 
 		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
 
     	onClose();
 	};
 
-	const editImage = (payload) => {
+	const editImage = (payload: InsertImagePayload) => {
 		editor.update(() => {
-			const node = $getNodeByKey(nodeKey);
-			if ($isImageNode(node)) {
-				node.selectNext();
-				node.remove();
+			if (nodeKey) {
+				const node = $getNodeByKey(nodeKey);
+				if ($isImageNode(node)) {
+					node.selectNext();
+					node.remove();
+				}
 			}
 		});
 		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload)

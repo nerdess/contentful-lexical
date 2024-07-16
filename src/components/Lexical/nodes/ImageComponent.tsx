@@ -265,7 +265,7 @@ export default function ImageComponent({
 										<ImageDialog
 											editor={editor}
 											onClose={onClose}
-											onOK={onOK}
+											//onOK={onOK}
 											mode='edit'
 											nodeKey={nodeKey}
 											image={{
