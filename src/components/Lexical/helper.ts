@@ -3,22 +3,32 @@ import { LexicalNode, NodeMap } from "lexical";
 
 export const cleanup = (html: string) => {
 
-	/*
-	1) replace empty nonbreaking-spaces
-	2) remove text-align: right;
-	3) remove text-align: center;
-	*/
 	const removeNbsp = html
-	.replace(/&nbsp;/g, ' ')				//replace &nbsp; with empty space
-	.replace(/\u00A0/g, ' ')				//replace utf-8 representation of &nbsp; with empty space
-	.replace(/text-align: right;/g, '')		//remove text-align: right;
-	.replace(/text-align:right;/g, '')		//remove text-align: right;
-	.replace(/text-align: center;/g, '')	//remove text-align: center;
-	.replace(/text-align:center;/g, '');	//remove text-align: center;
+	.replace(/&nbsp;/g, ' ')					//replace &nbsp; with empty space
+	.replace(/\u00A0/g, ' ')					//replace utf-8 representation of &nbsp; with empty space
 
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(removeNbsp, 'text/html');
+	doc.querySelectorAll('*').forEach(element => {
+		element.removeAttribute('style');		//remove all style tags
+		element.removeAttribute('class');		//remove all class tags
+		element.removeAttribute('id');			//remove all id tags
+		element.removeAttribute('align');		//remove all align tags
+		element.removeAttribute('text-align');	//remove all text-align tags
+	});
+
+	//remove all empty <o:p> and <p> tags
+	doc.querySelectorAll('o\\:p').forEach(element => element.remove());
+	doc.querySelectorAll('p').forEach(element => {
+		if (element.innerHTML === '') {
+			element.remove();
+		};
+	});
+
+	const cleanedHTMLString = doc.body.innerHTML;
 
 	//replace wrong quotes with „...“
-	const split = removeNbsp.split(/(["“„”><])/).filter(Boolean);
+	const split = cleanedHTMLString.split(/(["“„”><])/).filter(Boolean);
 	let checkQuotes = 0;
 	let checkTags = 0;
 	let lastTag = '';
