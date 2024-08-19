@@ -25,10 +25,12 @@ export const cleanup = (html: string) => {
 		};
 	});
 
-	const cleanedHTMLString = doc.body.innerHTML;
+	return doc.body.innerHTML;
+	
+	//const cleanedHTMLString = doc.body.innerHTML;
 
 	//replace wrong quotes with „...“
-	const split = cleanedHTMLString.split(/(["“„”><])/).filter(Boolean);
+	/*const split = cleanedHTMLString.split(/(["“„”><])/).filter(Boolean);
 	let checkQuotes = 0;
 	let checkTags = 0;
 	let lastTag = '';
@@ -59,7 +61,7 @@ export const cleanup = (html: string) => {
 
 		return item;
 	});
-	return result.join('');
+	return result.join('');*/
 	
 }
 
