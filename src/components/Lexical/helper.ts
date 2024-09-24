@@ -3,6 +3,8 @@ import { LexicalNode, NodeMap } from "lexical";
 
 export const cleanup = (html: string) => {
 
+	//console.log('incoming', html);
+
 	const removeNbsp = html
 	.replace(/&nbsp;/g, ' ')					//replace &nbsp; with empty space
 	.replace(/\u00A0/g, ' ')					//replace utf-8 representation of &nbsp; with empty space
@@ -24,6 +26,8 @@ export const cleanup = (html: string) => {
 			element.remove();
 		};
 	});
+
+	//console.log('cleaned', doc.body.innerHTML);
 
 	return doc.body.innerHTML;
 	

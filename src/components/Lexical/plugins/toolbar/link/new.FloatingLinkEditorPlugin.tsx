@@ -24,7 +24,6 @@ import {
 	LexicalEditor,
 	SELECTION_CHANGE_COMMAND,
 	BaseSelection,
-	$isLineBreakNode,
 } from 'lexical';
 import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
@@ -45,7 +44,7 @@ import {
 	IconButton,
 	Stack,
 } from '@contentful/f36-components';
-import './floatingLinkEditorPlugin.scss';
+import './floatingLinkEditorPlugin.css';
 
 function FloatingLinkEditor({
 	editor,
@@ -69,6 +68,8 @@ function FloatingLinkEditor({
 	const [editedLinkOpenNewWindow, setEditedLinkOpenNewWindow] = useState(true);
 	const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null);
 
+	console.log('editedLinkOpenNewWindow', editedLinkOpenNewWindow);
+
 	const updateLinkEditor = useCallback(() => {
 
 		const selection = $getSelection();
@@ -79,18 +80,19 @@ function FloatingLinkEditor({
 
 			if ($isLinkNode(parent)) {
 				setLinkUrl(parent.getURL());
+				console.log('range parent');
 				setEditedLinkOpenNewWindow(
-					parent.getTarget() === '_blank' /*|| !parent.getTarget()*/
+					parent.getTarget() === '_blank' || !parent.getTarget()
 				);
-
-				
 			} else if ($isLinkNode(node)) {
 				setLinkUrl(node.getURL());
+				console.log('range node');
 				setEditedLinkOpenNewWindow(
-					node.getTarget() === '_blank' /*|| !node.getTarget()*/
+					node.getTarget() === '_blank' || !node.getTarget()
 				);
 			} else {
 				setLinkUrl('');
+				console.log('..............""')
 				setEditedLinkOpenNewWindow(false);
 			}
 		}
@@ -130,12 +132,6 @@ function FloatingLinkEditor({
 
 		return true;
 	}, [anchorElem, editor, setEditMode]);
-
-	useEffect(() => {
-		editor.getEditorState().read(() => {
-			updateLinkEditor();
-		});
-	}, [editor, updateLinkEditor]);
 
 	useEffect(() => {
 		const scrollerElem = anchorElem.parentElement;
@@ -191,6 +187,17 @@ function FloatingLinkEditor({
 		);
 	}, [editor, updateLinkEditor, setIsLink, isLink]);
 
+	useEffect(() => {
+		editor.getEditorState().read(() => {
+			updateLinkEditor();
+		});
+	}, [editor, updateLinkEditor]);
+
+	useEffect(() => {
+		if (isEditMode && inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [isEditMode]);
 
 	const monitorInputInteraction = (
 		event: React.KeyboardEvent<HTMLInputElement>
@@ -225,7 +232,6 @@ function FloatingLinkEditor({
 
 	return (
 		<div ref={editorRef} className='link-editor'>
-			<div>
 			{isEditMode && (
 				<Stack
 					flexDirection='column'
@@ -250,6 +256,7 @@ function FloatingLinkEditor({
 							<ButtonGroup>
 								<IconButton
 									aria-label='Save'
+									//variant='primary'
 									size='small'
 									icon={<DoneIcon />}
 									tabIndex={0}
@@ -289,17 +296,17 @@ function FloatingLinkEditor({
 							</ButtonGroup>
 						</Box>
 					</Stack>
-					<Stack className={`link-editor-target ${editedLinkOpenNewWindow ? 'link-editor-target-checked' : ''}`}>
+					<Stack>
 						<Checkbox
 							isChecked={editedLinkOpenNewWindow}
 							onChange={() => setEditedLinkOpenNewWindow((prev) => !prev)}
 						>
-							Open in new tab
+							Open in new foo tab
 						</Checkbox>
 					</Stack>
 				</Stack>
 			)} 
-			</div>
+			
 		</div>
 	);
 }
@@ -315,41 +322,22 @@ function useFloatingLinkEditorToolbar(
 
 	const updateToolbar = useCallback(() => {
 		const selection = $getSelection();
-		if ($isRangeSelection(selection)) {
-			const focusNode = getSelectedNode(selection);
-			const focusLinkNode = $findMatchingParent(focusNode, $isLinkNode);
-			const focusAutoLinkNode = $findMatchingParent(
-			  focusNode,
-			  $isAutoLinkNode,
-			);
-			if (!(focusLinkNode || focusAutoLinkNode)) {
-			  setIsLink(false);
-			  setEditMode(false);
-			  return;
-			}
-			const badNode = selection
-			  .getNodes()
-			  .filter((node) => !$isLineBreakNode(node))
-			  .find((node) => {
-				const linkNode = $findMatchingParent(node, $isLinkNode);
-				const autoLinkNode = $findMatchingParent(node, $isAutoLinkNode);
-				return (
-				  (focusLinkNode && !focusLinkNode.is(linkNode)) ||
-				  (linkNode && !linkNode.is(focusLinkNode)) ||
-				  (focusAutoLinkNode && !focusAutoLinkNode.is(autoLinkNode)) ||
-				  (autoLinkNode &&
-					(!autoLinkNode.is(focusAutoLinkNode) ||
-					  autoLinkNode.getIsUnlinked()))
-				);
-			  });
-			if (!badNode) {
-			  setIsLink(true);
-			  setEditMode(true);
+		console.log('selection', selection);
+		/*if ($isRangeSelection(selection)) {
+			const node = getSelectedNode(selection);
+			const linkParent = $findMatchingParent(node, $isLinkNode);
+			const autoLinkParent = $findMatchingParent(node, $isAutoLinkNode);
+
+			// We don't want this menu to open for auto links.
+			if (linkParent != null && autoLinkParent === null) {
+				setIsLink(true);
+				setEditMode(true);
 			} else {
-			  setIsLink(false);
-			  setEditMode(false);
+				setIsLink(false);
+				setEditMode(false);
 			}
-		  }
+
+		}*/
 	}, []);
 
 	useEffect(() => {

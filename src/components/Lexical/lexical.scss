@@ -765,3 +765,29 @@ html .modal-image {
   margin-bottom: 4px;
   font-weight: bold;
 }
+
+//links
+.editor-container a {
+
+  position: relative;
+  white-space: nowrap;
+
+  &:before {
+    display: inline-block;
+    content: url(../../images/icons/link-internal.svg);
+    width: 14px;
+    height: 14px;
+    bottom: -3px;
+    right: -1px;
+    position: relative;
+  }
+
+  &[target=_blank]:before,
+  &[target=blank]:before  {
+    content: url(../../images/icons/link-internal.svg);
+    transform: rotate(180deg);
+    bottom: -5px;
+  }
+
+
+}

@@ -28,6 +28,8 @@ const LexicalToContentful = ({
 			setCleanups={setCleanups}
 			setValue={(value: string): void => {
 
+				//console.log('SETTING VALUE', value);
+				setValue(value);
 				countChanges.current = countChanges.current + 1;
 
 				//incoming value is empty
@@ -38,7 +40,6 @@ const LexicalToContentful = ({
 
 				//it is not the initial value and incoming value is different to current value
 				if (countChanges.current > 1 && value !== currentValue) {
-					setValue(value);
 					return;
 				}
 			}}
