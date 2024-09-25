@@ -1,7 +1,7 @@
 import { 
   ParagraphNode, 
   $applyNodeReplacement,
-  LexicalEditor, 
+  LexicalEditor
 } from "lexical";
 
 export function $createParagraphNode() {
@@ -16,6 +16,13 @@ export class CustomParagraphNode extends ParagraphNode {
   static clone(node: ParagraphNode) {
     return new CustomParagraphNode(node.__key);
   }
+
+
+	static importJSON(): CustomParagraphNode {
+		const node = $createParagraphNode();
+		return node as CustomParagraphNode;
+	}
+
 
   exportJSON() {
     return {
