@@ -40,6 +40,7 @@ import CopyPasteEnhancementPlugin from './plugins/copyPasteEnhancement/CopyPaste
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
 import Cleanups from './plugins/copyPasteEnhancement/Cleanups';
 import { Cleanup } from './plugins/copyPasteEnhancement/types';
+import TreeViewPlugin from './plugins/TreeViewPlugin';
 import './lexical.scss';
 
 function Placeholder() {
@@ -68,13 +69,14 @@ const initialConfig = {
 				return new CustomHeadingNode();
 			},
 		},*/
-		/*CustomParagraphNode,
+		CustomParagraphNode,
 		{
-			replace: ParagraphNode,
-			with: () => {
-				return new CustomParagraphNode();
-			},
-		},*/
+            replace: ParagraphNode,
+            with: (node: ParagraphNode) => {
+                return new CustomParagraphNode();
+            },
+            withKlass: CustomParagraphNode,
+        },
 		CustomTextNode,
 		{
 			replace: TextNode,
@@ -174,9 +176,6 @@ const Editor = ({
 	setCleanups: React.Dispatch<React.SetStateAction<Cleanup[]>>;
 }) => {
 
-	//const [html, setHtml] = useState<string>('');
-
-
 	return (
 		<LexicalComposer initialConfig={initialConfig}>
 			<Stack
@@ -212,7 +211,7 @@ const Editor = ({
 							}}
 						/>
 						<CopyPasteEnhancementPlugin setCleanups={setCleanups} />
-						{/*<TreeViewPlugin />*/}
+						{<TreeViewPlugin />}
 						{/*<AutoFocusPlugin/>*/}
 					</Box>
 				</Flex>

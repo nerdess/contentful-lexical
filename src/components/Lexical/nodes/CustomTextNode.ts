@@ -51,15 +51,6 @@ const applyFormatting = (element: HTMLElement, formatting: Formatting): HTMLElem
 
 export class CustomTextNode extends TextNode {
 
-	/*constructor(text: string, key?: NodeKey) {
-		super(text, key);
-		super.toggleDirectionless();
-	}*/
-
-	static clone(node: TextNode): TextNode {
-		return new CustomTextNode(node.__text);
-	}
-
 	static clone(node: CustomTextNode): CustomTextNode {
 		return new CustomTextNode(node.__text, node.__key);
 	}
@@ -91,8 +82,6 @@ export class CustomTextNode extends TextNode {
 	exportDOM(editor: LexicalEditor) {
 		let element = super.createDOM(editor._config) as HTMLElement;
 
-		//console.log('element', element);
-
 		invariant(
 			element !== null && isHTMLElement(element),
 			'Expected TextNode createDOM to always return a HTMLElement'
@@ -111,7 +100,7 @@ export class CustomTextNode extends TextNode {
 
 		return {
 			element,
-			/*after: (element: any): any => {
+			after: (element: any): any => {
 
 				//remove those empty <span>tags created by lexical
 				if (element.tagName === 'SPAN' && element.attributes.length === 0) {
@@ -119,7 +108,7 @@ export class CustomTextNode extends TextNode {
 				}
 
 				return element;
-			}*/
+			}
 		};
 	}
 }

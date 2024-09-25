@@ -1,7 +1,8 @@
 import { 
   ParagraphNode, 
   $applyNodeReplacement,
-  LexicalEditor
+  LexicalEditor,
+  SerializedParagraphNode
 } from "lexical";
 
 export function $createParagraphNode() {
@@ -17,14 +18,12 @@ export class CustomParagraphNode extends ParagraphNode {
     return new CustomParagraphNode(node.__key);
   }
 
-
 	static importJSON(): CustomParagraphNode {
 		const node = $createParagraphNode();
 		return node as CustomParagraphNode;
 	}
 
-
-  exportJSON() {
+  exportJSON(): SerializedParagraphNode {
     return {
       ...super.exportJSON(),
       type: 'custom-paragraph',
@@ -32,8 +31,13 @@ export class CustomParagraphNode extends ParagraphNode {
     };
   }
 
-  //here
-  exportDOM(editor: LexicalEditor) {
+  createDOM(config: any): HTMLElement {
+    const dom = super.createDOM(config);
+    //dom.style.backgroundColor = "green";
+    return dom;
+  }
+
+  exportDOM(editor: LexicalEditor): { element: HTMLElement } {
 
     const element = super.createDOM(editor._config);
 
