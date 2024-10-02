@@ -26,6 +26,7 @@ import ImageDialog from '../plugins/image/ImageDialog';
 import useModal from '../../../hooks/useModal';
 import { ButtonGroup, IconButton } from '@contentful/f36-components';
 import { DeleteIcon, EditIcon } from '@contentful/f36-icons';
+import errorImage from '../../../images/image_error.png'
 import './ImageComponent.scss';
 
 const imageCache = new Set();
@@ -39,6 +40,10 @@ function useSuspenseImage(src: string) {
 				imageCache.add(src);
 				resolve(null);
 			};
+			img.onerror = () => {
+				imageCache.add(src);
+				resolve(null);
+			}
 		});
 	}
 }
@@ -64,7 +69,7 @@ function LazyImage({
 }): JSX.Element {
 
 	useSuspenseImage(src);
-	
+
 	return (
 		<img
 			className={className || undefined}
@@ -72,6 +77,11 @@ function LazyImage({
 			alt={altText}
 			title={title}
 			ref={imageRef}
+			onError={({ currentTarget }) => {
+				currentTarget.onerror = null;
+				currentTarget.src=errorImage;
+				currentTarget.style.width='300px';
+  			}}
 			/*style={{
 				display: 'block',
 				maxWidth: 570,
@@ -79,6 +89,7 @@ function LazyImage({
       		}}*/
 			draggable="false"
 		/>
+
 	);
 }
 
