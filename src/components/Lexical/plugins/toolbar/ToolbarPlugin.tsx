@@ -445,6 +445,17 @@ const ToolbarPlugin = () => {
 			>
 				<i className='format image' />
 			</button>
+			<Divider />
+			<button
+				onClick={() => {
+					showModal('Insert Image', (onClose, onOK) => (
+						<ImageDialog editor={editor} onClose={onClose} /*onOK={onOK}*/ />
+					));
+				}}
+				className={'toolbar-item spaced '}
+			>
+				<i className='format image' />
+			</button>
 			
 			{modal}
 		</div>
