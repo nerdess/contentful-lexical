@@ -30,6 +30,8 @@ const LexicalToContentful = ({
 
 				countChanges.current = countChanges.current + 1;
 
+				console.log('value', value);
+
 				//incoming value is empty
 				if (value === '<p></p>') {
 					setValue('');

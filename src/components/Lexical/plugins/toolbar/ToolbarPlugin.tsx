@@ -29,7 +29,8 @@ import ImageDialog from '../image/ImageDialog';
 import useModal from '../../../../hooks/useModal';
 import BlockFormatDropDown from './formatsDropdown/formatsDropdown';
 import { blockTypeToBlockName} from './formatsDropdown/const';
-
+import DropDown, { DropDownItem } from '../../../ui/DropDown';
+import { INSERT_DEFINITIONLIST_COMMAND } from '../DefinitionListPlugin';
 
 const wrap = ({ 
 	editor,
@@ -389,45 +390,6 @@ const ToolbarPlugin = () => {
 			
 			<Divider />
 			<button
-				onClick={() => {
-					wrap({
-						left: '„',
-						right: '“',
-						editor,
-					});
-				}}
-				className={'toolbar-item spaced ' /*+ (isLink ? 'active' : '')*/}
-				aria-label='Insert quotation marks'
-			>
-				<i className='format quotation-marks' />
-			</button>
-			<button
-				onClick={() => {
-					wrap({
-						left: '–',
-						editor,
-					});
-				}}
-				className={'toolbar-item spaced '}
-				aria-label='Insert ndash'
-			>
-				<i className='format ndash' />
-			</button>
-
-			<button
-				onClick={() => {
-					wrap({
-						left: '—',
-						editor,
-					});
-				}}
-				className={'toolbar-item spaced '}
-				aria-label='Insert mdash'
-			>
-				<i className='format mdash' />
-			</button>
-			<Divider />
-			<button
 				onClick={insertLink}
 				className={'toolbar-item spaced ' + (isLink ? 'active' : '')}
 				aria-label='Insert Link'
@@ -435,27 +397,70 @@ const ToolbarPlugin = () => {
 				<i className='format link' />
 			</button>
 			<Divider />
-			<button
-				onClick={() => {
+			<DropDown
+                disabled={!isEditable}
+                buttonClassName="toolbar-item spaced"
+                buttonLabel="Insert"
+                buttonAriaLabel="Insert specialized editor node"
+                //buttonIconClassName="icon plus"
+			>
+				<DropDownItem
+                  onClick={() => {
 					showModal('Insert Image', (onClose, onOK) => (
 						<ImageDialog editor={editor} onClose={onClose} /*onOK={onOK}*/ />
 					));
-				}}
-				className={'toolbar-item spaced '}
-			>
-				<i className='format image' />
-			</button>
-			<Divider />
-			<button
-				onClick={() => {
-					showModal('Insert Image', (onClose, onOK) => (
-						<ImageDialog editor={editor} onClose={onClose} /*onOK={onOK}*/ />
-					));
-				}}
-				className={'toolbar-item spaced '}
-			>
-				<i className='format image' />
-			</button>
+                  }}
+                  className="item">
+                  <i className='icon image' />
+                  <span className="text">Image</span>
+                </DropDownItem>
+				<DropDownItem
+					onClick={() => {
+						wrap({
+							left: '„',
+							right: '“',
+							editor,
+						});
+					}}
+					className="item">
+					<i className='icon quotation-marks' />
+					<span className="text">Quotation Marks</span>
+                </DropDownItem>
+				<DropDownItem
+					onClick={() => {
+							wrap({
+								left: '–',
+								editor,
+							});
+						}}
+					className={`item`}
+					>
+					<i className='icon ndash' />
+					<span className="text">Ndash</span>
+                </DropDownItem>
+				<DropDownItem
+					onClick={() => {
+						wrap({
+							left: '—',
+							editor,
+						});
+					}}
+					className={`item`}
+				>
+					<i className='icon mdash' />
+					<span className="text">Mdash</span>
+                </DropDownItem>
+				<DropDownItem
+                  onClick={() => {
+                    editor.dispatchCommand(
+                      INSERT_DEFINITIONLIST_COMMAND, undefined
+                    );
+                  }}
+                  className="item">
+                  <i className="icon definition-list" />
+                  <span className="text">Definition List</span>
+                </DropDownItem>
+			</DropDown>
 			
 			{modal}
 		</div>
