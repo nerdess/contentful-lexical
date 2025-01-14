@@ -33,14 +33,14 @@ import {
 	Box,
 	Flex
 } from '@contentful/f36-components';
-import { HeadingNode } from '@lexical/rich-text';
+import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 import CharacterCountPlugin from './plugins/CharacterCountPlugin';
 import CopyPasteEnhancementPlugin from './plugins/copyPasteEnhancement/CopyPasteEnhancementPlugin';
 //import ClickableLinkPlugin from './plugins/toolbar/link/ClickableLinkPlugin';
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
 import Cleanups from './plugins/copyPasteEnhancement/Cleanups';
 import { Cleanup } from './plugins/copyPasteEnhancement/types';
-import TreeViewPlugin from './plugins/TreeViewPlugin';
+//import TreeViewPlugin from './plugins/TreeViewPlugin';
 import './lexical.scss';
 
 function Placeholder() {
@@ -61,7 +61,7 @@ const initialConfig = {
 		ListItemNode,
 		AutoLinkNode,
 		ImageNode,
-		HeadingNode,
+		QuoteNode,
 		//CustomHeadingNode,
 		/*{
 			replace: HeadingNode,

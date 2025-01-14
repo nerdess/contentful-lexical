@@ -3,7 +3,7 @@ const theme = {
     //rtl: "rtl",
     //placeholder: "editor-placeholder",
     paragraph: "editor-paragraph",
-    //quote: "editor-quote",
+    quote: "editor-quote",
     heading: {
       //h1: "editor-heading-h1",
       //h2: "ts-tpm-h2",
