@@ -8,28 +8,19 @@
 
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {
-  $insertNodeToNearestRoot,
-  $wrapNodeInElement} from '@lexical/utils';
+  $insertNodeToNearestRoot} from '@lexical/utils';
 import {
-  $createParagraphNode,
-  $getRoot,
-  $insertNodes,
-  $isRootOrShadowRoot,
   $setSelection,
   COMMAND_PRIORITY_EDITOR,
   createCommand,
   LexicalCommand,
-  LexicalEditor,
 } from 'lexical';
-import {useEffect, useState} from 'react';
-import * as React from 'react';
+import {useEffect} from 'react';
 
 import {
   $createDefinitionListNode,
   DefinitionListNode,
-  Options
 } from '../../nodes/DefinitionListNode';
-import { $customInsertNodeToNearestRoot } from './customInsertNodeToNearestRoot';
 
 function createUID(): string {
 	return Math.random()
@@ -38,9 +29,7 @@ function createUID(): string {
 	  .substr(0, 5);
 } 
 
-
-
-export const INSERT_DEFINITIONLIST_COMMAND: LexicalCommand<void> = createCommand(
+export const INSERT_DEFINITIONLIST_COMMAND: LexicalCommand<undefined> = createCommand(
   'INSERT_DEFINITIONLIST_COMMAND',
 );
 export default function DefinitionListPlugin(): JSX.Element | null {
@@ -50,7 +39,7 @@ export default function DefinitionListPlugin(): JSX.Element | null {
       throw new Error('DefinitionListNode not registered on editor');
     }
 
-    return editor.registerCommand(
+    return editor.registerCommand<undefined>(
       INSERT_DEFINITIONLIST_COMMAND,
       () => {
         editor.update(() => {
@@ -59,7 +48,6 @@ export default function DefinitionListPlugin(): JSX.Element | null {
             dt: '',
             uid: createUID()
           }]);
-          //$customInsertNodeToNearestRoot(DLNode);
           $insertNodeToNearestRoot(DLNode);
           $setSelection(null);
           return true;

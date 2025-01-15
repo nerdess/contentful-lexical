@@ -13,7 +13,8 @@ import {
 	$isRangeSelection,
 	$setSelection,
 	LexicalEditor,
-	TextNode,
+	$createParagraphNode,
+	$isRootNode,
 } from 'lexical';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
@@ -31,6 +32,8 @@ import BlockFormatDropDown from './formatsDropdown/formatsDropdown';
 import { blockTypeToBlockName} from './formatsDropdown/const';
 import DropDown, { DropDownItem } from '../../../ui/DropDown';
 import { INSERT_DEFINITIONLIST_COMMAND } from '../DefinitionListPlugin';
+import { $isTextNode } from 'lexical';
+
 
 const wrap = ({ 
 	editor,
@@ -47,6 +50,7 @@ const wrap = ({
 
 		let _left = {key: null, offset: 0};
 		let _right = {key: null, offset: 0};
+		
 
 		if (selection.getNodes().length === 1) {
 			_left =
@@ -69,7 +73,28 @@ const wrap = ({
 					: { ...selection.anchor };
 		}
 
-		selection.getNodes().forEach((node: TextNode) => {
+		selection.getNodes().forEach((node: any) => {
+
+			// If the node is the root node
+			if ($isRootNode(node)) {
+				const paragraph = $createParagraphNode();
+				node.append(paragraph);
+				paragraph.select();
+				const selection = $getSelection();
+				selection?.insertText(left);
+				right && selection?.insertText(right);
+				return;
+			}
+
+			// If the node is a text node
+			if (!$isTextNode(node) && node.isEmpty()) {
+				node.select();
+				const selection = $getSelection();
+				selection?.insertText(left);
+				right && selection?.insertText(right);
+				return;
+			}
+
 			if (node.getKey() === _left.key) {
 				node.setTextContent(
 					node.getTextContent().substring(0, _left.offset) +
