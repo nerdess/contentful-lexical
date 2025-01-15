@@ -4,7 +4,9 @@ import {
   REMOVE_LIST_COMMAND,
 } from '@lexical/list';
 import {
-  $createHeadingNode, HeadingTagType,
+  $createHeadingNode, 
+  HeadingTagType,
+  $createQuoteNode
 } from '@lexical/rich-text';
 import {
   $setBlocksType,
@@ -19,11 +21,60 @@ import {
 import DropDown, {DropDownItem, DropDownHeader} from '../../../../ui/DropDown';
 import { BlockTypeToBlockName, blockTypeToBlockName } from './const';
 
+const formatParagraph = (editor: LexicalEditor) => {
+  editor.update(() => {
+    const selection = $getSelection();
+    if ($isRangeSelection(selection)) {
+      $setBlocksType(selection, () => $createParagraphNode());
+    }
+  });
+};
 
-function dropDownActiveClass(active: boolean) {
+const formatHeading = (
+  editor: LexicalEditor,
+  blockType: string,
+  headingSize: HeadingTagType,
+) => {
+  if (blockType !== headingSize) {
+    editor.update(() => {
+      const selection = $getSelection();
+      $setBlocksType(selection, () => $createHeadingNode(headingSize));
+    });
+  }
+};
+
+const formatBulletList = (editor: LexicalEditor, blockType: string) => {
+  if (blockType !== 'bullet') {
+    editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
+  } else {
+    editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+  }
+};
+
+const formatNumberedList = (
+  editor: LexicalEditor,
+  blockType: string,
+) => {
+  if (blockType !== 'number') {
+    editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
+  } else {
+    editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+  }
+};
+  
+const formatQuote = (editor: LexicalEditor, blockType: string) => {
+  if (blockType !== 'quote') {
+    editor.update(() => {
+      const selection = $getSelection();
+      $setBlocksType(selection, () => $createQuoteNode());
+    });
+  }
+};
+
+const dropDownActiveClass = (active: boolean) => {
     if (active) return 'active dropdown-item-active';
     else return '';
-  }
+};
 
 const BlockFormatDropDown = ({
     editor,
@@ -34,92 +85,6 @@ const BlockFormatDropDown = ({
     blockType: string,
     disabled?: boolean,
   }) => {
-
-    const formatParagraph = () => {
-      editor.update(() => {
-        const selection = $getSelection();
-        if (
-          $isRangeSelection(selection)
-        ) {
-          $setBlocksType(selection, () => $createParagraphNode());
-        }
-      });
-    };
-  
-    const formatHeading = (headingSize: HeadingTagType) => {
-      if (blockType !== headingSize) {
-        editor.update(() => {
-          const selection = $getSelection();
-          if (
-            $isRangeSelection(selection)
-          ) {
-            $setBlocksType(selection, () => $createHeadingNode(headingSize));
-          }
-        });
-      }
-    };
-  
-    const formatBulletList = () => {
-      if (blockType !== 'bullet') {
-        editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-      } else {
-        editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-      }
-    };
-  
-    /*const formatCheckList = () => {
-      if (blockType !== 'check') {
-        editor.dispatchCommand(INSERT_CHECK_LIST_COMMAND, undefined);
-      } else {
-        editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-      }
-    };*/
-  
-    const formatNumberedList = () => {
-      if (blockType !== 'number') {
-        editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
-      } else {
-        editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-      }
-    };
-  
-    /*const formatQuote = () => {
-      if (blockType !== 'quote') {
-        editor.update(() => {
-          const selection = $getSelection();
-          if (
-            $isRangeSelection(selection) ||
-            DEPRECATED_$isGridSelection(selection)
-          ) {
-            $setBlocksType(selection, () => $createQuoteNode());
-          }
-        });
-      }
-    };
-  
-    const formatCode = () => {
-      if (blockType !== 'code') {
-        editor.update(() => {
-          let selection = $getSelection();
-  
-          if (
-            $isRangeSelection(selection) ||
-            DEPRECATED_$isGridSelection(selection)
-          ) {
-            if (selection.isCollapsed()) {
-              $setBlocksType(selection, () => $createCodeNode());
-            } else {
-              const textContent = selection.getTextContent();
-              const codeNode = $createCodeNode();
-              selection.insertNodes([codeNode]);
-              selection = $getSelection();
-              if ($isRangeSelection(selection))
-                selection.insertRawText(textContent);
-            }
-          }
-        });
-      }
-    };*/
   
     return (
       <DropDown 
@@ -130,39 +95,33 @@ const BlockFormatDropDown = ({
         buttonAriaLabel="Formatting options for text style">
         <DropDownItem
           className={'item ' + dropDownActiveClass(blockType === 'paragraph')}
-          onClick={formatParagraph}>
+          onClick={() => formatParagraph(editor)}>
           <i className="icon paragraph" />
           <span className="text">Normal</span>
         </DropDownItem>
-        {/*<DropDownItem
-          className={'item ' + dropDownActiveClass(blockType === 'h1')}
-          onClick={() => formatHeading('h1')}>
-          <i className="icon h1" />
-          <span className="text">Heading 1</span>
-        </DropDownItem>
-        <DropDownItem
-          className={'item ' + dropDownActiveClass(blockType === 'h3')}
-          onClick={() => formatHeading('h3')}>
-          <i className="icon h3" />
-          <span className="text">Heading 3</span>
-        </DropDownItem>*/}
         <DropDownItem
           className={'item ' + dropDownActiveClass(blockType === 'bullet')}
-          onClick={formatBulletList}>
+          onClick={() => formatBulletList(editor, blockType)}>
           <i className="icon bullet-list" />
           <span className="text">Liste (einfach)</span>
         </DropDownItem>
         <DropDownItem
           className={'item ' + dropDownActiveClass(blockType === 'number')}
-          onClick={formatNumberedList}>
+          onClick={() => formatNumberedList(editor, blockType)}>
           <i className="icon numbered-list" />
           <span className="text">Liste (nummeriert)</span>
+        </DropDownItem>
+        <DropDownItem
+          className={'item wide ' + dropDownActiveClass(blockType === 'quote')}
+          onClick={() => formatQuote(editor, blockType)}>
+          <i className="icon quote" />
+          <span className="text">Zitat</span>
         </DropDownItem>
         <hr />
         <DropDownHeader>Sonderformate</DropDownHeader>
         <DropDownItem
           className={'item ' + dropDownActiveClass(blockType === 'h4')}
-          onClick={() => formatHeading('h4')}>
+          onClick={() => formatHeading(editor, blockType, 'h4')}>
           <i className="icon h4" />
           <span className="text ts-tpm-h4" style={{margin: 0}}>TPM H4</span>
         </DropDownItem>

@@ -40,7 +40,7 @@ function createUID(): string {
 
 
 
-export const INSERT_DEFINITIONLIST_COMMAND: LexicalCommand<undefined> = createCommand(
+export const INSERT_DEFINITIONLIST_COMMAND: LexicalCommand<void> = createCommand(
   'INSERT_DEFINITIONLIST_COMMAND',
 );
 export default function DefinitionListPlugin(): JSX.Element | null {
@@ -50,7 +50,7 @@ export default function DefinitionListPlugin(): JSX.Element | null {
       throw new Error('DefinitionListNode not registered on editor');
     }
 
-    return editor.registerCommand<undefined>(
+    return editor.registerCommand(
       INSERT_DEFINITIONLIST_COMMAND,
       () => {
         editor.update(() => {
@@ -64,6 +64,7 @@ export default function DefinitionListPlugin(): JSX.Element | null {
           $setSelection(null);
           return true;
         });
+        return true;
       },
       COMMAND_PRIORITY_EDITOR,
     );
