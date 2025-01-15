@@ -227,7 +227,7 @@ const Editor = ({
 						/>
 						<CopyPasteEnhancementPlugin setCleanups={setCleanups} />
 						<DefinitionListPlugin />
-						{/*<TreeViewPlugin />*/}
+						{<TreeViewPlugin />}
 						{/*<AutoFocusPlugin/>*/}
 					</Box>
 				</Flex>

@@ -12,6 +12,7 @@
   min-width: 400px;
   user-select: none;
   border-radius: 5px;
+  margin-bottom: 12px;
 }
 .DefinitionListNode__container.focused {
   outline: 2px solid rgb(60, 132, 244);

@@ -137,8 +137,6 @@ export default function DefinitionListComponent({
 
   const isFocused = $isNodeSelection(selection) && isSelected;
 
-  console.log('options', options);
-
 
   return (
     <div

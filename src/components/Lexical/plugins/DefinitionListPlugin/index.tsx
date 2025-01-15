@@ -12,6 +12,7 @@ import {
   $wrapNodeInElement} from '@lexical/utils';
 import {
   $createParagraphNode,
+  $getRoot,
   $insertNodes,
   $isRootOrShadowRoot,
   $setSelection,
@@ -28,13 +29,16 @@ import {
   DefinitionListNode,
   Options
 } from '../../nodes/DefinitionListNode';
+import { $customInsertNodeToNearestRoot } from './customInsertNodeToNearestRoot';
 
 function createUID(): string {
 	return Math.random()
 	  .toString(36)
 	  .replace(/[^a-z]+/g, '')
 	  .substr(0, 5);
-}  
+} 
+
+
 
 export const INSERT_DEFINITIONLIST_COMMAND: LexicalCommand<undefined> = createCommand(
   'INSERT_DEFINITIONLIST_COMMAND',
@@ -55,7 +59,8 @@ export default function DefinitionListPlugin(): JSX.Element | null {
             dt: '',
             uid: createUID()
           }]);
-          $insertNodes([DLNode]);
+          //$customInsertNodeToNearestRoot(DLNode);
+          $insertNodeToNearestRoot(DLNode);
           $setSelection(null);
           return true;
         });
