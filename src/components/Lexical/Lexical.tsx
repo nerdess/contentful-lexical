@@ -42,6 +42,9 @@ import Cleanups from './plugins/copyPasteEnhancement/Cleanups';
 import { Cleanup } from './plugins/copyPasteEnhancement/types';
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
 import './lexical.scss';
+import { DefinitionListNode } from './nodes/DefinitionListNode';
+import DefinitionListPlugin from './plugins/DefinitionListPlugin';
+import DraggableBlockPlugin from './plugins/DraggableBlockPlugin';
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
@@ -62,6 +65,8 @@ const initialConfig = {
 		AutoLinkNode,
 		ImageNode,
 		QuoteNode,
+		HeadingNode,
+		DefinitionListNode,
 		//CustomHeadingNode,
 		/*{
 			replace: HeadingNode,
@@ -176,6 +181,14 @@ const Editor = ({
 	setCleanups: React.Dispatch<React.SetStateAction<Cleanup[]>>;
 }) => {
 
+	const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
+
+	const onRef = (_floatingAnchorElem: HTMLDivElement) => {
+		if (_floatingAnchorElem !== null) {
+		  setFloatingAnchorElem(_floatingAnchorElem);
+		}
+	  };
+
 	return (
 		<LexicalComposer initialConfig={initialConfig}>
 			<Stack
@@ -189,7 +202,9 @@ const Editor = ({
 					<Box className='editor-inner'>
 						<RichTextPlugin
 							contentEditable={
-								<ContentEditableContainer resizable={resizable} />
+								<div ref={onRef}>
+									<ContentEditableContainer resizable={resizable} />
+								</div>
 							}
 							placeholder={<Placeholder />}
 							ErrorBoundary={LexicalErrorBoundary}
@@ -200,6 +215,7 @@ const Editor = ({
 						<FloatingLinkEditorPlugin />
 						<ListMaxIndentLevelPlugin maxDepth={7} />
 						<ImagePlugin />
+						{floatingAnchorElem && <DraggableBlockPlugin anchorElem={floatingAnchorElem} />}
 						<InitialContentPlugin htmlString={initialValue} />
 						<OnChangePlugin
 							ignoreNonChanges={true}
@@ -211,6 +227,7 @@ const Editor = ({
 							}}
 						/>
 						<CopyPasteEnhancementPlugin setCleanups={setCleanups} />
+						<DefinitionListPlugin />
 						{/*<TreeViewPlugin />*/}
 						{/*<AutoFocusPlugin/>*/}
 					</Box>
