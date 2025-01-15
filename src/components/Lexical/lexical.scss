@@ -72,7 +72,7 @@ body {
     position: relative;
     tab-size: 1;
     outline: 0;
-    padding: 15px 10px;
+    padding: 16px 28px;
     caret-color: #444;
     width: 100%;
   }
@@ -83,7 +83,7 @@ body {
     position: absolute;
     text-overflow: ellipsis;
     top: 15px;
-    left: 10px;
+    left: 28px;
     font-size: 15px;
     user-select: none;
     display: inline-block;
@@ -436,15 +436,13 @@ body {
   .toolbar .toolbar-item .text {
     display: flex;
     line-height: 20px;
-    width: 200px;
     vertical-align: middle;
     font-size: 14px;
     color: #777;
-    text-overflow: ellipsis;
-    width: 70px;
-    overflow: hidden;
     height: 20px;
     text-align: left;
+    margin-right: 5px;
+    font-weight: normal;
   }
   
   .toolbar .toolbar-item .icon {
@@ -582,6 +580,8 @@ body {
     line-height: 20px;
     flex-grow: 1;
     width: 200px;
+    //color: #777;
+    font-weight: normal;
   }
   
   .dropdown .item .icon {
@@ -723,6 +723,10 @@ body {
 
   i.clear {
     background-image: url(../../images/icons/trash.svg);
+  }
+
+  i.definition-list {
+    background-image: url(../../images/icons/list-dt.svg);
   }
   
   
