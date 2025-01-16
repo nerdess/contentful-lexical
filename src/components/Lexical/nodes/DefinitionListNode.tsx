@@ -70,8 +70,9 @@ export type SerializedDefinitionListNode = Spread<
 >;
 
 function $convertDefinitionListElement(domNode: HTMLElement): DOMConversionOutput | null {
-  const DTs = domNode.querySelectorAll(':scope > dt');
-  const DDs = domNode.querySelectorAll(':scope > dd');
+  
+  const DTs = domNode.querySelectorAll(':scope h3');
+  const DDs = domNode.querySelectorAll(':scope p');
   const options = [] as Options;
 
   DTs.forEach((dt, i) => {
@@ -83,6 +84,7 @@ function $convertDefinitionListElement(domNode: HTMLElement): DOMConversionOutpu
   });
 
   const node = $createDefinitionListNode(options);
+
   return {node};
 
   /*const options = domNode.getAttribute('data-lexical-poll-options');
@@ -147,37 +149,48 @@ export class DefinitionListNode extends DecoratorNode<JSX.Element> {
   }
 
   static importDOM(): DOMConversionMap | null {
-    console.log('importDOM before dl')
     return {
-      dl: () => {
-        console.log('importDOM dl')
+      div: () => {
         return {
           conversion: $convertDefinitionListElement,
           priority: 2,
         };
       }
-      /*span: (domNode: HTMLElement) => {
-        if (!domNode.hasAttribute('data-lexical-poll-question')) {
-          return null;
-        }
-        return {
-          conversion: $convertDefinitionListElement,
-          priority: 2,
-        };
-      },*/
     };
   }
 
   exportDOM(): DOMExportOutput {
-    const element = document.createElement('dl');
+    const element = document.createElement('div');
+    element.setAttribute('itemscope','');
+    element.setAttribute('itemtype','https://schema.org/FAQPage');
+
     for (const option of this.__options) {
-      const dt = document.createElement('dt');
-      dt.textContent = option.dt;
-      element.appendChild(dt);
-      const dd = document.createElement('dd');
-      dd.textContent = option.dd;
-      element.appendChild(dd);
+      const wrapper = document.createElement('div');
+      wrapper.setAttribute('itemscope','');
+      wrapper.setAttribute('itemtype','https://schema.org/Question');
+      wrapper.setAttribute('itemprop','mainEntity');
+
+      const question = document.createElement('h3');
+      question.setAttribute('itemprop','name');
+      question.textContent = option.dt;
+
+      const answerWrapper = document.createElement('div');
+      answerWrapper.setAttribute('itemscope','');
+      answerWrapper.setAttribute('itemtype','http://schema.org/Answer');
+      answerWrapper.setAttribute('itemprop','acceptedAnswer');
+
+      const answer = document.createElement('p');
+      answer.setAttribute('itemprop','text');
+      answer.textContent = option.dd;
+
+      answerWrapper.appendChild(answer);
+
+      wrapper.appendChild(question);
+      wrapper.appendChild(answerWrapper);
+
+      element.appendChild(wrapper);
     }
+    
     return {element};
   }
 

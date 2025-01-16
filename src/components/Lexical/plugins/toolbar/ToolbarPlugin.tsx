@@ -482,8 +482,8 @@ const ToolbarPlugin = () => {
                     );
                   }}
                   className="item">
-                  <i className="icon definition-list" />
-                  <span className="text">Definition List</span>
+                  <i className="icon faq" />
+                  <span className="text">FAQ</span>
                 </DropDownItem>
 			</DropDown>
 			

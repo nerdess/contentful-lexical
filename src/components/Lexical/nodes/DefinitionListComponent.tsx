@@ -16,7 +16,6 @@ import {
   BaseSelection,
   NodeKey,
 } from 'lexical';
-import * as React from 'react';
 import {useRef, useState} from 'react';
 
 import Button from '../../ui/Button';
@@ -66,7 +65,7 @@ function DefinitionListOptionComponent({
               },
             );
           }}
-          placeholder={`Term ${index + 1}`}
+          placeholder={`Question ${index + 1}`}
         />
         <textarea
           className="PollNode__optionDD"
@@ -86,7 +85,7 @@ function DefinitionListOptionComponent({
               },
             );
           }}
-          placeholder={`Term definition ${index + 1}`}
+          placeholder={`Answer ${index + 1}`}
         />
 
       </div>
@@ -145,7 +144,7 @@ export default function DefinitionListComponent({
     >
       <div className="DefinitionListNode__header">
         <h2 className="DefinitionListNode__heading">
-          Definition list
+          FAQ
         </h2>
         <button className="DefinitionListNode__delete" onClick={deleteDefinitionList} />
       </div>
@@ -165,7 +164,7 @@ export default function DefinitionListComponent({
 
       <div className="DefinitionListNode__footer">
           <Button className="DefinitionListNode_button" onClick={addOption} small={true}>
-            Add term
+            Add question
           </Button>
       </div>
     </div>
