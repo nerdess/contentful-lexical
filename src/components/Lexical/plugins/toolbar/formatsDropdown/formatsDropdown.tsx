@@ -123,7 +123,7 @@ const BlockFormatDropDown = ({
           className={'item ' + dropDownActiveClass(blockType === 'h4')}
           onClick={() => formatHeading(editor, blockType, 'h4')}>
           <i className="icon h4" />
-          <span className="text ts-tpm-h4" style={{margin: 0}}>TPM H4</span>
+          <span className="text ts-tpm-h4" style={{margin: 0}}>Zwischenüberschrift</span>
         </DropDownItem>
         {/* <DropDownItem
           className={'item ' + dropDownActiveClass(blockType === 'check')}

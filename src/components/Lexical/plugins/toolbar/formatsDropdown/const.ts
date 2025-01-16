@@ -11,7 +11,7 @@ export const blockTypeToBlockName: BlockTypeToBlockName = {
     //check: 'Check List',
     //code: 'Code Block',
     //h2: 'TPM H2',
-    h4: 'TPM H4',
+    h4: 'Zwischenüberschrift',
     /*h3: 'Heading 3',
     h4: 'Heading 4',
     h5: 'Heading 5',
