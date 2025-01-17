@@ -6,8 +6,16 @@ export class CustomLinkNode extends LinkNode {
     return "custom-link";
   }
 
-  static clone(node: any) {
-    return new CustomLinkNode(node.getURL(), { rel: node.getRel(), target: node.getTarget() }, node.getKey());
+  static clone(node: LinkNode) {
+
+    console.log('node', node.getTarget());
+
+    return new CustomLinkNode(node.getURL(), { 
+      rel: node.getRel(), 
+      target: node.getTarget()
+    }, 
+      node.getKey()
+    );
   }
 
   exportJSON() {

@@ -37,13 +37,12 @@ import {
 	CloseIcon,
 	DoneIcon,
 } from '@contentful/f36-icons';
-import { TextInput, Checkbox } from '@contentful/f36-components';
+import { TextInput, Checkbox, Button } from '@contentful/f36-components';
 
 import './floatingLinkEditorPlugin.css';
 import {
 	Box,
 	ButtonGroup,
-	IconButton,
 	Stack,
 } from '@contentful/f36-components';
 
@@ -65,10 +64,7 @@ function FloatingLinkEditor({
 	const editorRef = useRef<HTMLDivElement | null>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [linkUrl, setLinkUrl] = useState('');
-	//const [linkOpenNewWindow, setLinkOpenNewWindow] = useState(true);
-	//const [editedLinkUrl, setEditedLinkUrl] = useState('');
-	const [editedLinkOpenNewWindow, setEditedLinkOpenNewWindow] = useState(true);
-	//const [isEditMode, setEditMode] = useState(false);
+	const [editedLinkOpenNewWindow, setEditedLinkOpenNewWindow] = useState(false);
 	const [lastSelection, setLastSelection] = useState<
 		BaseSelection | null
 	>(null);
@@ -82,12 +78,12 @@ function FloatingLinkEditor({
 			if ($isLinkNode(parent)) {
 				setLinkUrl(parent.getURL());
 				setEditedLinkOpenNewWindow(
-					parent.getTarget() === '_blank' || !parent.getTarget()
+					parent.getTarget() === '_blank'
 				);
 			} else if ($isLinkNode(node)) {
 				setLinkUrl(node.getURL());
 				setEditedLinkOpenNewWindow(
-					node.getTarget() === '_blank' || !node.getTarget()
+					node.getTarget() === '_blank'
 				);
 			} else {
 				setLinkUrl('');
@@ -157,12 +153,6 @@ function FloatingLinkEditor({
 
 	useEffect(() => {
 		return mergeRegister(
-			editor.registerUpdateListener(({ editorState }) => {
-				editorState.read(() => {
-					updateLinkEditor();
-				});
-			}),
-
 			editor.registerCommand(
 				SELECTION_CHANGE_COMMAND,
 				() => {
@@ -184,12 +174,6 @@ function FloatingLinkEditor({
 			)
 		);
 	}, [editor, updateLinkEditor, setIsLink, isLink]);
-
-	useEffect(() => {
-		editor.getEditorState().read(() => {
-			updateLinkEditor();
-		});
-	}, [editor, updateLinkEditor]);
 
 	useEffect(() => {
 		if (isEditMode && inputRef.current) {
@@ -225,7 +209,6 @@ function FloatingLinkEditor({
 			$setSelection(null);
 			setEditMode(false);
 		});
-
 	};
 
 	return (
@@ -251,23 +234,23 @@ function FloatingLinkEditor({
 							/>
 						</Box>
 						<Box>
+							<Checkbox
+								isChecked={editedLinkOpenNewWindow}
+								onChange={() => {
+									setEditedLinkOpenNewWindow((prev) => !prev);
+								}}
+							>
+								Open in new tab
+							</Checkbox>
+						</Box>
+					</Stack>
+					<Stack justifyContent='space-between' fullWidth>
+						<Box>
 							<ButtonGroup>
-								<IconButton
-									aria-label='Save'
-									//variant='primary'
-									size='small'
-									icon={<DoneIcon />}
-									tabIndex={0}
-									onMouseDown={(event: React.MouseEvent) =>
-										event.preventDefault()
-									}
-									onClick={handleLinkSubmission}
-								/>
-							
-								<IconButton
+								<Button
 									aria-label='Cancel'
 									size='small'
-									icon={<CloseIcon />}
+									endIcon={<CloseIcon />}
 									tabIndex={0}
 									onMouseDown={(event: React.MouseEvent) =>
 										event.preventDefault()
@@ -278,11 +261,13 @@ function FloatingLinkEditor({
 										}
 										setEditMode(false);
 									}}
-								/>
-								<IconButton
+								>
+									Cancel
+								</Button>
+								<Button
 									aria-label='Delete link'
 									size='small'
-									icon={<DeleteIcon />}
+									endIcon={<DeleteIcon />}
 									tabIndex={0}
 									onMouseDown={(event: React.MouseEvent) =>
 										event.preventDefault()
@@ -290,19 +275,26 @@ function FloatingLinkEditor({
 									onClick={() => {
 										editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
 									}}
-								/>
+								>
+									Delete
+								</Button>
 							</ButtonGroup>
 						</Box>
-					</Stack>
-					<Stack>
-						<Checkbox
-							isChecked={editedLinkOpenNewWindow}
-							onChange={() => {
-								setEditedLinkOpenNewWindow((prev) => !prev);
-							}}
-						>
-							Open in new tab
-						</Checkbox>
+						<Box>
+							<Button
+								aria-label='Save'
+								size='small'
+								variant='primary'
+								endIcon={<DoneIcon />}
+								tabIndex={0}
+								onMouseDown={(event: React.MouseEvent) =>
+									event.preventDefault()
+								}
+								onClick={handleLinkSubmission}
+							>
+								Save
+							</Button>
+						</Box>
 					</Stack>
 				</Stack>
 			)} 
