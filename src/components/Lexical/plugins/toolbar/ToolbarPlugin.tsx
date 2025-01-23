@@ -31,8 +31,9 @@ import useModal from '../../../../hooks/useModal';
 import BlockFormatDropDown from './formatsDropdown/formatsDropdown';
 import { blockTypeToBlockName} from './formatsDropdown/const';
 import DropDown, { DropDownItem } from '../../../ui/DropDown';
-import { INSERT_DEFINITIONLIST_COMMAND } from '../DefinitionListPlugin';
+//import { INSERT_DEFINITIONLIST_COMMAND } from '../DefinitionListPlugin';
 import { $isTextNode } from 'lexical';
+import { INSERT_FAQ_CONTAINER_COMMAND, INSERT_FAQ_ITEM_COMMAND } from '../FAQPlugin';
 
 
 const wrap = ({ 
@@ -478,13 +479,23 @@ const ToolbarPlugin = () => {
 				<DropDownItem
                   onClick={() => {
                     editor.dispatchCommand(
-                      INSERT_DEFINITIONLIST_COMMAND, undefined
+					  INSERT_FAQ_CONTAINER_COMMAND, undefined
                     );
                   }}
                   className="item">
                   <i className="icon faq" />
-                  <span className="text">FAQ</span>
+                  <span className="text">FAQ Container</span>
                 </DropDownItem>
+				{/*<DropDownItem
+                  onClick={() => {
+                    editor.dispatchCommand(
+					  INSERT_FAQ_ITEM_COMMAND, undefined
+                    );
+                  }}
+                  className="item">
+                  <i className="icon faq" />
+                  <span className="text">FAQ Item</span>
+                </DropDownItem>*/}
 			</DropDown>
 			
 			{modal}

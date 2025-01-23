@@ -774,3 +774,51 @@ html .modal-image {
   margin-bottom: 4px;
   font-weight: bold;
 }
+
+//FAQ Plugin
+.ts-faq-container {
+  border: 1px dashed black;
+  position: relative;
+  padding: 26px 5px 5px 5px;
+  background: #5890ff26;
+}
+
+.ts-faq-container:before {
+  content: "FAQ Container";
+  position: absolute;
+  left: 50%; 
+  top: 2px;
+  transform: translate(-50%, 0);
+  font-size: 14px;
+  color: #216fdb;
+  font-weight: bold;
+}
+
+/*div[data-lexical-faq-container] {
+    border: 1px dashed yellow;
+    padding: 8px 16px;
+    min-width: 0;
+    max-width: 100%;
+}
+
+div[data-lexical-faq-item] {
+  border: 1px dashed blue;
+  padding: 8px 16px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+div[data-lexical-faq-item] h3 {
+  border: 1px dashed red;
+  padding: 8px 16px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+
+div[data-lexical-faq-item] p {
+  border: 1px dashed green;
+  padding: 8px 16px;
+  min-width: 0;
+  max-width: 100%;
+}*/

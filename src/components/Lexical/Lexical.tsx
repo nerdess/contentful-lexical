@@ -42,9 +42,15 @@ import Cleanups from './plugins/copyPasteEnhancement/Cleanups';
 import { Cleanup } from './plugins/copyPasteEnhancement/types';
 //import TreeViewPlugin from './plugins/TreeViewPlugin';
 import './lexical.scss';
-import { DefinitionListNode } from './nodes/DefinitionListNode';
-import DefinitionListPlugin from './plugins/DefinitionListPlugin';
+//import { DefinitionListNode } from './nodes/DefinitionListNode';
+//import DefinitionListPlugin from './plugins/DefinitionListPlugin';
 import DraggableBlockPlugin from './plugins/DraggableBlockPlugin';
+import { FAQContainerNode } from './nodes/FAQContainerNode';
+import FAQPlugin from './plugins/FAQPlugin';
+import TreeViewPlugin from './plugins/TreeViewPlugin';
+import { FAQItemNode } from './nodes/FAQItemNode';
+import { FAQQuestionNode } from './nodes/FAQQuestionNode';
+import { FAQAnswerNode } from './nodes/FAQAnswerNode';
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
@@ -66,7 +72,11 @@ const initialConfig = {
 		ImageNode,
 		QuoteNode,
 		HeadingNode,
-		DefinitionListNode,
+		//DefinitionListNode,
+		FAQContainerNode,
+		FAQItemNode,
+		FAQQuestionNode,
+		FAQAnswerNode,
 		//CustomHeadingNode,
 		/*{
 			replace: HeadingNode,
@@ -227,8 +237,9 @@ const Editor = ({
 							}}
 						/>
 						<CopyPasteEnhancementPlugin setCleanups={setCleanups} />
-						<DefinitionListPlugin />
-						{/*<TreeViewPlugin />*/}
+						<FAQPlugin />
+						{/*<DefinitionListPlugin />*/}
+						{<TreeViewPlugin />}
 						{/*<AutoFocusPlugin/>*/}
 					</Box>
 				</Flex>
