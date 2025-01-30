@@ -27,9 +27,7 @@ import { $createFAQAnswerNode } from '../../nodes/FAQAnswerNode';
 import { $isRootOrShadowRoot } from 'lexical';
 import { $wrapNodeInElement } from '@lexical/utils';
 
-export const INSERT_FAQ_CONTAINER_COMMAND: LexicalCommand<undefined> = createCommand(
-	'INSERT_FAQ_CONTAINER_COMMAND'
-);
+export const INSERT_FAQ_COMMAND: LexicalCommand<number> = createCommand<number>();
 
 export const INSERT_FAQ_ITEM_COMMAND: LexicalCommand<undefined> = createCommand(
 	'INSERT_FAQ_ITEM_COMMAND'
@@ -52,12 +50,28 @@ export default function FAQPlugin(): JSX.Element | null {
       // (mainly for decorators), except it'll always be possible to continue adding
       // new content even if trailing paragraph is accidentally deleted
       editor.registerCommand(
-        INSERT_FAQ_CONTAINER_COMMAND,
-        () => {
+        INSERT_FAQ_COMMAND,
+        (count) => {
           editor.update(() => {
-            const FAQContainerNode = $createFAQContainerNode().append($createParagraphNode());
-            $insertNodeToNearestRoot(FAQContainerNode);
-            FAQContainerNode.selectStart();
+            const container = $createFAQContainerNode();
+
+            for (let i = 0; i < count; i++) {
+
+              const item = $createFAQItemNode();
+
+              item.append(
+                $createFAQQuestionNode()
+              );
+              item.append(
+                $createFAQAnswerNode().append($createParagraphNode())
+              );
+
+              container.append(item);
+            }
+
+
+            $insertNodeToNearestRoot(container);
+            container.selectStart();
             //return true;
           });
           return true;

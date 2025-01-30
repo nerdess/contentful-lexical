@@ -21,7 +21,7 @@ const Field = () => {
 		sdk.field.setValue(value);
 	}, [sdk.field]);
 
-	console.log('initialValue', initialValue);
+	//console.log('initialValue', initialValue);
 
 	return (
 		<Stack 

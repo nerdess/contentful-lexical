@@ -34,6 +34,7 @@ import DropDown, { DropDownItem } from '../../../ui/DropDown';
 //import { INSERT_DEFINITIONLIST_COMMAND } from '../DefinitionListPlugin';
 import { $isTextNode } from 'lexical';
 import { INSERT_FAQ_CONTAINER_COMMAND, INSERT_FAQ_ITEM_COMMAND } from '../FAQPlugin';
+import InsertFAQDialog from '../FAQPlugin/InsertFAQDialog';
 
 
 const wrap = ({ 
@@ -476,16 +477,19 @@ const ToolbarPlugin = () => {
 					<i className='icon mdash' />
 					<span className="text">Mdash</span>
                 </DropDownItem>
-				<DropDownItem
+				{/*<DropDownItem
                   onClick={() => {
-                    editor.dispatchCommand(
-					  INSERT_FAQ_CONTAINER_COMMAND, undefined
-                    );
+                    showModal('Insert Columns Layout', (onClose) => (
+                      <InsertFAQDialog
+                        activeEditor={activeEditor}
+                        onClose={onClose}
+                      />
+                    ));
                   }}
                   className="item">
                   <i className="icon faq" />
-                  <span className="text">FAQ Container</span>
-                </DropDownItem>
+                  <span className="text">FAQ</span>
+                </DropDownItem>/*}
 				{/*<DropDownItem
                   onClick={() => {
                     editor.dispatchCommand(

@@ -26,7 +26,7 @@ export type SerializedFAQContainerNode = SerializedElementNode;
 function $convertFAQContainerElement(
   domNode: HTMLElement,
 ): DOMConversionOutput | null {
-  return {node: $createFAQContainerNode()};
+  return null;
 }
 
 export class FAQContainerNode extends ElementNode {
@@ -44,8 +44,8 @@ export class FAQContainerNode extends ElementNode {
     dom.classList.add('ts-faq-container');
     //dom.style.display = 'block';
     dom.setAttribute('data-lexical-faq-container', 'true');
-    //dom.setAttribute('itemscope', '');
-    //dom.setAttribute('itemtype', 'https://schema.org/FAQPage');
+    dom.setAttribute('itemscope', '');
+    dom.setAttribute('itemtype', 'https://schema.org/FAQPage');
     return dom;
   }
 
@@ -53,8 +53,8 @@ export class FAQContainerNode extends ElementNode {
     const element = document.createElement('div');
     element.classList.add('ts-faq-container');
     element.setAttribute('data-lexical-faq-container', 'true');
-    //element.setAttribute('itemscope', '');
-    //element.setAttribute('itemtype', 'https://schema.org/FAQPage');
+    element.setAttribute('itemscope', '');
+    element.setAttribute('itemtype', 'https://schema.org/FAQPage');
     return {element};
   }
 
@@ -85,7 +85,6 @@ export class FAQContainerNode extends ElementNode {
   ): this {
     return super
       .updateFromJSON(serializedNode)
-      //.setTemplateColumns(serializedNode.templateColumns);
   }
 
   isShadowRoot(): boolean {

@@ -44,12 +44,6 @@ function $convertFAQQuestionElement(
 }
 
 export class FAQQuestionNode extends ElementNode {
-  //__templateColumns: string;
-
-  constructor(/*templateColumns: string,*/ key?: NodeKey) {
-    super(key);
-    //this.__templateColumns = templateColumns;
-  }
 
   static getType(): string {
     return 'faq-question';
@@ -61,6 +55,7 @@ export class FAQQuestionNode extends ElementNode {
 
   createDOM(config: EditorConfig): HTMLElement {
     const dom = document.createElement('h3');
+    dom.setAttribute('data-lexical-faq-question', 'true');
     dom.setAttribute('itemprop', 'name');
 
     return dom;
@@ -75,9 +70,6 @@ export class FAQQuestionNode extends ElementNode {
   }
 
   updateDOM(prevNode: this, dom: HTMLElement): boolean {
-    /*if (prevNode.__templateColumns !== this.__templateColumns) {
-      dom.style.gridTemplateColumns = this.__templateColumns;
-    }*/
     return false;
   }
 
@@ -104,33 +96,14 @@ export class FAQQuestionNode extends ElementNode {
   ): this {
     return super
       .updateFromJSON(serializedNode)
-      //.setTemplateColumns(serializedNode.templateColumns);
   }
-
-  /*isShadowRoot(): boolean {
-    return true;
-  }
-
-  canBeEmpty(): boolean {
-    return false;
-  }*/
 
   exportJSON(): SerializedFAQQuestionNode {
     return {
       ...super.exportJSON(),
-      //templateColumns: this.__templateColumns,
     };
   }
 
-  /*getTemplateColumns(): string {
-    return this.getLatest().__templateColumns;
-  }*/
-
-  /*setTemplateColumns(templateColumns: string): this {
-    const self = this.getWritable();
-    self.__templateColumns = templateColumns;
-    return self;
-  }*/
 }
 
 export function $createFAQQuestionNode(

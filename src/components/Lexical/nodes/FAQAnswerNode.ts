@@ -31,15 +31,6 @@ export type SerializedFAQAnswerNode = Spread<
 function $convertFAQAnswerElement(
   domNode: HTMLElement,
 ): DOMConversionOutput | null {
-
-  /*const styleAttributes = window.getComputedStyle(domNode);
-  const templateColumns = styleAttributes.getPropertyValue(
-    'grid-template-columns',
-  );
-  if (templateColumns) {
-    const node = $createFAQAnswerNode(templateColumns);
-    return {node};
-  }*/
   return null;
 }
 
@@ -50,19 +41,20 @@ export class FAQAnswerNode extends ElementNode {
   }
 
   static clone(node: FAQAnswerNode): FAQAnswerNode {
-    return new FAQAnswerNode(/*node.__templateColumns,*/ node.__key);
+    return new FAQAnswerNode( node.__key);
   }
 
   createDOM(config: EditorConfig): HTMLElement {
     const dom = document.createElement('div');
+    dom.setAttribute('data-lexical-faq-answer', 'true');
     dom.setAttribute('itemscope', '');
     dom.setAttribute('itemtype', 'http://schema.org/Answer');
     dom.setAttribute('itemprop', 'acceptedAnswer');
 
-    const answerText = document.createElement('div');
-    answerText.setAttribute('itemprop', 'text');
+    //const answerText = document.createElement('div');
+    //answerText.setAttribute('itemprop', 'text');
 
-    dom.appendChild(answerText);
+    //dom.appendChild(answerText);
 
     return dom;
   }
@@ -74,18 +66,15 @@ export class FAQAnswerNode extends ElementNode {
     element.setAttribute('itemtype', 'http://schema.org/Answer');
     element.setAttribute('itemprop', 'acceptedAnswer');
 
-    const answerText = document.createElement('div');
-    answerText.setAttribute('itemprop', 'text');
+    //const answerText = document.createElement('div');
+    //answerText.setAttribute('itemprop', 'text');
 
-    element.appendChild(answerText);
+    //element.appendChild(answerText);
 
     return {element};
   }
 
   updateDOM(prevNode: this, dom: HTMLElement): boolean {
-    /*if (prevNode.__templateColumns !== this.__templateColumns) {
-      dom.style.gridTemplateColumns = this.__templateColumns;
-    }*/
     return false;
   }
 
