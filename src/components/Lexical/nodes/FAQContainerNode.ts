@@ -10,23 +10,18 @@ import type {
   DOMConversionMap,
   DOMConversionOutput,
   DOMExportOutput,
-  EditorConfig,
   LexicalNode,
   LexicalUpdateJSON,
-  NodeKey,
   SerializedElementNode,
-  Spread,
 } from 'lexical';
 
-import {addClassNamesToElement} from '@lexical/utils';
 import {ElementNode} from 'lexical';
 
 export type SerializedFAQContainerNode = SerializedElementNode;
 
-function $convertFAQContainerElement(
-  domNode: HTMLElement,
-): DOMConversionOutput | null {
-  return null;
+function $convertFAQContainerElement(): DOMConversionOutput | null {
+  const node = $createFAQContainerNode();
+  return {node};
 }
 
 export class FAQContainerNode extends ElementNode {
@@ -39,10 +34,9 @@ export class FAQContainerNode extends ElementNode {
     return new FAQContainerNode(node.__key);
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
+  createDOM(): HTMLElement {
     const dom = document.createElement('div');
     dom.classList.add('ts-faq-container');
-    //dom.style.display = 'block';
     dom.setAttribute('data-lexical-faq-container', 'true');
     dom.setAttribute('itemscope', '');
     dom.setAttribute('itemtype', 'https://schema.org/FAQPage');
@@ -65,6 +59,7 @@ export class FAQContainerNode extends ElementNode {
   static importDOM(): DOMConversionMap | null {
     return {
       div: (domNode: HTMLElement) => {
+        console.log('domNodeContainer', domNode, domNode.hasAttribute('data-lexical-faq-container'));
         if (!domNode.hasAttribute('data-lexical-faq-container')) {
           return null;
         }

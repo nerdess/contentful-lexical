@@ -7,7 +7,7 @@
  */
 import {LexicalEditor} from 'lexical';
 import {useState} from 'react';
-import { FormControl, TextInput } from '@contentful/f36-components';
+import { FormControl, Note, Stack, TextInput } from '@contentful/f36-components';
 import { INSERT_FAQ_COMMAND } from '.';
 import Button from '../../../ui/Button';
 
@@ -28,16 +28,22 @@ export default function InsertFAQDialog({
 
   return (
     <>
-    <FormControl>
-        <FormControl.Label>
-           Number of questions
-        </FormControl.Label>
-        <TextInput
-            value={value.toString()}
-            type='number'
-            onChange={(e) => setValue(e.target.value)}
-        />
-    </FormControl>
+      <FormControl>
+          <FormControl.Label>
+            Number of questions
+          </FormControl.Label>
+          <Stack flexDirection="column" alignItems="start" spacing="spacingS">
+            <Note variant="neutral">
+              The number of questions cannot be changed after creation.
+            </Note>
+            <TextInput
+                value={value.toString()}
+                type="number"
+                style={{width: 100}}
+                onChange={(e) => setValue(e.target.value)}
+            />
+          </Stack>
+      </FormControl>
       <Button onClick={onClick}>Insert</Button>
     </>
   );

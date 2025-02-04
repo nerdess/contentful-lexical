@@ -33,8 +33,9 @@ import { blockTypeToBlockName} from './formatsDropdown/const';
 import DropDown, { DropDownItem } from '../../../ui/DropDown';
 //import { INSERT_DEFINITIONLIST_COMMAND } from '../DefinitionListPlugin';
 import { $isTextNode } from 'lexical';
-import { INSERT_FAQ_CONTAINER_COMMAND, INSERT_FAQ_ITEM_COMMAND } from '../FAQPlugin';
 import InsertFAQDialog from '../FAQPlugin/InsertFAQDialog';
+//import { INSERT_FAQ_CONTAINER_COMMAND, INSERT_FAQ_ITEM_COMMAND } from '../FAQPlugin';
+//import InsertFAQDialog from '../FAQPlugin/InsertFAQDialog';
 
 
 const wrap = ({ 
@@ -308,9 +309,10 @@ const ToolbarPlugin = () => {
 
 	const insertLink = useCallback(() => {
 		if (!isLink) {
-			//editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl('https://'));
+			console.log('isNoLink!!!!')
 			editor.dispatchCommand(TOGGLE_LINK_COMMAND, '');
 		} else {
+			console.log('isLink!!!!')
 			editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
 		}
 	}, [editor, isLink]);
@@ -477,7 +479,7 @@ const ToolbarPlugin = () => {
 					<i className='icon mdash' />
 					<span className="text">Mdash</span>
                 </DropDownItem>
-				{/*<DropDownItem
+				{<DropDownItem
                   onClick={() => {
                     showModal('Insert Columns Layout', (onClose) => (
                       <InsertFAQDialog
@@ -489,7 +491,7 @@ const ToolbarPlugin = () => {
                   className="item">
                   <i className="icon faq" />
                   <span className="text">FAQ</span>
-                </DropDownItem>/*}
+                </DropDownItem>}
 				{/*<DropDownItem
                   onClick={() => {
                     editor.dispatchCommand(

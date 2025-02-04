@@ -13,12 +13,10 @@ import type {
   EditorConfig,
   LexicalNode,
   LexicalUpdateJSON,
-  NodeKey,
   SerializedElementNode,
   Spread,
 } from 'lexical';
 
-import {addClassNamesToElement} from '@lexical/utils';
 import {ElementNode} from 'lexical';
 
 export type SerializedFAQQuestionNode = Spread<
@@ -28,19 +26,9 @@ export type SerializedFAQQuestionNode = Spread<
   SerializedElementNode
 >;
 
-function $convertFAQQuestionElement(
-  domNode: HTMLElement,
-): DOMConversionOutput | null {
-
-  /*const styleAttributes = window.getComputedStyle(domNode);
-  const templateColumns = styleAttributes.getPropertyValue(
-    'grid-template-columns',
-  );
-  if (templateColumns) {
-    const node = $createFAQQuestionNode(templateColumns);
-    return {node};
-  }*/
-  return null;
+function $convertFAQQuestionElement(): DOMConversionOutput | null {
+  const node = $createFAQQuestionNode();
+  return {node};
 }
 
 export class FAQQuestionNode extends ElementNode {
@@ -50,26 +38,24 @@ export class FAQQuestionNode extends ElementNode {
   }
 
   static clone(node: FAQQuestionNode): FAQQuestionNode {
-    return new FAQQuestionNode(/*node.__templateColumns,*/ node.__key);
+    return new FAQQuestionNode(node.__key);
   }
 
   createDOM(config: EditorConfig): HTMLElement {
     const dom = document.createElement('h3');
     dom.setAttribute('data-lexical-faq-question', 'true');
     dom.setAttribute('itemprop', 'name');
-
     return dom;
   }
 
   exportDOM(): DOMExportOutput {
-
     const element = document.createElement('h3');
+    element.setAttribute('data-lexical-faq-question', 'true');
     element.setAttribute('itemprop', 'name');
-
     return {element};
   }
 
-  updateDOM(prevNode: this, dom: HTMLElement): boolean {
+  updateDOM(): boolean {
     return false;
   }
 
@@ -107,9 +93,8 @@ export class FAQQuestionNode extends ElementNode {
 }
 
 export function $createFAQQuestionNode(
-  //templateColumns: string = '',
 ): FAQQuestionNode {
-  return new FAQQuestionNode(/*templateColumns*/);
+  return new FAQQuestionNode();
 }
 
 export function $isFAQQuestionNode(

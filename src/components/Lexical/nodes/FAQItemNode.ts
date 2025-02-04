@@ -13,12 +13,10 @@ import type {
   EditorConfig,
   LexicalNode,
   LexicalUpdateJSON,
-  NodeKey,
   SerializedElementNode,
   Spread,
 } from 'lexical';
 
-import {addClassNamesToElement} from '@lexical/utils';
 import {ElementNode} from 'lexical';
 
 export type SerializedFAQItemNode = Spread<
@@ -29,7 +27,8 @@ export type SerializedFAQItemNode = Spread<
 >;
 
 function $convertFAQItemElement(): DOMConversionOutput | null {
-  return null;
+  const node = $createFAQItemNode();
+  return {node};
 }
 
 export class FAQItemNode extends ElementNode {
@@ -61,7 +60,7 @@ export class FAQItemNode extends ElementNode {
     return {element};
   }
 
-  updateDOM(prevNode: this, dom: HTMLElement): boolean {
+  updateDOM(): boolean {
     return false;
   }
 

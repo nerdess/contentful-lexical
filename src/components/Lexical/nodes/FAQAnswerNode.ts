@@ -10,15 +10,12 @@ import type {
   DOMConversionMap,
   DOMConversionOutput,
   DOMExportOutput,
-  EditorConfig,
   LexicalNode,
   LexicalUpdateJSON,
-  NodeKey,
   SerializedElementNode,
   Spread,
 } from 'lexical';
 
-import {addClassNamesToElement} from '@lexical/utils';
 import {ElementNode} from 'lexical';
 
 export type SerializedFAQAnswerNode = Spread<
@@ -29,9 +26,9 @@ export type SerializedFAQAnswerNode = Spread<
 >;
 
 function $convertFAQAnswerElement(
-  domNode: HTMLElement,
 ): DOMConversionOutput | null {
-  return null;
+  const node = $createFAQAnswerNode();
+  return {node};
 }
 
 export class FAQAnswerNode extends ElementNode {
@@ -44,37 +41,25 @@ export class FAQAnswerNode extends ElementNode {
     return new FAQAnswerNode( node.__key);
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
+  createDOM(): HTMLElement {
     const dom = document.createElement('div');
     dom.setAttribute('data-lexical-faq-answer', 'true');
     dom.setAttribute('itemscope', '');
     dom.setAttribute('itemtype', 'http://schema.org/Answer');
     dom.setAttribute('itemprop', 'acceptedAnswer');
-
-    //const answerText = document.createElement('div');
-    //answerText.setAttribute('itemprop', 'text');
-
-    //dom.appendChild(answerText);
-
     return dom;
   }
 
   exportDOM(): DOMExportOutput {
-
     const element = document.createElement('div');
+    element.setAttribute('data-lexical-faq-answer', 'true');
     element.setAttribute('itemscope', '');
     element.setAttribute('itemtype', 'http://schema.org/Answer');
     element.setAttribute('itemprop', 'acceptedAnswer');
-
-    //const answerText = document.createElement('div');
-    //answerText.setAttribute('itemprop', 'text');
-
-    //element.appendChild(answerText);
-
     return {element};
   }
 
-  updateDOM(prevNode: this, dom: HTMLElement): boolean {
+  updateDOM(): boolean {
     return false;
   }
 
@@ -101,39 +86,18 @@ export class FAQAnswerNode extends ElementNode {
   ): this {
     return super
       .updateFromJSON(serializedNode)
-      //.setTemplateColumns(serializedNode.templateColumns);
   }
-
-  /*isShadowRoot(): boolean {
-    return true;
-  }
-
-  canBeEmpty(): boolean {
-    return false;
-  }*/
 
   exportJSON(): SerializedFAQAnswerNode {
     return {
       ...super.exportJSON(),
-      //templateColumns: this.__templateColumns,
     };
   }
-
-  /*getTemplateColumns(): string {
-    return this.getLatest().__templateColumns;
-  }*/
-
-  /*setTemplateColumns(templateColumns: string): this {
-    const self = this.getWritable();
-    self.__templateColumns = templateColumns;
-    return self;
-  }*/
 }
 
 export function $createFAQAnswerNode(
-  //templateColumns: string = '',
 ): FAQAnswerNode {
-  return new FAQAnswerNode(/*templateColumns*/);
+  return new FAQAnswerNode();
 }
 
 export function $isFAQAnswerNode(

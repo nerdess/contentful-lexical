@@ -8,8 +8,6 @@ export class CustomLinkNode extends LinkNode {
 
   static clone(node: LinkNode) {
 
-    console.log('node', node.getTarget());
-
     return new CustomLinkNode(node.getURL(), { 
       rel: node.getRel(), 
       target: node.getTarget()

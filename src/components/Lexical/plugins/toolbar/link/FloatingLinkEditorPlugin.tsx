@@ -32,19 +32,11 @@ import { createPortal } from 'react-dom';
 import { getSelectedNode } from '../../utils/getSelectedNode';
 import { sanitizeUrl } from '../../utils/url';
 import { setFloatingElemPositionForLinkEditor } from '../../utils/setFloatingElemPositionForLinkEditor';
-import {
-	DeleteIcon,
-	CloseIcon,
-	DoneIcon,
-} from '@contentful/f36-icons';
+import { DeleteIcon, CloseIcon, DoneIcon } from '@contentful/f36-icons';
 import { TextInput, Checkbox, Button } from '@contentful/f36-components';
 
 import './floatingLinkEditorPlugin.css';
-import {
-	Box,
-	ButtonGroup,
-	Stack,
-} from '@contentful/f36-components';
+import { Box, ButtonGroup, Stack } from '@contentful/f36-components';
 
 function FloatingLinkEditor({
 	editor,
@@ -52,7 +44,7 @@ function FloatingLinkEditor({
 	setIsLink,
 	anchorElem,
 	isEditMode,
-	setEditMode
+	setEditMode,
 }: {
 	editor: LexicalEditor;
 	isLink: boolean;
@@ -65,9 +57,9 @@ function FloatingLinkEditor({
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [linkUrl, setLinkUrl] = useState('');
 	const [editedLinkOpenNewWindow, setEditedLinkOpenNewWindow] = useState(false);
-	const [lastSelection, setLastSelection] = useState<
-		BaseSelection | null
-	>(null);
+	const [lastSelection, setLastSelection] = useState<BaseSelection | null>(
+		null
+	);
 
 	const updateLinkEditor = useCallback(() => {
 		const selection = $getSelection();
@@ -77,17 +69,13 @@ function FloatingLinkEditor({
 
 			if ($isLinkNode(parent)) {
 				setLinkUrl(parent.getURL());
-				setEditedLinkOpenNewWindow(
-					parent.getTarget() === '_blank'
-				);
+				setEditedLinkOpenNewWindow(parent.getTarget() === '_blank');
 			} else if ($isLinkNode(node)) {
 				setLinkUrl(node.getURL());
-				setEditedLinkOpenNewWindow(
-					node.getTarget() === '_blank'
-				);
+				setEditedLinkOpenNewWindow(node.getTarget() === '_blank');
 			} else {
 				setLinkUrl('');
-				setEditedLinkOpenNewWindow(false);
+				setEditedLinkOpenNewWindow(true);
 			}
 		}
 		const editorElem = editorRef.current;
@@ -256,9 +244,6 @@ function FloatingLinkEditor({
 										event.preventDefault()
 									}
 									onClick={() => {
-										if (!linkUrl) {
-											editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
-										}
 										setEditMode(false);
 									}}
 								>
@@ -297,8 +282,7 @@ function FloatingLinkEditor({
 						</Box>
 					</Stack>
 				</Stack>
-			)} 
-			
+			)}
 		</div>
 	);
 }
@@ -326,7 +310,6 @@ function useFloatingLinkEditorToolbar(
 				setIsLink(false);
 				setEditMode(false);
 			}
-
 		}
 	}, []);
 
