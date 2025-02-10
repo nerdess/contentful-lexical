@@ -20,6 +20,7 @@ import {
 //import DropDown, {DropDownItem} from '../../ui/DropDown';
 import DropDown, {DropDownItem, DropDownHeader} from '../../../../ui/DropDown';
 import { BlockTypeToBlockName, blockTypeToBlockName } from './const';
+import { clearFormatting } from '../../../../../lib/utils/clearFormatting';
 
 const formatParagraph = (editor: LexicalEditor) => {
   editor.update(() => {
@@ -38,6 +39,7 @@ const formatHeading = (
   if (blockType !== headingSize) {
     editor.update(() => {
       const selection = $getSelection();
+      clearFormatting(editor);
       $setBlocksType(selection, () => $createHeadingNode(headingSize));
     });
   }

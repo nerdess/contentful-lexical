@@ -165,7 +165,6 @@ const ToolbarPlugin = () => {
 			setIsItalic(selection.hasFormat('italic'));
 			setIsUnderline(selection.hasFormat('underline'));
 			setIsStrikethrough(selection.hasFormat('strikethrough'));
-			//setIsRTL($isParentElementRTL(selection));
 
 			// Update links
 			const node = getSelectedNode(selection);
@@ -196,14 +195,6 @@ const ToolbarPlugin = () => {
 				  if (type in blockTypeToBlockName) {
 					setBlockType(type);
 				  }
-				  /*if ($isCodeNode(element)) {
-					const language =
-					  element.getLanguage();
-					setCodeLanguage(
-					  language ? CODE_LANGUAGE_MAP[language] || language : '',
-					);
-					return;
-				  }*/
 				}
 			  }
 
@@ -357,6 +348,7 @@ const ToolbarPlugin = () => {
 				}}
 				className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
 				aria-label='Format Bold'
+				disabled={blockType === 'h4'}
 			>
 				<i className='format bold' />
 			</button>
@@ -366,6 +358,7 @@ const ToolbarPlugin = () => {
 				}}
 				className={'toolbar-item spaced ' + (isItalic ? 'active' : '')}
 				aria-label='Format Italics'
+				disabled={blockType === 'h4'}
 			>
 				<i className='format italic' />
 			</button>
@@ -375,6 +368,7 @@ const ToolbarPlugin = () => {
 				}}
 				className={'toolbar-item spaced ' + (isUnderline ? 'active' : '')}
 				aria-label='Format Underline'
+				disabled={blockType === 'h4'}
 			>
 				<i className='format underline' />
 			</button>
@@ -384,6 +378,7 @@ const ToolbarPlugin = () => {
 				}}
 				className={'toolbar-item spaced ' + (isStrikethrough ? 'active' : '')}
 				aria-label='Format Strikethrough'
+				disabled={blockType === 'h4'}
 			>
 				<i className='format strikethrough' />
 			</button>
@@ -480,7 +475,7 @@ const ToolbarPlugin = () => {
 					<i className='icon mdash' />
 					<span className="text">Mdash</span>
                 </DropDownItem>
-				{<DropDownItem
+				<DropDownItem
                   onClick={() => {
                     showModal('Insert Columns Layout', (onClose) => (
                       <InsertFAQDialog
@@ -492,7 +487,7 @@ const ToolbarPlugin = () => {
                   className="item">
                   <i className="icon faq" />
                   <span className="text">FAQ</span>
-                </DropDownItem>}
+                </DropDownItem>
 				{/*<DropDownItem
                   onClick={() => {
                     editor.dispatchCommand(
