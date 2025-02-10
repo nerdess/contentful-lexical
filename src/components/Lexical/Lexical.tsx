@@ -222,7 +222,7 @@ const Editor = ({
 						<HistoryPlugin />
 						<ListPlugin />
 						<LinkPlugin />
-						<FloatingLinkEditorPlugin />
+						{<FloatingLinkEditorPlugin />}
 						<ListMaxIndentLevelPlugin maxDepth={7} />
 						<ImagePlugin />
 						{floatingAnchorElem && <DraggableBlockPlugin anchorElem={floatingAnchorElem} />}
@@ -239,7 +239,7 @@ const Editor = ({
 						<CopyPasteEnhancementPlugin setCleanups={setCleanups} />
 						<FAQPlugin />
 						{/*<DefinitionListPlugin />*/}
-						{/*<TreeViewPlugin />*/}
+						{<TreeViewPlugin />}
 						{/*<AutoFocusPlugin/>*/}
 					</Box>
 				</Flex>

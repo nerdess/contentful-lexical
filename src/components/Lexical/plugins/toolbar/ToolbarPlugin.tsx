@@ -308,12 +308,13 @@ const ToolbarPlugin = () => {
 	};*/
 
 	const insertLink = useCallback(() => {
-		if (!isLink) {
-			console.log('isNoLink!!!!')
-			editor.dispatchCommand(TOGGLE_LINK_COMMAND, '');
-		} else {
-			console.log('isLink!!!!')
+		if (isLink) {
 			editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+		} else {
+			editor.dispatchCommand(TOGGLE_LINK_COMMAND, {
+				url: '',
+				target: '_blank'
+			});
 		}
 	}, [editor, isLink]);
 

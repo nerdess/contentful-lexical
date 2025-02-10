@@ -24,6 +24,7 @@ import {
 	LexicalEditor,
 	SELECTION_CHANGE_COMMAND,
 	BaseSelection,
+	$isLineBreakNode,
 } from 'lexical';
 import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
@@ -57,31 +58,36 @@ function FloatingLinkEditor({
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [linkUrl, setLinkUrl] = useState('');
 	const [editedLinkOpenNewWindow, setEditedLinkOpenNewWindow] = useState(false);
-	const [lastSelection, setLastSelection] = useState<BaseSelection | null>(
-		null
-	);
+	const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null);
 
 	const updateLinkEditor = useCallback(() => {
+		//console.log('updateLinkEditor');
 		const selection = $getSelection();
 		if ($isRangeSelection(selection)) {
 			const node = getSelectedNode(selection);
 			const parent = node.getParent();
 
 			if ($isLinkNode(parent)) {
+				//console.log('updateLinkEditor: parent')
 				setLinkUrl(parent.getURL());
 				setEditedLinkOpenNewWindow(parent.getTarget() === '_blank');
 			} else if ($isLinkNode(node)) {
+				//console.log('updateLinkEditor: node')
 				setLinkUrl(node.getURL());
 				setEditedLinkOpenNewWindow(node.getTarget() === '_blank');
 			} else {
+				//console.log('updateLinkEditor: else')
 				setLinkUrl('');
-				setEditedLinkOpenNewWindow(true);
+				setEditedLinkOpenNewWindow(false);
 			}
 		}
 		const editorElem = editorRef.current;
 		const nativeSelection = window.getSelection();
 		const activeElement = document.activeElement;
 
+		//console.log('editorElem', editorElem);
+		//console.log('activeElement', activeElement);
+	
 		if (editorElem === null) {
 			return;
 		}
@@ -114,6 +120,14 @@ function FloatingLinkEditor({
 
 		return true;
 	}, [anchorElem, editor, setEditMode]);
+
+
+	useEffect(() => {
+		if (!isLink) {
+			setLinkUrl('');
+			setEditedLinkOpenNewWindow(false);
+		}
+	}, [isLink]);
 
 	useEffect(() => {
 		const scrollerElem = anchorElem.parentElement;
@@ -295,25 +309,47 @@ function useFloatingLinkEditorToolbar(
 	const [isLink, setIsLink] = useState(false);
 	const [isEditMode, setEditMode] = useState(false);
 
-	const updateToolbar = useCallback(() => {
-		const selection = $getSelection();
-		if ($isRangeSelection(selection)) {
-			const node = getSelectedNode(selection);
-			const linkParent = $findMatchingParent(node, $isLinkNode);
-			const autoLinkParent = $findMatchingParent(node, $isAutoLinkNode);
+	useEffect(() => {
 
-			// We don't want this menu to open for auto links.
-			if (linkParent != null && autoLinkParent === null) {
-				setIsLink(true);
-				setEditMode(true);
-			} else {
+		const updateToolbar = () => {
+			const selection = $getSelection();
+			if ($isRangeSelection(selection)) {
+			  const focusNode = getSelectedNode(selection);
+			  const focusLinkNode = $findMatchingParent(focusNode, $isLinkNode);
+			  const focusAutoLinkNode = $findMatchingParent(
+				focusNode,
+				$isAutoLinkNode,
+			  );
+			  if (!(focusLinkNode || focusAutoLinkNode)) {
 				setIsLink(false);
 				setEditMode(false);
+				return;
+			  }
+			  const badNode = selection
+				.getNodes()
+				.filter((node) => !$isLineBreakNode(node))
+				.find((node) => {
+				  const linkNode = $findMatchingParent(node, $isLinkNode);
+				  const autoLinkNode = $findMatchingParent(node, $isAutoLinkNode);
+				  return (
+					(focusLinkNode && !focusLinkNode.is(linkNode)) ||
+					(linkNode && !linkNode.is(focusLinkNode)) ||
+					(focusAutoLinkNode && !focusAutoLinkNode.is(autoLinkNode)) ||
+					(autoLinkNode &&
+					  (!autoLinkNode.is(focusAutoLinkNode) ||
+						autoLinkNode.getIsUnlinked()))
+				  );
+				});
+			  if (!badNode) {
+				setIsLink(true);
+				setEditMode(true);
+			  } else {
+				setIsLink(false);
+				setEditMode(false);
+			  }
 			}
-		}
-	}, []);
+		};
 
-	useEffect(() => {
 		return mergeRegister(
 			editor.registerUpdateListener(({ editorState }) => {
 				editorState.read(() => {
@@ -330,7 +366,9 @@ function useFloatingLinkEditorToolbar(
 				COMMAND_PRIORITY_CRITICAL
 			)
 		);
-	}, [editor, updateToolbar]);
+	}, [editor]);
+
+	//console.log('isLink isEditMode', isLink, isEditMode);
 
 	return createPortal(
 		<FloatingLinkEditor

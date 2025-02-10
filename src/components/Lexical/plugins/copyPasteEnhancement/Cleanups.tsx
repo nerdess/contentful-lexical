@@ -1,7 +1,7 @@
 import { Badge, Stack } from '@contentful/f36-components';
 import { useSDK } from '@contentful/react-apps-toolkit';
-import './Cleanups.scss';
 import { Cleanup } from './types';
+import './Cleanups.scss';
 
 const Cleanups = ({ cleanups }: { cleanups: Cleanup[] }) => {
 	const sdk = useSDK();

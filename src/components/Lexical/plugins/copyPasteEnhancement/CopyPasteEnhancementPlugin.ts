@@ -50,8 +50,6 @@ const CopyPasteEnhancementPlugin = ({
 		);
 	}, [editor, onPasteForRichText]);
 
-
-
 	return null;
 };
 
