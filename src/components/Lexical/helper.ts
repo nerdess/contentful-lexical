@@ -25,6 +25,13 @@ export const cleanup = (html: string) => {
 		};
 	});
 
+	//set all links that have no target to target=_blank
+	doc.querySelectorAll('a').forEach(element => {
+		if (element.getAttribute('targt') === null) {
+			element.setAttribute('target', '_blank');
+		}
+	});
+
 	return doc.body.innerHTML;
 	
 	//const cleanedHTMLString = doc.body.innerHTML;
