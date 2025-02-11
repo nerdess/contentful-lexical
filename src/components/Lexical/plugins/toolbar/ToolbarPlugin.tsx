@@ -26,16 +26,12 @@ import Divider from './divider/Divider';
 import ImageDialog from '../image/ImageDialog';
 import useModal from '../../../../hooks/useModal';
 import BlockFormatDropDown from './formatsDropdown/formatsDropdown';
-import { blockTypeToBlockName } from './formatsDropdown/const';
 import DropDown, { DropDownItem } from '../../../ui/DropDown';
-//import { INSERT_DEFINITIONLIST_COMMAND } from '../DefinitionListPlugin';
 import { $isTextNode } from 'lexical';
 import InsertFAQDialog from '../FAQPlugin/InsertFAQDialog';
 import {
 	FORCE_UPDATE_LINK_EDITOR_COMMAND,
 } from './link/FloatingLinkEditorPlugin';
-//import { INSERT_FAQ_CONTAINER_COMMAND, INSERT_FAQ_ITEM_COMMAND } from '../FAQPlugin';
-//import InsertFAQDialog from '../FAQPlugin/InsertFAQDialog';
 
 const wrap = ({
 	editor,
