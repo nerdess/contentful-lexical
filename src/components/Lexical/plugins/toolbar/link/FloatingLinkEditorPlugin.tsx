@@ -25,6 +25,8 @@ import {
 	SELECTION_CHANGE_COMMAND,
 	BaseSelection,
 	$isLineBreakNode,
+	LexicalCommand,
+	createCommand,
 } from 'lexical';
 import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
@@ -38,6 +40,9 @@ import { TextInput, Checkbox, Button } from '@contentful/f36-components';
 
 import './floatingLinkEditorPlugin.css';
 import { Box, ButtonGroup, Stack } from '@contentful/f36-components';
+
+export const FORCE_UPDATE_LINK_EDITOR_COMMAND: LexicalCommand<null> = createCommand();
+
 
 function FloatingLinkEditor({
 	editor,
@@ -61,22 +66,19 @@ function FloatingLinkEditor({
 	const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null);
 
 	const updateLinkEditor = useCallback(() => {
-		//console.log('updateLinkEditor');
+
 		const selection = $getSelection();
 		if ($isRangeSelection(selection)) {
 			const node = getSelectedNode(selection);
 			const parent = node.getParent();
 
 			if ($isLinkNode(parent)) {
-				//console.log('updateLinkEditor: parent')
 				setLinkUrl(parent.getURL());
 				setEditedLinkOpenNewWindow(parent.getTarget() === '_blank');
 			} else if ($isLinkNode(node)) {
-				//console.log('updateLinkEditor: node')
 				setLinkUrl(node.getURL());
 				setEditedLinkOpenNewWindow(node.getTarget() === '_blank');
 			} else {
-				//console.log('updateLinkEditor: else')
 				setLinkUrl('');
 				setEditedLinkOpenNewWindow(false);
 			}
@@ -84,9 +86,6 @@ function FloatingLinkEditor({
 		const editorElem = editorRef.current;
 		const nativeSelection = window.getSelection();
 		const activeElement = document.activeElement;
-
-		//console.log('editorElem', editorElem);
-		//console.log('activeElement', activeElement);
 	
 		if (editorElem === null) {
 			return;
@@ -116,6 +115,7 @@ function FloatingLinkEditor({
 			setLastSelection(null);
 			setEditMode(false);
 			setLinkUrl('');
+			setEditedLinkOpenNewWindow(false);
 		}
 
 		return true;
@@ -129,6 +129,7 @@ function FloatingLinkEditor({
 		}
 	}, [isLink]);
 
+	//scroll & resize event listeners
 	useEffect(() => {
 		const scrollerElem = anchorElem.parentElement;
 
@@ -153,8 +154,17 @@ function FloatingLinkEditor({
 		};
 	}, [anchorElem.parentElement, editor, updateLinkEditor]);
 
+
 	useEffect(() => {
 		return mergeRegister(
+			editor.registerCommand(
+				FORCE_UPDATE_LINK_EDITOR_COMMAND,
+				() => {
+				  updateLinkEditor();
+				  return true;
+				},
+				COMMAND_PRIORITY_LOW,
+			  ),
 			editor.registerCommand(
 				SELECTION_CHANGE_COMMAND,
 				() => {
@@ -227,6 +237,7 @@ function FloatingLinkEditor({
 							<TextInput
 								ref={inputRef}
 								value={linkUrl}
+								className="link-input"
 								onChange={(event) => {
 									setLinkUrl(event.target.value);
 								}}
@@ -367,8 +378,6 @@ function useFloatingLinkEditorToolbar(
 			)
 		);
 	}, [editor]);
-
-	//console.log('isLink isEditMode', isLink, isEditMode);
 
 	return createPortal(
 		<FloatingLinkEditor

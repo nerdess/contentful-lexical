@@ -18,30 +18,30 @@ import {
 } from 'lexical';
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
-import {
-	$isListNode,
-	ListNode,
-} from '@lexical/list';
-import {$isHeadingNode} from '@lexical/rich-text';
+import { $isListNode, ListNode } from '@lexical/list';
+import { $isHeadingNode } from '@lexical/rich-text';
 import { getSelectedNode } from '../utils/getSelectedNode';
 import { LowPriority } from './const';
 import Divider from './divider/Divider';
 import ImageDialog from '../image/ImageDialog';
 import useModal from '../../../../hooks/useModal';
 import BlockFormatDropDown from './formatsDropdown/formatsDropdown';
-import { blockTypeToBlockName} from './formatsDropdown/const';
+import { blockTypeToBlockName } from './formatsDropdown/const';
 import DropDown, { DropDownItem } from '../../../ui/DropDown';
 //import { INSERT_DEFINITIONLIST_COMMAND } from '../DefinitionListPlugin';
 import { $isTextNode } from 'lexical';
 import InsertFAQDialog from '../FAQPlugin/InsertFAQDialog';
+import {
+	HELLO_WORLD_COMMAND,
+	FORCE_UPDATE_LINK_EDITOR_COMMAND,
+} from './link/FloatingLinkEditorPlugin';
 //import { INSERT_FAQ_CONTAINER_COMMAND, INSERT_FAQ_ITEM_COMMAND } from '../FAQPlugin';
 //import InsertFAQDialog from '../FAQPlugin/InsertFAQDialog';
 
-
-const wrap = ({ 
+const wrap = ({
 	editor,
-	left = '', 
-	right = ''
+	left = '',
+	right = '',
 }: {
 	editor: LexicalEditor;
 	left: string;
@@ -51,9 +51,8 @@ const wrap = ({
 		const selection = $getSelection() as any;
 		if (!selection) return null;
 
-		let _left = {key: null, offset: 0};
-		let _right = {key: null, offset: 0};
-		
+		let _left = { key: null, offset: 0 };
+		let _right = { key: null, offset: 0 };
 
 		if (selection.getNodes().length === 1) {
 			_left =
@@ -77,7 +76,6 @@ const wrap = ({
 		}
 
 		selection.getNodes().forEach((node: any) => {
-
 			// If the node is the root node
 			if ($isRootNode(node)) {
 				const paragraph = $createParagraphNode();
@@ -180,23 +178,19 @@ const ToolbarPlugin = () => {
 			if (elementDOM !== null) {
 				//setSelectedElementKey(elementKey);
 				if ($isListNode(element)) {
-				  const parentList = $getNearestNodeOfType(
-					anchorNode,
-					ListNode,
-				  );
-				  const type = parentList
-					? parentList.getListType()
-					: element.getListType();
-				  setBlockType(type);
-				} else {
-
-				  const type = $isHeadingNode(element)
-					? element.getTag()
-					: element.getType();
-				  if (type in blockTypeToBlockName) {
+					const parentList = $getNearestNodeOfType(anchorNode, ListNode);
+					const type = parentList
+						? parentList.getListType()
+						: element.getListType();
 					setBlockType(type);
-				  }
-				  /*if ($isCodeNode(element)) {
+				} else {
+					const type = $isHeadingNode(element)
+						? element.getTag()
+						: element.getType();
+					if (type in blockTypeToBlockName) {
+						setBlockType(type);
+					}
+					/*if ($isCodeNode(element)) {
 					const language =
 					  element.getLanguage();
 					setCodeLanguage(
@@ -205,7 +199,7 @@ const ToolbarPlugin = () => {
 					return;
 				  }*/
 				}
-			  }
+			}
 
 			/*if ($isImageNode(parent) || $isImageNode(node)) {
 				setIsImage(true);
@@ -249,47 +243,46 @@ const ToolbarPlugin = () => {
 		);
 	}, [editor, $updateToolbar]);
 
-
 	useEffect(() => {
 		return editor.registerCommand(
-		  SELECTION_CHANGE_COMMAND,
-		  (_payload, newEditor) => {
-			$updateToolbar();
-			setActiveEditor(newEditor);
-			return false;
-		  },
-		  COMMAND_PRIORITY_CRITICAL,
+			SELECTION_CHANGE_COMMAND,
+			(_payload, newEditor) => {
+				$updateToolbar();
+				setActiveEditor(newEditor);
+				return false;
+			},
+			COMMAND_PRIORITY_CRITICAL
 		);
-	  }, [editor, $updateToolbar]);
+	}, [editor, $updateToolbar]);
 
 	useEffect(() => {
 		return mergeRegister(
-		  editor.registerEditableListener((editable) => {
-			setIsEditable(editable);
-		  }),
-		  activeEditor.registerUpdateListener(({editorState}) => {
-			editorState.read(() => {
-			  $updateToolbar();
-			});
-		  }),
-		  activeEditor.registerCommand(
-			CAN_UNDO_COMMAND,
-			(payload) => {
-			  setCanUndo(payload);
-			  return false;
-			},
-			COMMAND_PRIORITY_CRITICAL,
-		  ),
-		  activeEditor.registerCommand(
-			CAN_REDO_COMMAND,
-			(payload) => {
-			  setCanRedo(payload);
-			  return false;
-			},
-			COMMAND_PRIORITY_CRITICAL,
-		  ),
+			editor.registerEditableListener((editable) => {
+				setIsEditable(editable);
+			}),
+			activeEditor.registerUpdateListener(({ editorState }) => {
+				editorState.read(() => {
+					$updateToolbar();
+				});
+			}),
+			activeEditor.registerCommand(
+				CAN_UNDO_COMMAND,
+				(payload) => {
+					setCanUndo(payload);
+					return false;
+				},
+				COMMAND_PRIORITY_CRITICAL
+			),
+			activeEditor.registerCommand(
+				CAN_REDO_COMMAND,
+				(payload) => {
+					setCanRedo(payload);
+					return false;
+				},
+				COMMAND_PRIORITY_CRITICAL
+			)
 		);
-	  }, [$updateToolbar, activeEditor, editor]);
+	}, [$updateToolbar, activeEditor, editor]);
 
 	/*const formatBulletList = () => {
 		if (blockType !== 'ul') {
@@ -313,8 +306,9 @@ const ToolbarPlugin = () => {
 		} else {
 			editor.dispatchCommand(TOGGLE_LINK_COMMAND, {
 				url: '',
-				target: '_blank'
+				target: '_blank',
 			});
+			editor.dispatchCommand(FORCE_UPDATE_LINK_EDITOR_COMMAND, null);
 		}
 	}, [editor, isLink]);
 
@@ -347,7 +341,7 @@ const ToolbarPlugin = () => {
 				disabled={!isEditable}
 				blockType={blockType}
 				editor={editor}
-          	/>
+			/>
 
 			<Divider />
 
@@ -387,37 +381,15 @@ const ToolbarPlugin = () => {
 			>
 				<i className='format strikethrough' />
 			</button>
-			{/*<Divider />
-			<button
-				className={`toolbar-item spaced ${blockType === 'ul' ? 'active' : ''}`}
-				onClick={formatBulletList}
-			>
-				<i className='format ul' />
-			</button>
-			<button
-				className={`toolbar-item spaced ${blockType === 'ol' ? 'active' : ''}`}
-				onClick={formatNumberedList}
-			>
-				<i className='format ol' />
-			</button>*/}
 			<Divider />
-				<button
-					className={`toolbar-item spaced`}
-					onClick={() => {
-						editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
-					}}
-				>
-					<i className='format left-align' />
-				</button>
-				{/*<button
-					className={`toolbar-item spaced`}
-					onClick={() => {
-						editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
-					}}
-				>
-					<i className='format center-align' />
-				</button>*/}
-			
+			<button
+				className={`toolbar-item spaced`}
+				onClick={() => {
+					editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
+				}}
+			>
+				<i className='format left-align' />
+			</button>
 			<Divider />
 			<button
 				onClick={insertLink}
@@ -427,72 +399,79 @@ const ToolbarPlugin = () => {
 				<i className='format link' />
 			</button>
 			<Divider />
-			<DropDown
-                disabled={!isEditable}
-                buttonClassName="toolbar-item spaced"
-                buttonLabel="Insert"
-                buttonAriaLabel="Insert specialized editor node"
-                //buttonIconClassName="icon plus"
-			>
-				<DropDownItem
-                  onClick={() => {
+			<button
+				onClick={() => {
 					showModal('Insert Image', (onClose, onOK) => (
 						<ImageDialog editor={editor} onClose={onClose} /*onOK={onOK}*/ />
 					));
-                  }}
-                  className="item">
-                  <i className='icon image' />
-                  <span className="text">Image</span>
-                </DropDownItem>
-				<DropDownItem
-					onClick={() => {
-						wrap({
-							left: '„',
-							right: '“',
-							editor,
-						});
-					}}
-					className="item">
-					<i className='icon quotation-marks' />
-					<span className="text">Quotation Marks</span>
-                </DropDownItem>
-				<DropDownItem
-					onClick={() => {
-							wrap({
-								left: '–',
-								editor,
-							});
+				}}
+				className='toolbar-item spaced'
+				aria-label='Insert Image'
+			>
+				<i className='format image' />
+			</button>
+			<Divider />
+			<button
+				onClick={() => {
+					wrap({
+						left: '„',
+						right: '“',
+						editor,
+					});
+				}}
+				aria-label="Insert quotation marks"
+				className='toolbar-item spaced'
+			>
+				<i className='format quotation-marks' />
+			</button>
+			<button
+				onClick={() => {
+					wrap({
+						left: '–',
+						editor,
+					});
+				}}
+				aria-label='Insert ndash'
+				className='toolbar-item spaced'
+			>
+				<i className='format ndash' />
+			</button>
+			<button
+				onClick={() => {
+					wrap({
+						left: '—',
+						editor,
+					});
+				}}
+				aria-label='Insert mdash'
+				className='toolbar-item spaced'
+			>
+				<i className='format mdash' />
+			</button>
+			<Divider />
+			<DropDown
+				disabled={!isEditable}
+				buttonClassName='toolbar-item spaced'
+				buttonLabel='Insert'
+				buttonAriaLabel='Insert specialized editor node'
+				//buttonIconClassName="icon plus"
+			>
+				{
+					<DropDownItem
+						onClick={() => {
+							showModal('Insert Columns Layout', (onClose) => (
+								<InsertFAQDialog
+									activeEditor={activeEditor}
+									onClose={onClose}
+								/>
+							));
 						}}
-					className={`item`}
+						className='item'
 					>
-					<i className='icon ndash' />
-					<span className="text">Ndash</span>
-                </DropDownItem>
-				<DropDownItem
-					onClick={() => {
-						wrap({
-							left: '—',
-							editor,
-						});
-					}}
-					className={`item`}
-				>
-					<i className='icon mdash' />
-					<span className="text">Mdash</span>
-                </DropDownItem>
-				{<DropDownItem
-                  onClick={() => {
-                    showModal('Insert Columns Layout', (onClose) => (
-                      <InsertFAQDialog
-                        activeEditor={activeEditor}
-                        onClose={onClose}
-                      />
-                    ));
-                  }}
-                  className="item">
-                  <i className="icon faq" />
-                  <span className="text">FAQ</span>
-                </DropDownItem>}
+						<i className='icon faq' />
+						<span className='text'>FAQ</span>
+					</DropDownItem>
+				}
 				{/*<DropDownItem
                   onClick={() => {
                     editor.dispatchCommand(
@@ -504,7 +483,7 @@ const ToolbarPlugin = () => {
                   <span className="text">FAQ Item</span>
                 </DropDownItem>*/}
 			</DropDown>
-			
+
 			{modal}
 		</div>
 	);

@@ -7,10 +7,10 @@
     "@contentful/f36-components": "^4.69.0",
     "@contentful/f36-tokens": "^4.2.0",
     "@contentful/react-apps-toolkit": "1.2.16",
-    "@lexical/react": "^0.23.0",
+    "@lexical/react": "^0.24.0",
     "contentful-management": "^11.35.1",
     "emotion": "^11.0.0",
-    "lexical": "^0.23.0",
+    "lexical": "^0.24.0",
     "re-resizable": "^6.9.17",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -43,8 +43,8 @@
     ]
   },
   "devDependencies": {
-    "@contentful/app-scripts": "^1.27.0",
-    "@lexical/rich-text": "^0.23.0",
+    "@contentful/app-scripts": "^1.32.3",
+    "@lexical/rich-text": "^0.24.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
     "@tsconfig/create-react-app": "^2.0.5",
