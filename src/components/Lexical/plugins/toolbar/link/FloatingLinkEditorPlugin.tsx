@@ -207,15 +207,16 @@ function FloatingLinkEditor({
 
 	const handleLinkSubmission = () => {
 		if (lastSelection !== null) {
-			if (!!linkUrl) {
+			//if (!!linkUrl) {
+				console.log('save');
 				editor.dispatchCommand(TOGGLE_LINK_COMMAND, {
 					url: sanitizeUrl(linkUrl),
 					target: editedLinkOpenNewWindow ? '_blank' : '_self',
 					rel: editedLinkOpenNewWindow ? 'noopener noreferrer' : '',
 				});
-			} else {
+			/*} else {
 				editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
-			}
+			}*/
 		}
 		editor.update(() => {
 			$setSelection(null);
