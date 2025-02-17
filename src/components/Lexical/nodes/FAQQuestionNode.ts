@@ -42,14 +42,14 @@ export class FAQQuestionNode extends ElementNode {
   }
 
   createDOM(config: EditorConfig): HTMLElement {
-    const dom = document.createElement('h3');
+    const dom = document.createElement('h2');
     dom.setAttribute('data-lexical-faq-question', 'true');
     dom.setAttribute('itemprop', 'name');
     return dom;
   }
 
   exportDOM(): DOMExportOutput {
-    const element = document.createElement('h3');
+    const element = document.createElement('h2');
     element.setAttribute('data-lexical-faq-question', 'true');
     element.setAttribute('itemprop', 'name');
     return {element};
@@ -61,7 +61,7 @@ export class FAQQuestionNode extends ElementNode {
 
   static importDOM(): DOMConversionMap | null {
     return {
-      h3: (domNode: HTMLElement) => {
+      h2: (domNode: HTMLElement) => {
         if (!domNode.hasAttribute('data-lexical-faq-question')) {
           return null;
         }
