@@ -27,6 +27,7 @@ import {
 	$isLineBreakNode,
 	LexicalCommand,
 	createCommand,
+	CLICK_COMMAND,
 } from 'lexical';
 import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
@@ -122,13 +123,6 @@ function FloatingLinkEditor({
 	}, [anchorElem, editor, setEditMode]);
 
 
-	useEffect(() => {
-		if (!isLink) {
-			setLinkUrl('');
-			setEditedLinkOpenNewWindow(false);
-		}
-	}, [isLink]);
-
 	//scroll & resize event listeners
 	useEffect(() => {
 		const scrollerElem = anchorElem.parentElement;
@@ -164,14 +158,24 @@ function FloatingLinkEditor({
 				  return true;
 				},
 				COMMAND_PRIORITY_LOW,
-			  ),
+			),
 			editor.registerCommand(
-				SELECTION_CHANGE_COMMAND,
+				CLICK_COMMAND,
 				() => {
+					console.log('CLICK_COMMAND');
 					updateLinkEditor();
 					return true;
 				},
-				COMMAND_PRIORITY_LOW
+				COMMAND_PRIORITY_HIGH
+			),
+			editor.registerCommand(
+				SELECTION_CHANGE_COMMAND,
+				() => {
+					console.log('SELECTION_CHANGE_COMMAND');
+					updateLinkEditor();
+					return true;
+				},
+				COMMAND_PRIORITY_HIGH
 			),
 			editor.registerCommand(
 				KEY_ESCAPE_COMMAND,
@@ -206,6 +210,7 @@ function FloatingLinkEditor({
 	};
 
 	const handleLinkSubmission = () => {
+		console.log('handleLinkSubmission');
 		if (lastSelection !== null) {
 			editor.dispatchCommand(TOGGLE_LINK_COMMAND, {
 				url: sanitizeUrl(linkUrl),
@@ -217,6 +222,9 @@ function FloatingLinkEditor({
 			$setSelection(null);
 			setEditMode(false);
 		});
+		/*console.log('do');
+		setLinkUrl('');
+		setEditedLinkOpenNewWindow(false);*/
 	};
 
 	return (
