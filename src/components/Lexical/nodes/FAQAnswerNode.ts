@@ -93,6 +93,14 @@ export class FAQAnswerNode extends ElementNode {
       ...super.exportJSON(),
     };
   }
+
+  canInsertTextAfter(): boolean {
+    return false;
+  }
+
+  canInsertTextBefore(): boolean {
+    return false;
+  }
 }
 
 export function $createFAQAnswerNode(

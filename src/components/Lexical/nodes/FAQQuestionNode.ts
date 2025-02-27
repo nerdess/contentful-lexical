@@ -90,6 +90,14 @@ export class FAQQuestionNode extends ElementNode {
     };
   }
 
+  canInsertTextAfter(): boolean {
+    return false;
+  }
+
+  canInsertTextBefore(): boolean {
+    return false;
+  }
+
 }
 
 export function $createFAQQuestionNode(

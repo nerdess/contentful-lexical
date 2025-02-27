@@ -11,7 +11,6 @@ import { $insertNodeToNearestRoot, mergeRegister } from '@lexical/utils';
 import {
   $createParagraphNode,
 	$insertNodes,
-	$setSelection,
 	COMMAND_PRIORITY_EDITOR,
 	createCommand,
 	LexicalCommand,
@@ -24,8 +23,6 @@ import {
 import { $createFAQItemNode, FAQItemNode } from '../../nodes/FAQItemNode';
 import { $createFAQQuestionNode } from '../../nodes/FAQQuestionNode';
 import { $createFAQAnswerNode } from '../../nodes/FAQAnswerNode';
-import { $isRootOrShadowRoot } from 'lexical';
-import { $wrapNodeInElement } from '@lexical/utils';
 
 export const INSERT_FAQ_COMMAND: LexicalCommand<number> = createCommand<number>();
 
@@ -60,7 +57,7 @@ export default function FAQPlugin(): JSX.Element | null {
               const item = $createFAQItemNode();
 
               item.append(
-                $createFAQQuestionNode()
+                $createFAQQuestionNode().append($createParagraphNode())
               );
               item.append(
                 $createFAQAnswerNode().append($createParagraphNode())

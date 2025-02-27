@@ -804,38 +804,14 @@ html .modal-image {
 .ts-faq-container [data-lexical-faq-item] [data-lexical-faq-question] {
   border: 1px dashed #000;
   margin-bottom: 10px;
-} 
+  font-size: 1rem;
+}
+
+.ts-faq-container [data-lexical-faq-item] [data-lexical-faq-question] p {
+  font-weight: bold;
+}
 
 .ts-faq-container [data-lexical-faq-item] [data-lexical-faq-answer] {
   border: 1px dashed #000;
-  min-height: 60px
+  min-height: 60px;
 }
-
-/*div[data-lexical-faq-container] {
-    border: 1px dashed yellow;
-    padding: 8px 16px;
-    min-width: 0;
-    max-width: 100%;
-}
-
-div[data-lexical-faq-item] {
-  border: 1px dashed blue;
-  padding: 8px 16px;
-  min-width: 0;
-  max-width: 100%;
-}
-
-div[data-lexical-faq-item] h3 {
-  border: 1px dashed red;
-  padding: 8px 16px;
-  min-width: 0;
-  max-width: 100%;
-}
-
-
-div[data-lexical-faq-item] p {
-  border: 1px dashed green;
-  padding: 8px 16px;
-  min-width: 0;
-  max-width: 100%;
-}*/
