@@ -59,7 +59,6 @@ export class FAQContainerNode extends ElementNode {
   static importDOM(): DOMConversionMap | null {
     return {
       div: (domNode: HTMLElement) => {
-        console.log('domNodeContainer', domNode, domNode.hasAttribute('data-lexical-faq-container'));
         if (!domNode.hasAttribute('data-lexical-faq-container')) {
           return null;
         }

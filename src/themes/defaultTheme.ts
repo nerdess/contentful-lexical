@@ -7,7 +7,7 @@ const theme = {
     heading: {
       //h1: "editor-heading-h1",
       //h2: "ts-tpm-h2",
-      h4: "ts-tpm-h4",
+      h2: "ts-tpm-h2",
       //h3: "editor-heading-h3",
       //h4: "editor-heading-h4",
       //h5: "editor-heading-h5"

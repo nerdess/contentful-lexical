@@ -32,7 +32,13 @@ export const cleanup = (html: string) => {
 		}
 	});
 
-	return doc.body.innerHTML;
+	//transform all h4 to h2 (legacy)
+	/*doc.querySelectorAll('h4').forEach(h4 => {
+		const h2 = document.createElement("h2");
+		h2.innerHTML = h4.innerHTML;
+		Array.from(h4.attributes).forEach(attr => h2.setAttribute(attr.name, attr.value));
+		h4.replaceWith(h2);
+	});*/
 	
 	//const cleanedHTMLString = doc.body.innerHTML;
 

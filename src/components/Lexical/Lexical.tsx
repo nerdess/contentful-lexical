@@ -51,6 +51,7 @@ import TreeViewPlugin from './plugins/TreeViewPlugin';
 import { FAQItemNode } from './nodes/FAQItemNode';
 import { FAQQuestionNode } from './nodes/FAQQuestionNode';
 import { FAQAnswerNode } from './nodes/FAQAnswerNode';
+import TransformH4toH2Plugin from './plugins/TransformH4toH2Plugin';
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
@@ -238,6 +239,7 @@ const Editor = ({
 						/>
 						<CopyPasteEnhancementPlugin setCleanups={setCleanups} />
 						<FAQPlugin />
+						<TransformH4toH2Plugin />
 						{/*<DefinitionListPlugin />*/}
 						{/*<TreeViewPlugin />*/}
 						{/*<AutoFocusPlugin/>*/}

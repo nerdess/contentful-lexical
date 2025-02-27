@@ -122,10 +122,10 @@ const BlockFormatDropDown = ({
         <hr />
         <DropDownHeader>Sonderformate</DropDownHeader>
         <DropDownItem
-          className={'item ' + dropDownActiveClass(blockType === 'h4')}
-          onClick={() => formatHeading(editor, blockType, 'h4')}>
-          <i className="icon h4" />
-          <span className="text ts-tpm-h4" style={{margin: 0}}>Zwischenüberschrift</span>
+          className={'item ' + dropDownActiveClass(blockType === 'h2')}
+          onClick={() => formatHeading(editor, blockType, 'h2')}>
+          <i className="icon h2" />
+          <span className="text ts-tpm-h2" style={{margin: 0}}>Zwischenüberschrift</span>
         </DropDownItem>
         {/* <DropDownItem
           className={'item ' + dropDownActiveClass(blockType === 'check')}

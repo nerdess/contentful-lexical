@@ -1,15 +1,13 @@
 body {
     margin: 0;
-    //background: #eee;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, ".SFNSText-Regular",
-      sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, ".SFNSText-Regular", sans-serif;
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
   }
   
-  .other h2 {
+  /*.other h2 {
     font-size: 18px;
     color: #444;
     margin-bottom: 7px;
@@ -30,7 +28,7 @@ body {
   .App {
     font-family: sans-serif;
     text-align: center;
-  }
+  }*/
   
   h1 {
     font-size: 24px;
@@ -232,7 +230,7 @@ body {
     padding: 0;
   }
   
-  .editor-heading-h4 {
+  .editor-heading-h2 {
     font-size: 15px;
     color: rgb(101, 103, 107);
     font-weight: 700;
@@ -637,6 +635,7 @@ body {
   .icon.h4 {
     background-image: url(../../images/icons/type-h4.svg);
   }
+
   
   .icon.bullet-list,
   .icon.ul,
@@ -767,6 +766,14 @@ html .modal-image {
 
 // custom headings
 .ts-tpm-h4 {
+  color: blue;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.ts-tpm-h2 {
   color: #E30A18;
   font-size: 1rem;
   line-height: 1.4;

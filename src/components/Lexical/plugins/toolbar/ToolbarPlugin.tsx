@@ -330,7 +330,7 @@ const ToolbarPlugin = () => {
 				}}
 				className={'toolbar-item spaced ' + (isBold ? 'active' : '')}
 				aria-label='Format Bold'
-				disabled={blockType === 'h4'}
+				disabled={blockType === 'h2'}
 			>
 				<i className='format bold' />
 			</button>
@@ -340,7 +340,7 @@ const ToolbarPlugin = () => {
 				}}
 				className={'toolbar-item spaced ' + (isItalic ? 'active' : '')}
 				aria-label='Format Italics'
-				disabled={blockType === 'h4'}
+				disabled={blockType === 'h2'}
 			>
 				<i className='format italic' />
 			</button>
@@ -350,7 +350,7 @@ const ToolbarPlugin = () => {
 				}}
 				className={'toolbar-item spaced ' + (isUnderline ? 'active' : '')}
 				aria-label='Format Underline'
-				disabled={blockType === 'h4'}
+				disabled={blockType === 'h2'}
 			>
 				<i className='format underline' />
 			</button>
@@ -360,7 +360,7 @@ const ToolbarPlugin = () => {
 				}}
 				className={'toolbar-item spaced ' + (isStrikethrough ? 'active' : '')}
 				aria-label='Format Strikethrough'
-				disabled={blockType === 'h4'}
+				disabled={blockType === 'h2'}
 			>
 				<i className='format strikethrough' />
 			</button>
