@@ -1,7 +1,7 @@
 import { LexicalNode, NodeMap } from "lexical";
 
 
-export const cleanup = (html: string) => {
+export const cleanup = (html: string): string => {
 
 	const removeNbsp = html
 	.replace(/&nbsp;/g, ' ')					//replace &nbsp; with empty space
@@ -31,6 +31,8 @@ export const cleanup = (html: string) => {
 			element.setAttribute('target', '_blank');
 		}
 	});
+
+	return doc.body.innerHTML;
 
 	//transform all h4 to h2 (legacy)
 	/*doc.querySelectorAll('h4').forEach(h4 => {
