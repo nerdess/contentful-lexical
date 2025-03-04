@@ -6,7 +6,7 @@ import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 //import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
+import {LexicalErrorBoundary} from '@lexical/react/LexicalErrorBoundary';
 
 import { ListItemNode, ListNode } from '@lexical/list';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
@@ -47,10 +47,11 @@ import './lexical.scss';
 import DraggableBlockPlugin from './plugins/DraggableBlockPlugin';
 import { FAQContainerNode } from './nodes/FAQContainerNode';
 import FAQPlugin from './plugins/FAQPlugin';
-import TreeViewPlugin from './plugins/TreeViewPlugin';
 import { FAQItemNode } from './nodes/FAQItemNode';
 import { FAQQuestionNode } from './nodes/FAQQuestionNode';
 import { FAQAnswerNode } from './nodes/FAQAnswerNode';
+import { FAQAnswerNodeInner } from './nodes/FAQAnswerNodeInner';
+import TreeViewPlugin from './plugins/TreeViewPlugin';
 
 function Placeholder() {
 	return <div className='editor-placeholder'>Schreib los :)</div>;
@@ -77,6 +78,7 @@ const initialConfig = {
 		FAQItemNode,
 		FAQQuestionNode,
 		FAQAnswerNode,
+		FAQAnswerNodeInner,
 		//CustomHeadingNode,
 		/*{
 			replace: HeadingNode,

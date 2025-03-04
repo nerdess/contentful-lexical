@@ -10,7 +10,6 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { $insertNodeToNearestRoot, mergeRegister } from '@lexical/utils';
 import {
   $createParagraphNode,
-	$insertNodes,
 	COMMAND_PRIORITY_EDITOR,
 	createCommand,
 	LexicalCommand,
@@ -23,12 +22,10 @@ import {
 import { $createFAQItemNode, FAQItemNode } from '../../nodes/FAQItemNode';
 import { $createFAQQuestionNode } from '../../nodes/FAQQuestionNode';
 import { $createFAQAnswerNode } from '../../nodes/FAQAnswerNode';
+import { $createFAQAnswerNodeInner } from '../../nodes/FAQAnswerNodeInner';
 
 export const INSERT_FAQ_COMMAND: LexicalCommand<number> = createCommand<number>();
 
-export const INSERT_FAQ_ITEM_COMMAND: LexicalCommand<undefined> = createCommand(
-	'INSERT_FAQ_ITEM_COMMAND'
-);
 
 export default function FAQPlugin(): JSX.Element | null {
 	const [editor] = useLexicalComposerContext();
@@ -60,12 +57,11 @@ export default function FAQPlugin(): JSX.Element | null {
                 $createFAQQuestionNode().append($createParagraphNode())
               );
               item.append(
-                $createFAQAnswerNode().append($createParagraphNode())
+                $createFAQAnswerNode().append($createFAQAnswerNodeInner().append($createParagraphNode()))
               );
 
               container.append(item);
             }
-
 
             $insertNodeToNearestRoot(container);
             container.selectStart();
@@ -74,25 +70,7 @@ export default function FAQPlugin(): JSX.Element | null {
           return true;
         },
         COMMAND_PRIORITY_EDITOR,
-      ),
-      editor.registerCommand(
-        INSERT_FAQ_ITEM_COMMAND,
-        () => {
-          editor.update(() => {
-            const FAQItemNode = $createFAQItemNode();
-            const FAQQuestionNode = $createFAQQuestionNode();
-            const FAQAnswerNode = $createFAQAnswerNode().append($createParagraphNode());
-            FAQItemNode.append(FAQQuestionNode);
-            FAQItemNode.append(FAQAnswerNode);
-            console.log(FAQItemNode);
-            $insertNodes([FAQItemNode]);
-            FAQQuestionNode.selectStart();
-            //return true;
-          });
-          return true;
-        },
-        COMMAND_PRIORITY_EDITOR,
-      ),
+      )
     );
   }, [editor]);
 
