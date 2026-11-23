@@ -14,18 +14,16 @@ import type {
   LexicalUpdateJSON,
   SerializedElementNode,
 } from 'lexical';
-
-import {ElementNode} from 'lexical';
+import { ElementNode } from 'lexical';
 
 export type SerializedFAQContainerNode = SerializedElementNode;
 
 function $convertFAQContainerElement(): DOMConversionOutput | null {
   const node = $createFAQContainerNode();
-  return {node};
+  return { node };
 }
 
 export class FAQContainerNode extends ElementNode {
-
   static getType(): string {
     return 'faq-container';
   }
@@ -49,7 +47,7 @@ export class FAQContainerNode extends ElementNode {
     element.setAttribute('data-lexical-faq-container', 'true');
     element.setAttribute('itemscope', '');
     element.setAttribute('itemtype', 'https://schema.org/FAQPage');
-    return {element};
+    return { element };
   }
 
   updateDOM(): boolean {
@@ -74,11 +72,8 @@ export class FAQContainerNode extends ElementNode {
     return $createFAQContainerNode().updateFromJSON(json);
   }
 
-  updateFromJSON(
-    serializedNode: LexicalUpdateJSON<SerializedFAQContainerNode>,
-  ): this {
-    return super
-      .updateFromJSON(serializedNode)
+  updateFromJSON(serializedNode: LexicalUpdateJSON<SerializedFAQContainerNode>): this {
+    return super.updateFromJSON(serializedNode);
   }
 
   isShadowRoot(): boolean {
@@ -87,18 +82,17 @@ export class FAQContainerNode extends ElementNode {
 
   exportJSON(): SerializedFAQContainerNode {
     return {
-      ...super.exportJSON()
+      ...super.exportJSON(),
     };
   }
 }
 
-export function $createFAQContainerNode(
-): FAQContainerNode {
+export function $createFAQContainerNode(): FAQContainerNode {
   return new FAQContainerNode();
 }
 
 export function $isFAQContainerNode(
-  node: LexicalNode | null | undefined,
+  node: LexicalNode | null | undefined
 ): node is FAQContainerNode {
   return node instanceof FAQContainerNode;
 }

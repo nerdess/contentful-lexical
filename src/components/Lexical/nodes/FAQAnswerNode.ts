@@ -15,30 +15,22 @@ import type {
   SerializedElementNode,
   Spread,
 } from 'lexical';
+import { ElementNode } from 'lexical';
 
-import {ElementNode} from 'lexical';
+export type SerializedFAQAnswerNode = Spread<object, SerializedElementNode>;
 
-export type SerializedFAQAnswerNode = Spread<
-  {
-    //templateColumns: string;
-  },
-  SerializedElementNode
->;
-
-function $convertFAQAnswerElement(
-): DOMConversionOutput | null {
+function $convertFAQAnswerElement(): DOMConversionOutput | null {
   const node = $createFAQAnswerNode();
-  return {node};
+  return { node };
 }
 
 export class FAQAnswerNode extends ElementNode {
-
   static getType(): string {
     return 'faq-answer';
   }
 
   static clone(node: FAQAnswerNode): FAQAnswerNode {
-    return new FAQAnswerNode( node.__key);
+    return new FAQAnswerNode(node.__key);
   }
 
   createDOM(): HTMLElement {
@@ -56,7 +48,7 @@ export class FAQAnswerNode extends ElementNode {
     element.setAttribute('itemscope', '');
     element.setAttribute('itemtype', 'http://schema.org/Answer');
     element.setAttribute('itemprop', 'acceptedAnswer');
-    return {element};
+    return { element };
   }
 
   updateDOM(): boolean {
@@ -81,11 +73,8 @@ export class FAQAnswerNode extends ElementNode {
     return $createFAQAnswerNode().updateFromJSON(json);
   }
 
-  updateFromJSON(
-    serializedNode: LexicalUpdateJSON<SerializedFAQAnswerNode>,
-  ): this {
-    return super
-      .updateFromJSON(serializedNode)
+  updateFromJSON(serializedNode: LexicalUpdateJSON<SerializedFAQAnswerNode>): this {
+    return super.updateFromJSON(serializedNode);
   }
 
   exportJSON(): SerializedFAQAnswerNode {
@@ -103,13 +92,10 @@ export class FAQAnswerNode extends ElementNode {
   }
 }
 
-export function $createFAQAnswerNode(
-): FAQAnswerNode {
+export function $createFAQAnswerNode(): FAQAnswerNode {
   return new FAQAnswerNode();
 }
 
-export function $isFAQAnswerNode(
-  node: LexicalNode | null | undefined,
-): node is FAQAnswerNode {
+export function $isFAQAnswerNode(node: LexicalNode | null | undefined): node is FAQAnswerNode {
   return node instanceof FAQAnswerNode;
 }

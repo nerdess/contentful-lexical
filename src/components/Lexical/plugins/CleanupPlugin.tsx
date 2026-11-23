@@ -1,17 +1,16 @@
-import {useEffect, } from 'react';
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {/*ParagraphNode, RootNode,*/ TextNode} from 'lexical';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { /*ParagraphNode, RootNode,*/ TextNode } from 'lexical';
+import { useEffect } from 'react';
+
 import { cleanup } from '../helper';
 
 //Not in use, cleanup is happening inside clipboard.ts
 
 const CleanupPlugin = () => {
-
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
-
-    editor.registerNodeTransform(TextNode, (textNode) => {
+    editor.registerNodeTransform(TextNode, textNode => {
       const textContent = textNode.getTextContent();
       const textContentCleanedUp = cleanup(textContent);
 
@@ -19,7 +18,6 @@ const CleanupPlugin = () => {
         //console.log('ttt', textContent, textContentCleanedUp);
         //textNode.setTextContent(textContentCleanedUp);
       }
-
     });
 
     /*editor.registerNodeTransform(ParagraphNode, (paragraphNode) => {
@@ -44,11 +42,9 @@ const CleanupPlugin = () => {
         //rootNode.set
       }
     });*/
-
   }, [editor]);
 
   return null;
-
-}
+};
 
 export default CleanupPlugin;

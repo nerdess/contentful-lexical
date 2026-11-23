@@ -1,9 +1,17 @@
-import { 
-  ParagraphNode, 
+import {
+  ParagraphNode,
   $applyNodeReplacement,
   LexicalEditor,
-  SerializedParagraphNode
-} from "lexical";
+  SerializedParagraphNode,
+  DOMConversionMap,
+  DOMConversionOutput,
+} from 'lexical';
+
+const convertParagraphElement = (): DOMConversionOutput => {
+  return {
+    node: $createParagraphNode(),
+  };
+};
 
 export function $createParagraphNode() {
   return $applyNodeReplacement(new ParagraphNode());
@@ -11,17 +19,17 @@ export function $createParagraphNode() {
 
 export class CustomParagraphNode extends ParagraphNode {
   static getType() {
-    return "custom-paragraph";
+    return 'custom-paragraph';
   }
 
   static clone(node: ParagraphNode) {
     return new CustomParagraphNode(node.__key);
   }
 
-	static importJSON(): CustomParagraphNode {
-		const node = $createParagraphNode();
-		return node as CustomParagraphNode;
-	}
+  static importJSON(): CustomParagraphNode {
+    const node = $createParagraphNode();
+    return node as CustomParagraphNode;
+  }
 
   exportJSON(): SerializedParagraphNode {
     return {
@@ -31,14 +39,23 @@ export class CustomParagraphNode extends ParagraphNode {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createDOM(config: any): HTMLElement {
     const dom = super.createDOM(config);
     //dom.style.backgroundColor = "green";
     return dom;
   }
 
-  exportDOM(editor: LexicalEditor): { element: HTMLElement } {
+  static importDOM(): DOMConversionMap | null {
+    return {
+      p: () => ({
+        conversion: convertParagraphElement,
+        priority: 0,
+      }),
+    };
+  }
 
+  exportDOM(editor: LexicalEditor): { element: HTMLElement } {
     const element = super.createDOM(editor._config);
 
     //only apply style=text-align if it is not default (=left)
@@ -49,10 +66,7 @@ export class CustomParagraphNode extends ParagraphNode {
     element.removeAttribute('class');
 
     return {
-      element
+      element,
     };
   }
-
-  
-
 }

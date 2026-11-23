@@ -1,9 +1,10 @@
-import React, { useCallback, useState, useEffect } from 'react';
 import { AppExtensionSDK } from '@contentful/app-sdk';
 import { Heading, Form, Paragraph, Flex } from '@contentful/f36-components';
-import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import { useCallback, useState, useEffect } from 'react';
 
-export interface AppInstallationParameters {}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AppInstallationParameters = Record<string, any>;
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({});
@@ -34,7 +35,7 @@ const ConfigScreen = () => {
 
   useEffect(() => {
     // `onConfigure` allows to configure a callback to be
-    // invoked when a user attempts to install the app or update
+    sdk.app.onConfigure(onConfigure);
     // its configuration.
     sdk.app.onConfigure(() => onConfigure());
   }, [sdk, onConfigure]);
@@ -56,7 +57,7 @@ const ConfigScreen = () => {
   }, [sdk]);
 
   return (
-    <Flex flexDirection="column" style={{ margin: '80px', maxWidth: '800px' }}>
+    <Flex flexDirection='column' style={{ margin: '80px', maxWidth: '800px' }}>
       <Form>
         <Heading>Blog Post Metrics Config</Heading>
         <Paragraph>Welcome to your contentful app. This is your config page.</Paragraph>

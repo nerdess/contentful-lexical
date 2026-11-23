@@ -15,30 +15,22 @@ import type {
   SerializedElementNode,
   Spread,
 } from 'lexical';
+import { ElementNode } from 'lexical';
 
-import {ElementNode} from 'lexical';
+export type SerializedFAQAnswerNodeInner = Spread<object, SerializedElementNode>;
 
-export type SerializedFAQAnswerNodeInner = Spread<
-  {
-    //templateColumns: string;
-  },
-  SerializedElementNode
->;
-
-function $convertFAQAnswerElement(
-): DOMConversionOutput | null {
+function $convertFAQAnswerElement(): DOMConversionOutput | null {
   const node = $createFAQAnswerNodeInner();
-  return {node};
+  return { node };
 }
 
 export class FAQAnswerNodeInner extends ElementNode {
-
   static getType(): string {
     return 'faq-answer-inner';
   }
 
   static clone(node: FAQAnswerNodeInner): FAQAnswerNodeInner {
-    return new FAQAnswerNodeInner( node.__key);
+    return new FAQAnswerNodeInner(node.__key);
   }
 
   createDOM(): HTMLElement {
@@ -52,7 +44,7 @@ export class FAQAnswerNodeInner extends ElementNode {
     const element = document.createElement('div');
     element.setAttribute('data-lexical-faq-answer-inner', 'true');
     element.setAttribute('itemprop', 'text');
-    return {element};
+    return { element };
   }
 
   updateDOM(): boolean {
@@ -77,11 +69,8 @@ export class FAQAnswerNodeInner extends ElementNode {
     return $createFAQAnswerNodeInner().updateFromJSON(json);
   }
 
-  updateFromJSON(
-    serializedNode: LexicalUpdateJSON<SerializedFAQAnswerNodeInner>,
-  ): this {
-    return super
-      .updateFromJSON(serializedNode)
+  updateFromJSON(serializedNode: LexicalUpdateJSON<SerializedFAQAnswerNodeInner>): this {
+    return super.updateFromJSON(serializedNode);
   }
 
   exportJSON(): SerializedFAQAnswerNodeInner {
@@ -99,13 +88,12 @@ export class FAQAnswerNodeInner extends ElementNode {
   }
 }
 
-export function $createFAQAnswerNodeInner(
-): FAQAnswerNodeInner {
+export function $createFAQAnswerNodeInner(): FAQAnswerNodeInner {
   return new FAQAnswerNodeInner();
 }
 
 export function $isFAQAnswerNodeInner(
-  node: LexicalNode | null | undefined,
+  node: LexicalNode | null | undefined
 ): node is FAQAnswerNodeInner {
   return node instanceof FAQAnswerNodeInner;
 }

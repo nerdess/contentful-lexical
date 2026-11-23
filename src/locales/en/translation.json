@@ -1,0 +1,77 @@
+{
+  "editor": {
+    "undo": "Undo",
+    "redo": "Redo",
+    "formatting": {
+      "options": "Formatting options for text style",
+      "disabled": "Formatting disabled",
+      "normal": "Normal",
+      "simpleList": "Simple List",
+      "numberedList": "Numbered List",
+      "normalDisplay": "Normal",
+      "simpleListDisplay": "List (simple)",
+      "numberedListDisplay": "List (numbered)",
+      "quote": "Quote",
+      "specialFormats": "Special Formats",
+      "h2": "Subheading",
+      "citation": "Citation"
+    },
+    "styles": {
+      "bold": "Bold",
+      "italic": "Italics",
+      "underline": "Underline",
+      "strikethrough": "Strikethrough",
+      "leftAlign": "Left Align",
+      "insertLink": "Insert Link",
+      "insertImage": "Insert Image"
+    },
+    "special": {
+      "insert": "Insert",
+      "insertNode": "Insert specialized editor node",
+      "insertDisabled": "Insert disabled in citations",
+      "quotationMarks": "Insert quotation marks",
+      "enDash": "Insert en dash",
+      "emDash": "Insert em dash",
+      "specialNode": "Insert specialized editor node",
+      "faq": "FAQ",
+      "faqDisplay": "FAQ",
+      "citation": "Citation",
+      "citationDisplay": "Citation"
+    },
+    "linkEditor": {
+      "linkInputLabel": "Link URL",
+      "linkTextLabel": "Link text",
+      "urlPlaceholder": "Enter URL...",
+      "textPlaceholder": "Enter link text...",
+      "willUseUrlAsText": "Will use URL as link text",
+      "openInNewTab": "Open in new tab",
+      "cancel": "Cancel",
+      "deleteLink": "Delete link",
+      "save": "Save",
+      "validating": "Validating...",
+      "errorInvalidUrl": "The entered URL is not valid.",
+      "errorInvalidUrlFormat": "Invalid URL format. Please provide a valid URL (e.g., https://example.com).",
+      "errorEmptyUrl": "URL cannot be empty",
+      "errorEmptyText": "Link text cannot be empty",
+      "errorUnexpected": "An unexpected error occurred during validation.",
+      "error403Message": "This URL returned an access error (403). The link might still exist but access is restricted.",
+      "error404Message": "The URL you entered cannot be found. Please check if it is accessible.",
+      "errorWithStatusCode": "This URL returned an error ({{statusCode}}). The link might exist but access is restricted.",
+      "forceSaveOption": "I understand the risks, save this link anyway",
+      "forceSave": "Force Save"
+    },
+    "citation": {
+      "title": "Insert Citation",
+      "quoteText": "Quote Text",
+      "quoteTextPlaceholder": "Enter the text you want to quote",
+      "author": "Author",
+      "authorPlaceholder": "Author name",
+      "cancel": "Cancel",
+      "add": "Add Citation",
+      "delete": "Delete",
+      "quoteRequired": "Quote text is required",
+      "authorRequired": "Author is required",
+      "quoteStyle": "Quotation marks style"
+    }
+  }
+}

@@ -10,32 +10,26 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import { $insertNodeToNearestRoot, mergeRegister } from '@lexical/utils';
 import {
   $createParagraphNode,
-	COMMAND_PRIORITY_EDITOR,
-	createCommand,
-	LexicalCommand,
+  COMMAND_PRIORITY_EDITOR,
+  createCommand,
+  LexicalCommand,
 } from 'lexical';
 import { useEffect } from 'react';
-import {
-	$createFAQContainerNode,
-	FAQContainerNode,
-} from '../../nodes/FAQContainerNode';
-import { $createFAQItemNode, FAQItemNode } from '../../nodes/FAQItemNode';
-import { $createFAQQuestionNode } from '../../nodes/FAQQuestionNode';
+
 import { $createFAQAnswerNode } from '../../nodes/FAQAnswerNode';
 import { $createFAQAnswerNodeInner } from '../../nodes/FAQAnswerNodeInner';
+import { $createFAQContainerNode, FAQContainerNode } from '../../nodes/FAQContainerNode';
+import { $createFAQItemNode, FAQItemNode } from '../../nodes/FAQItemNode';
+import { $createFAQQuestionNode } from '../../nodes/FAQQuestionNode';
 
 export const INSERT_FAQ_COMMAND: LexicalCommand<number> = createCommand<number>();
 
-
 export default function FAQPlugin(): JSX.Element | null {
-	const [editor] = useLexicalComposerContext();
-
+  const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
     if (!editor.hasNodes([FAQContainerNode, FAQItemNode])) {
-      throw new Error(
-        'FAQPlugin: FAQContainerNode, or FAQItemNode not registered on editor',
-      );
+      throw new Error('FAQPlugin: FAQContainerNode, or FAQItemNode not registered on editor');
     }
 
     return mergeRegister(
@@ -45,19 +39,18 @@ export default function FAQPlugin(): JSX.Element | null {
       // new content even if trailing paragraph is accidentally deleted
       editor.registerCommand(
         INSERT_FAQ_COMMAND,
-        (count) => {
+        count => {
           editor.update(() => {
             const container = $createFAQContainerNode();
 
             for (let i = 0; i < count; i++) {
-
               const item = $createFAQItemNode();
 
+              item.append($createFAQQuestionNode().append($createParagraphNode()));
               item.append(
-                $createFAQQuestionNode().append($createParagraphNode())
-              );
-              item.append(
-                $createFAQAnswerNode().append($createFAQAnswerNodeInner().append($createParagraphNode()))
+                $createFAQAnswerNode().append(
+                  $createFAQAnswerNodeInner().append($createParagraphNode())
+                )
               );
 
               container.append(item);
@@ -69,10 +62,10 @@ export default function FAQPlugin(): JSX.Element | null {
           });
           return true;
         },
-        COMMAND_PRIORITY_EDITOR,
+        COMMAND_PRIORITY_EDITOR
       )
     );
   }, [editor]);
 
-	return null;
+  return null;
 }

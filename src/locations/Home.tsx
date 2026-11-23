@@ -1,7 +1,7 @@
-import React from 'react';
-import { Paragraph } from '@contentful/f36-components';
 import { HomeExtensionSDK } from '@contentful/app-sdk';
+import { Paragraph } from '@contentful/f36-components';
 import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
+import React from 'react';
 
 const Home = () => {
   const sdk = useSDK<HomeExtensionSDK>();

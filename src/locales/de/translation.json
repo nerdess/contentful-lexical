@@ -1,0 +1,77 @@
+{
+  "editor": {
+    "undo": "Rückgängig",
+    "redo": "Wiederholen",
+    "formatting": {
+      "options": "Formatierungsoptionen für Textstil",
+      "disabled": "Formatierung deaktiviert",
+      "normal": "Standard Text",
+      "simpleList": "Einfache Listenmarkierung",
+      "numberedList": "Nummerierte Listenmarkierung",
+      "normalDisplay": "Normal",
+      "simpleListDisplay": "Liste (einfach)",
+      "numberedListDisplay": "Liste (nummeriert)",
+      "quote": "Zitat",
+      "specialFormats": "Sonderformate",
+      "h2": "Zwischenüberschrift",
+      "citation": "Zitat"
+    },
+    "styles": {
+      "bold": "Fett",
+      "italic": "Kursiv",
+      "underline": "Unterstrichen",
+      "strikethrough": "Durchgestrichen",
+      "leftAlign": "Linksbündig",
+      "insertLink": "Link einfügen",
+      "insertImage": "Bild einfügen"
+    },
+    "special": {
+      "insert": "Einfügen",
+      "insertNode": "Spezielles Editor-Element einfügen",
+      "insertDisabled": "Einfügen in Zitaten deaktiviert",
+      "quotationMarks": "Anführungszeichen hinzufügen",
+      "enDash": "Halbgeviertstrich",
+      "emDash": "Geviertstrich",
+      "specialNode": "Sonderformat einfügen",
+      "faq": "FAQ",
+      "faqDisplay": "Frage & Antwort Tabelle einfügen",
+      "citation": "Zitat",
+      "citationDisplay": "Zitat-Teaser einfügen"
+    },
+    "linkEditor": {
+      "linkInputLabel": "Link-URL",
+      "linkTextLabel": "Link-Text",
+      "urlPlaceholder": "URL eingeben...",
+      "textPlaceholder": "Link-Text eingeben...",
+      "willUseUrlAsText": "URL wird als Link-Text verwendet",
+      "openInNewTab": "In neuem Tab öffnen",
+      "cancel": "Abbrechen",
+      "deleteLink": "Link löschen",
+      "save": "Speichern",
+      "validating": "Validierung...",
+      "errorInvalidUrl": "Die eingegebene URL ist ungültig.",
+      "errorInvalidUrlFormat": "Ungültiges URL-Format. Bitte geben Sie eine gültige URL an (z.B. https://example.com).",
+      "errorEmptyUrl": "URL darf nicht leer sein",
+      "errorEmptyText": "Link-Text darf nicht leer sein",
+      "errorUnexpected": "Während der Prüfung ist ein unerwarteter Fehler aufgetreten.",
+      "error403Message": "Diese URL hat einen Zugriffsfehler (403) zurückgegeben. Der Link könnte existieren, aber der Zugriff ist eingeschränkt.",
+      "error404Message": "Die eingegebene URL kann nicht gefunden werden. Bitte prüfen Sie, ob diese erreichbar ist.",
+      "errorWithStatusCode": "Diese URL hat einen Zugriffsfehler ({{statusCode}}) zurückgegeben. Der Link könnte existieren, aber der Zugriff ist eingeschränkt.",
+      "forceSaveOption": "Ich verstehe die Risiken, diesen Link trotzdem speichern",
+      "forceSave": "Trotzdem speichern"
+    },
+    "citation": {
+      "title": "Zitat",
+      "quoteText": "Zitattext",
+      "quoteTextPlaceholder": "Geben Sie hier den zu zitierenden Text ein",
+      "author": "Autor",
+      "authorPlaceholder": "Name des Autors",
+      "cancel": "Abbrechen",
+      "add": "Zitat hinzufügen",
+      "delete": "Löschen",
+      "quoteRequired": "Zitattext ist erforderlich",
+      "authorRequired": "Autor ist erforderlich",
+      "quoteStyle": "Stil Anführungszeichen"
+    }
+  }
+}

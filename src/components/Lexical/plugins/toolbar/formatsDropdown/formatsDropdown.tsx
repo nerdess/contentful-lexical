@@ -3,24 +3,15 @@ import {
   INSERT_UNORDERED_LIST_COMMAND,
   REMOVE_LIST_COMMAND,
 } from '@lexical/list';
-import {
-  $createHeadingNode, 
-  HeadingTagType,
-  $createQuoteNode
-} from '@lexical/rich-text';
-import {
-  $setBlocksType,
-} from '@lexical/selection';
-import {
-  $createParagraphNode,
-  $getSelection,
-  $isRangeSelection,
-  LexicalEditor,
-} from 'lexical';
-//import DropDown, {DropDownItem} from '../../ui/DropDown';
-import DropDown, {DropDownItem, DropDownHeader} from '../../../../ui/DropDown';
-import { BlockTypeToBlockName, blockTypeToBlockName } from './const';
+import { $createHeadingNode, HeadingTagType } from '@lexical/rich-text';
+import { $setBlocksType } from '@lexical/selection';
+import { $createParagraphNode, $getSelection, $isRangeSelection, LexicalEditor } from 'lexical';
+import { useTranslation } from 'react-i18next';
+
 import { clearFormatting } from '../../../../../lib/utils/clearFormatting';
+import DropDown, { DropDownItem, DropDownHeader } from '../../../../ui/DropDown';
+
+import { BlockTypeToBlockName, blockTypeToBlockName } from './const';
 
 const formatParagraph = (editor: LexicalEditor) => {
   editor.update(() => {
@@ -31,11 +22,7 @@ const formatParagraph = (editor: LexicalEditor) => {
   });
 };
 
-const formatHeading = (
-  editor: LexicalEditor,
-  blockType: string,
-  headingSize: HeadingTagType,
-) => {
+const formatHeading = (editor: LexicalEditor, blockType: string, headingSize: HeadingTagType) => {
   if (blockType !== headingSize) {
     editor.update(() => {
       const selection = $getSelection();
@@ -53,81 +40,76 @@ const formatBulletList = (editor: LexicalEditor, blockType: string) => {
   }
 };
 
-const formatNumberedList = (
-  editor: LexicalEditor,
-  blockType: string,
-) => {
+const formatNumberedList = (editor: LexicalEditor, blockType: string) => {
   if (blockType !== 'number') {
     editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
   } else {
     editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
   }
 };
-  
-const formatQuote = (editor: LexicalEditor, blockType: string) => {
-  if (blockType !== 'quote') {
-    editor.update(() => {
-      const selection = $getSelection();
-      $setBlocksType(selection, () => $createQuoteNode());
-    });
-  }
-};
 
 const dropDownActiveClass = (active: boolean) => {
-    if (active) return 'active dropdown-item-active';
-    else return '';
+  if (active) return 'active dropdown-item-active';
+  else return '';
 };
 
 const BlockFormatDropDown = ({
-    editor,
-    blockType,
-    disabled = false,
-  }:{
-    editor: LexicalEditor,
-    blockType: string,
-    disabled?: boolean,
-  }) => {
-  
-    return (
-      <DropDown 
-        disabled={disabled}
-        buttonClassName="toolbar-item block-controls"
-        buttonIconClassName={'icon block-type ' + blockType}
-        buttonLabel={blockTypeToBlockName[blockType as keyof BlockTypeToBlockName]}
-        buttonAriaLabel="Formatting options for text style">
-        <DropDownItem
-          className={'item ' + dropDownActiveClass(blockType === 'paragraph')}
-          onClick={() => formatParagraph(editor)}>
-          <i className="icon paragraph" />
-          <span className="text">Normal</span>
-        </DropDownItem>
-        <DropDownItem
-          className={'item ' + dropDownActiveClass(blockType === 'bullet')}
-          onClick={() => formatBulletList(editor, blockType)}>
-          <i className="icon bullet-list" />
-          <span className="text">Liste (einfach)</span>
-        </DropDownItem>
-        <DropDownItem
-          className={'item ' + dropDownActiveClass(blockType === 'number')}
-          onClick={() => formatNumberedList(editor, blockType)}>
-          <i className="icon numbered-list" />
-          <span className="text">Liste (nummeriert)</span>
-        </DropDownItem>
-        <DropDownItem
-          className={'item wide ' + dropDownActiveClass(blockType === 'quote')}
-          onClick={() => formatQuote(editor, blockType)}>
-          <i className="icon quote" />
-          <span className="text">Zitat</span>
-        </DropDownItem>
-        <hr />
-        <DropDownHeader>Sonderformate</DropDownHeader>
-        <DropDownItem
-          className={'item ' + dropDownActiveClass(blockType === 'h4')}
-          onClick={() => formatHeading(editor, blockType, 'h4')}>
-          <i className="icon h4" />
-          <span className="text ts-tpm-h4" style={{margin: 0}}>Zwischenüberschrift</span>
-        </DropDownItem>
-        {/* <DropDownItem
+  editor,
+  blockType,
+  disabled = false,
+}: {
+  editor: LexicalEditor;
+  blockType: string;
+  disabled?: boolean;
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <DropDown
+      disabled={disabled}
+      buttonClassName='toolbar-item block-controls'
+      buttonIconClassName={'icon block-type ' + blockType}
+      buttonLabel={blockTypeToBlockName[blockType as keyof BlockTypeToBlockName]}
+      buttonAriaLabel={disabled ? t('editor.formatting.disabled') : t('editor.formatting.options')}
+      tooltipContent={disabled ? t('editor.formatting.disabled') : undefined}
+    >
+      <DropDownItem
+        className={'item ' + dropDownActiveClass(blockType === 'paragraph')}
+        onClick={() => formatParagraph(editor)}
+        title={t('editor.formatting.normal')}
+      >
+        <i className='icon paragraph' />
+        <span className='text'>{t('editor.formatting.normalDisplay')}</span>
+      </DropDownItem>
+      <DropDownItem
+        className={'item ' + dropDownActiveClass(blockType === 'bullet')}
+        onClick={() => formatBulletList(editor, blockType)}
+        title={t('editor.formatting.simpleList')}
+      >
+        <i className='icon bullet-list' />
+        <span className='text'>{t('editor.formatting.simpleListDisplay')}</span>
+      </DropDownItem>
+      <DropDownItem
+        className={'item ' + dropDownActiveClass(blockType === 'number')}
+        onClick={() => formatNumberedList(editor, blockType)}
+        title={t('editor.formatting.numberedList')}
+      >
+        <i className='icon numbered-list' />
+        <span className='text'>{t('editor.formatting.numberedListDisplay')}</span>
+      </DropDownItem>
+      <hr />
+      <DropDownHeader>{t('editor.formatting.specialFormats')}</DropDownHeader>
+      <DropDownItem
+        className={'item ' + dropDownActiveClass(blockType === 'h2')}
+        onClick={() => formatHeading(editor, blockType, 'h2')}
+        title={t('editor.formatting.h2')}
+      >
+        <i className='icon h2' />
+        <span className='text ts-tpm-h2' style={{ margin: 0 }}>
+          {t('editor.formatting.h2')}
+        </span>
+      </DropDownItem>
+      {/* <DropDownItem
           className={'item ' + dropDownActiveClass(blockType === 'check')}
           onClick={formatCheckList}>
           <i className="icon check-list" />
@@ -145,8 +127,8 @@ const BlockFormatDropDown = ({
           <i className="icon code" />
           <span className="text">Code Block</span>
         </DropDownItem>*/}
-      </DropDown>
-    );
-}
+    </DropDown>
+  );
+};
 
 export default BlockFormatDropDown;

@@ -1,9 +1,11 @@
-import React from 'react';
-import Page from './Page';
 import { render } from '@testing-library/react';
+import { vi } from 'vitest';
+
 import { mockCma, mockSdk } from '../../test/mocks';
 
-jest.mock('@contentful/react-apps-toolkit', () => ({
+import Page from './Page';
+
+vi.mock('@contentful/react-apps-toolkit', () => ({
   useSDK: () => mockSdk,
   useCMA: () => mockCma,
 }));

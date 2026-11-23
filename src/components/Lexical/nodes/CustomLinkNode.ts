@@ -1,17 +1,17 @@
 import { LinkNode } from '@lexical/link';
 
 export class CustomLinkNode extends LinkNode {
-
   static getType() {
-    return "custom-link";
+    return 'custom-link';
   }
 
   static clone(node: LinkNode) {
-
-    return new CustomLinkNode(node.getURL(), { 
-      rel: node.getRel(), 
-      target: node.getTarget()
-    }, 
+    return new CustomLinkNode(
+      node.getURL(),
+      {
+        rel: node.getRel(),
+        target: node.getTarget(),
+      },
       node.getKey()
     );
   }
@@ -24,6 +24,7 @@ export class CustomLinkNode extends LinkNode {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createDOM(config: any) {
     return super.createDOM(config);
   }

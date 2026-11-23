@@ -16,23 +16,16 @@ import type {
   SerializedElementNode,
   Spread,
 } from 'lexical';
+import { ElementNode } from 'lexical';
 
-import {ElementNode} from 'lexical';
-
-export type SerializedFAQQuestionNode = Spread<
-  {
-    //templateColumns: string;
-  },
-  SerializedElementNode
->;
+export type SerializedFAQQuestionNode = Spread<object, SerializedElementNode>;
 
 function $convertFAQQuestionElement(): DOMConversionOutput | null {
   const node = $createFAQQuestionNode();
-  return {node};
+  return { node };
 }
 
 export class FAQQuestionNode extends ElementNode {
-
   static getType(): string {
     return 'faq-question';
   }
@@ -41,7 +34,7 @@ export class FAQQuestionNode extends ElementNode {
     return new FAQQuestionNode(node.__key);
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
+  createDOM(_config: EditorConfig): HTMLElement {
     const dom = document.createElement('h2');
     dom.setAttribute('data-lexical-faq-question', 'true');
     dom.setAttribute('itemprop', 'name');
@@ -52,7 +45,7 @@ export class FAQQuestionNode extends ElementNode {
     const element = document.createElement('h2');
     element.setAttribute('data-lexical-faq-question', 'true');
     element.setAttribute('itemprop', 'name');
-    return {element};
+    return { element };
   }
 
   updateDOM(): boolean {
@@ -77,11 +70,8 @@ export class FAQQuestionNode extends ElementNode {
     return $createFAQQuestionNode().updateFromJSON(json);
   }
 
-  updateFromJSON(
-    serializedNode: LexicalUpdateJSON<SerializedFAQQuestionNode>,
-  ): this {
-    return super
-      .updateFromJSON(serializedNode)
+  updateFromJSON(serializedNode: LexicalUpdateJSON<SerializedFAQQuestionNode>): this {
+    return super.updateFromJSON(serializedNode);
   }
 
   exportJSON(): SerializedFAQQuestionNode {
@@ -97,16 +87,12 @@ export class FAQQuestionNode extends ElementNode {
   canInsertTextBefore(): boolean {
     return false;
   }
-
 }
 
-export function $createFAQQuestionNode(
-): FAQQuestionNode {
+export function $createFAQQuestionNode(): FAQQuestionNode {
   return new FAQQuestionNode();
 }
 
-export function $isFAQQuestionNode(
-  node: LexicalNode | null | undefined,
-): node is FAQQuestionNode {
+export function $isFAQQuestionNode(node: LexicalNode | null | undefined): node is FAQQuestionNode {
   return node instanceof FAQQuestionNode;
 }

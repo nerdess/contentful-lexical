@@ -1,36 +1,51 @@
 {
   "name": "contentful-lexical",
-  "version": "0.1.0",
+  "version": "BGCA-48",
   "private": true,
   "dependencies": {
-    "@contentful/app-scripts": "^2.1.0",
-    "@contentful/app-sdk": "^4.29.1",
-    "@contentful/f36-components": "^4.77.5",
-    "@contentful/f36-tokens": "^4.2.0",
-    "@contentful/react-apps-toolkit": "1.2.16",
-    "@lexical/react": "^0.27.0",
-    "@lexical/rich-text": "^0.27.0",
-    "contentful-management": "^11.47.3",
+    "@contentful/app-scripts": "^3.0.1",
+    "@contentful/app-sdk": "^4.76.1",
+    "@contentful/f36-components": "^6.31.2",
+    "@contentful/f36-tokens": "^6.3.1",
+    "@contentful/react-apps-toolkit": "^2.0.1",
+    "@floating-ui/react": "^0.27.20",
+    "@lexical/react": "^0.45.0",
+    "@lexical/rich-text": "^0.45.0",
+    "@testing-library/dom": "^10.4.2",
+    "axios": "^1.21.1",
+    "contentful-management": "^12.21.0",
     "emotion": "^11.0.0",
-    "lexical": "^0.27.0",
-    "re-resizable": "^6.9.17",
+    "i18next": "^26.7.2",
+    "i18next-browser-languagedetector": "^8.3.1",
+    "lexical": "^0.45.0",
+    "re-resizable": "^6.11.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-scripts": "5.0.1",
+    "react-i18next": "^17.1.13",
     "react-string-diff": "^0.2.0",
-    "usehooks-ts": "^3.1.0"
+    "usehooks-ts": "^3.1.1"
   },
   "scripts": {
-    "start": "cross-env BROWSER=none react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "dev": "vite",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:watch": "vitest --watch",
     "create-app-definition": "contentful-app-scripts create-app-definition",
     "upload": "contentful-app-scripts upload --bundle-dir ./build",
-    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN"
+    "upload-ci": "contentful-app-scripts upload --ci --bundle-dir ./build --organization-id $CONTENTFUL_ORG_ID --definition-id $CONTENTFUL_APP_DEF_ID --token $CONTENTFUL_ACCESS_TOKEN --comment \"$COMMIT_MESSAGE\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx}\" --ignore-path .prettierignore",
+    "lint": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
+    "lint:check": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
+    "prepare": "husky"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
@@ -45,15 +60,45 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.5.0",
-    "@testing-library/react": "^16.0.1",
-    "@tsconfig/create-react-app": "^2.0.5",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^22.13.4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.13",
+    "@tsconfig/create-react-app": "^2.0.12",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.9.9",
+    "@types/react": "18.3.0",
     "@types/react-dom": "^18.3.0",
-    "cross-env": "7.0.3",
-    "sass": "^1.85.0",
-    "typescript": "^5.8.2"
+    "@typescript-eslint/eslint-plugin": "^8.73.0",
+    "@typescript-eslint/parser": "^8.73.0",
+    "@vitejs/plugin-react-swc": "^4.3.3",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
+    "lint-staged": "^17.6.2",
+    "prettier": "^3.10.1",
+    "sass": "^1.108.2",
+    "typescript": "^5.8.2",
+    "vite": "^8.3.8",
+    "vitest": "^4.1.12"
   },
-  "homepage": "."
+  "homepage": ".",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*.{json,css,scss,md}": [
+      "prettier --write"
+    ]
+  }
 }

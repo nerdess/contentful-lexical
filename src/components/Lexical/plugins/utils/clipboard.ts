@@ -6,13 +6,13 @@
  *
  */
 
-import {$generateHtmlFromNodes, $generateNodesFromDOM} from '@lexical/html';
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
 import {
   $addNodeStyle,
   $cloneWithProperties,
   $sliceSelectedTextNodeContent,
 } from '@lexical/selection';
-import {objectKlassEquals} from '@lexical/utils';
+import { objectKlassEquals } from '@lexical/utils';
 import {
   $createTabNode,
   $getRoot,
@@ -31,12 +31,13 @@ import {
   SerializedElementNode,
   SerializedTextNode,
 } from 'lexical';
+
 //import {CAN_USE_DOM} from 'shared/canUseDOM';
+import { cleanup, cleanupText } from '../../helper';
 import { CAN_USE_DOM } from '../../shared/canUseDom';
 //import invariant from 'shared/invariant';
 import invariant from '../../shared/invariant';
-import { cleanup } from '../../helper';
-import { Cleanup } from '../copyPasteEnhancement/types';
+import type { Cleanup } from '../copyPasteEnhancement/types';
 
 const getDOMSelection = (targetWindow: Window | null): Selection | null =>
   CAN_USE_DOM ? (targetWindow || window).getSelection() : null;
@@ -105,10 +106,9 @@ export function $getLexicalContent(editor: LexicalEditor): null | string {
  */
 export function $insertDataTransferForPlainText(
   dataTransfer: DataTransfer,
-  selection: BaseSelection,
+  selection: BaseSelection
 ): void {
-  const text =
-    dataTransfer.getData('text/plain') || dataTransfer.getData('text/uri-list');
+  const text = dataTransfer.getData('text/plain') || dataTransfer.getData('text/uri-list');
 
   if (text != null) {
     selection.insertRawText(text);
@@ -148,27 +148,31 @@ export function $insertDataTransferForPlainText(
  * @returns a cleaned up string of HTML
  */
 const cleanupHTML = (html: string, cleanups: Cleanup[]): string => {
+  const nodeValueCleaned = cleanup(html);
 
-    const nodeValueCleaned = cleanup(html);
+  if (html.trim() !== nodeValueCleaned.trim()) {
+    const tempHTMLElement = document.createElement('div');
+    tempHTMLElement.innerHTML = html;
 
-    if (html.trim() !== nodeValueCleaned.trim()) {
+    const tempHTMLElementCleaned = document.createElement('div');
+    tempHTMLElementCleaned.innerHTML = nodeValueCleaned;
 
-      const tempHTMLElement = document.createElement('div');
-      tempHTMLElement.innerHTML = html;
+    cleanups.push({
+      original: tempHTMLElement.textContent || '',
+      cleaned: tempHTMLElementCleaned.textContent || '',
+    });
+  }
+  return nodeValueCleaned;
+};
 
-      const tempHTMLElementCleaned = document.createElement('div');
-      tempHTMLElementCleaned.innerHTML = nodeValueCleaned;
+const cleanupPlainText = (text: string, cleanups: Cleanup[]): string => {
+  const cleaned = cleanupText(text);
 
-
-      cleanups.push({
-        original: tempHTMLElement.textContent || '',
-        cleaned: tempHTMLElementCleaned.textContent || ''
-      });
-    }
-    return nodeValueCleaned;
-      
-}
-
+  if (text.trim() !== cleaned.trim()) {
+    cleanups.push({ original: text, cleaned });
+  }
+  return cleaned;
+};
 
 /**
  * Attempts to insert content of the mime-types application/x-lexical-editor, text/html,
@@ -182,20 +186,15 @@ const cleanupHTML = (html: string, cleanups: Cleanup[]): string => {
 export function $insertDataTransferForRichText(
   dataTransfer: DataTransfer,
   selection: BaseSelection,
-  editor: LexicalEditor,
-): any {
+  editor: LexicalEditor
+): Cleanup[] {
   const lexicalString = dataTransfer.getData('application/x-lexical-editor');
-  const cleanups = [] as Array<any>;
+  const cleanups: Cleanup[] = [];
 
   if (lexicalString) {
-
     try {
       const payload = JSON.parse(lexicalString);
-      if (
-        payload.namespace === editor._config.namespace &&
-        Array.isArray(payload.nodes)
-      ) {
-
+      if (payload.namespace === editor._config.namespace && Array.isArray(payload.nodes)) {
         const nodes = $generateNodesFromSerializedNodes(payload.nodes);
         $insertGeneratedNodes(editor, nodes, selection);
         return cleanups;
@@ -208,7 +207,6 @@ export function $insertDataTransferForRichText(
   const htmlString = dataTransfer.getData('text/html');
 
   if (htmlString) {
-
     try {
       const parser = new DOMParser();
       const dom = parser.parseFromString(htmlString, 'text/html');
@@ -221,16 +219,13 @@ export function $insertDataTransferForRichText(
     } catch {
       // Fail silently.
     }
-
   }
-
 
   // Multi-line plain text in rich text mode pasted as separate paragraphs
   // instead of single paragraph with linebreaks.
   // Webkit-specific: Supports read 'text/uri-list' in clipboard.
 
-  const text =
-    dataTransfer.getData('text/plain') || dataTransfer.getData('text/uri-list');
+  const text = dataTransfer.getData('text/plain') || dataTransfer.getData('text/uri-list');
   if (text != null) {
     if ($isRangeSelection(selection)) {
       const parts = text.split(/(\r?\n|\t)/);
@@ -244,18 +239,17 @@ export function $insertDataTransferForRichText(
         } else if (part === '\t') {
           selection.insertNodes([$createTabNode()]);
         } else {
-          const _part = cleanupHTML(part, cleanups);
+          const _part = cleanupPlainText(part, cleanups);
           selection.insertText(_part);
         }
       }
     } else {
-      const _text = cleanupHTML(text, cleanups);
+      const _text = cleanupPlainText(text, cleanups);
       selection.insertRawText(_text);
     }
   }
 
   return cleanups;
-
 }
 
 /**
@@ -271,7 +265,7 @@ export function $insertDataTransferForRichText(
 export function $insertGeneratedNodes(
   editor: LexicalEditor,
   nodes: Array<LexicalNode>,
-  selection: BaseSelection,
+  selection: BaseSelection
 ): void {
   if (
     !editor.dispatchCommand(SELECTION_INSERT_CLIPBOARD_NODES_COMMAND, {
@@ -295,21 +289,16 @@ function exportNodeToJSON<T extends LexicalNode>(node: T): BaseSerializedNode {
   const nodeClass = node.constructor;
 
   if (serializedNode.type !== nodeClass.getType()) {
-    invariant(
-      false,
-      'LexicalNode: Node %s does not implement .exportJSON().',
-      nodeClass.name,
-    );
+    invariant(false, 'LexicalNode: Node %s does not implement .exportJSON().', nodeClass.name);
   }
 
   if ($isElementNode(node)) {
-    const serializedChildren = (serializedNode as SerializedElementNode)
-      .children;
+    const serializedChildren = (serializedNode as SerializedElementNode).children;
     if (!Array.isArray(serializedChildren)) {
       invariant(
         false,
         'LexicalNode: Node %s is an element but .exportJSON() does not have a children array.',
-        nodeClass.name,
+        nodeClass.name
       );
     }
   }
@@ -321,12 +310,10 @@ function $appendNodesToJSON(
   editor: LexicalEditor,
   selection: BaseSelection | null,
   currentNode: LexicalNode,
-  targetArray: Array<BaseSerializedNode> = [],
+  targetArray: Array<BaseSerializedNode> = []
 ): boolean {
-  let shouldInclude =
-    selection !== null ? currentNode.isSelected(selection) : true;
-  const shouldExclude =
-    $isElementNode(currentNode) && currentNode.excludeFromCopy('html');
+  let shouldInclude = selection !== null ? currentNode.isSelected(selection) : true;
+  const shouldExclude = $isElementNode(currentNode) && currentNode.excludeFromCopy('html');
   let target = currentNode;
 
   if (selection !== null) {
@@ -365,7 +352,7 @@ function $appendNodesToJSON(
       editor,
       selection,
       childNode,
-      serializedNode.children,
+      serializedNode.children
     );
 
     if (
@@ -398,11 +385,9 @@ function $appendNodesToJSON(
  * @param selection Selection to get the JSON content from.
  * @returns an object with the editor namespace and a list of serializable nodes as JavaScript objects.
  */
-export function $generateJSONFromSelectedNodes<
-  SerializedNode extends BaseSerializedNode,
->(
+export function $generateJSONFromSelectedNodes<SerializedNode extends BaseSerializedNode>(
   editor: LexicalEditor,
-  selection: BaseSelection | null,
+  selection: BaseSelection | null
 ): {
   namespace: string;
   nodes: Array<SerializedNode>;
@@ -429,7 +414,7 @@ export function $generateJSONFromSelectedNodes<
  * @returns an Array of Lexical Node objects.
  */
 export function $generateNodesFromSerializedNodes(
-  serializedNodes: Array<BaseSerializedNode>,
+  serializedNodes: Array<BaseSerializedNode>
 ): Array<LexicalNode> {
   const nodes = [];
   for (let i = 0; i < serializedNodes.length; i++) {
@@ -459,7 +444,7 @@ let clipboardEventTimeout: null | number = null;
  */
 export async function copyToClipboard(
   editor: LexicalEditor,
-  event: null | ClipboardEvent,
+  event: null | ClipboardEvent
 ): Promise<boolean> {
   if (clipboardEventTimeout !== null) {
     // Prevent weird race conditions that can happen when this function is run multiple times
@@ -467,7 +452,7 @@ export async function copyToClipboard(
     return false;
   }
   if (event !== null) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       editor.update(() => {
         resolve($copyToClipboardEvent(editor, event));
       });
@@ -475,8 +460,7 @@ export async function copyToClipboard(
   }
 
   const rootElement = editor.getRootElement();
-  const windowDocument =
-    editor._window == null ? window.document : editor._window.document;
+  const windowDocument = editor._window == null ? window.document : editor._window.document;
   const domSelection = getDOMSelection(editor._window);
   if (rootElement === null || domSelection === null) {
     return false;
@@ -490,10 +474,10 @@ export async function copyToClipboard(
   range.setEnd(element, 1);
   domSelection.removeAllRanges();
   domSelection.addRange(range);
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     const removeListener = editor.registerCommand(
       COPY_COMMAND,
-      (secondEvent) => {
+      secondEvent => {
         if (objectKlassEquals(secondEvent, ClipboardEvent)) {
           removeListener();
           if (clipboardEventTimeout !== null) {
@@ -505,7 +489,7 @@ export async function copyToClipboard(
         // Block the entire copy flow while we wait for the next ClipboardEvent
         return true;
       },
-      COMMAND_PRIORITY_CRITICAL,
+      COMMAND_PRIORITY_CRITICAL
     );
     // If the above hack execCommand hack works, this timeout code should never fire. Otherwise,
     // the listener will be quickly freed so that the user can reuse it again
@@ -520,10 +504,7 @@ export async function copyToClipboard(
 }
 
 // TODO shouldn't pass editor (pass namespace directly)
-function $copyToClipboardEvent(
-  editor: LexicalEditor,
-  event: ClipboardEvent,
-): boolean {
+function $copyToClipboardEvent(editor: LexicalEditor, event: ClipboardEvent): boolean {
   const domSelection = getDOMSelection(editor._window);
   if (!domSelection) {
     return false;

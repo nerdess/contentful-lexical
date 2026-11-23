@@ -16,23 +16,16 @@ import type {
   SerializedElementNode,
   Spread,
 } from 'lexical';
+import { ElementNode } from 'lexical';
 
-import {ElementNode} from 'lexical';
-
-export type SerializedFAQItemNode = Spread<
-  {
-    //templateColumns: string;
-  },
-  SerializedElementNode
->;
+export type SerializedFAQItemNode = Spread<object, SerializedElementNode>;
 
 function $convertFAQItemElement(): DOMConversionOutput | null {
   const node = $createFAQItemNode();
-  return {node};
+  return { node };
 }
 
 export class FAQItemNode extends ElementNode {
-
   static getType(): string {
     return 'faq-item';
   }
@@ -41,7 +34,7 @@ export class FAQItemNode extends ElementNode {
     return new FAQItemNode(node.__key);
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
+  createDOM(_config: EditorConfig): HTMLElement {
     const dom = document.createElement('div');
     dom.setAttribute('data-lexical-faq-item', 'true');
     dom.setAttribute('itemscope', '');
@@ -57,7 +50,7 @@ export class FAQItemNode extends ElementNode {
     element.setAttribute('itemtype', 'https://schema.org/Question');
     element.setAttribute('itemprop', 'mainEntity');
 
-    return {element};
+    return { element };
   }
 
   updateDOM(): boolean {
@@ -82,26 +75,20 @@ export class FAQItemNode extends ElementNode {
     return $createFAQItemNode().updateFromJSON(json);
   }
 
-  updateFromJSON(
-    serializedNode: LexicalUpdateJSON<SerializedFAQItemNode>,
-  ): this {
-    return super
-      .updateFromJSON(serializedNode)
+  updateFromJSON(serializedNode: LexicalUpdateJSON<SerializedFAQItemNode>): this {
+    return super.updateFromJSON(serializedNode);
   }
   exportJSON(): SerializedFAQItemNode {
     return {
-      ...super.exportJSON()
+      ...super.exportJSON(),
     };
   }
 }
 
-export function $createFAQItemNode(
-): FAQItemNode {
+export function $createFAQItemNode(): FAQItemNode {
   return new FAQItemNode();
 }
 
-export function $isFAQItemNode(
-  node: LexicalNode | null | undefined,
-): node is FAQItemNode {
+export function $isFAQItemNode(node: LexicalNode | null | undefined): node is FAQItemNode {
   return node instanceof FAQItemNode;
 }

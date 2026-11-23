@@ -1,0 +1,136 @@
+/* Container styles */
+.ts-quote {
+  background-color: rgba(251, 238, 168, 0.1);
+  padding-top: 4px;
+  padding-bottom: 4px;
+
+  &-container {
+    position: relative !important;
+    margin: 1.5rem 0;
+    cursor: pointer;
+
+    & button {
+      pointer-events: auto !important;
+    }
+  }
+
+  &-content {
+    padding-left: 28px;
+    border-left: 5px solid #fbeea8;
+    font-weight: bold;
+  }
+
+  &-style {
+    &-low-high {
+      &:before {
+        content: '„';
+      }
+
+      &:after {
+        content: '“';
+      }
+    }
+
+    &-high {
+      &:before {
+        content: '"';
+      }
+
+      &:after {
+        content: '"';
+      }
+    }
+  }
+
+  &-author {
+    margin-top: 8px;
+    margin-left: calc(28px + 5px);
+  }
+}
+
+.selected-quote {
+  outline: 2px solid rgba(251, 238, 168, 0.5);
+}
+
+/* Delete button styles */
+.quote-delete-button {
+  position: absolute;
+  top: -14px;
+  right: 0;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ts-quote-container:hover .quote-delete-button,
+.selected-quote .quote-delete-button {
+  opacity: 1;
+}
+
+/* F36 Button styles */
+.f36-button {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  border: 1px solid transparent;
+}
+
+.f36-button--small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.f36-button--negative {
+  background-color: #e00e00;
+  color: white;
+}
+
+.f36-button--negative:hover {
+  background-color: #c80808;
+}
+
+.f36-button--negative:active {
+  background-color: #b00000;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2) inset;
+}
+
+.f36-button__icon {
+  display: flex; /* Add this */
+  align-items: center; /* Add this */
+  margin-right: 0.5rem;
+}
+
+.f36-button__icon--left {
+  margin-right: 0.5rem;
+}
+
+.f36-button__text {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 2px;
+}
+
+/* modal */
+.ts-quote-modal {
+  overflow: auto !important;
+
+  & textarea {
+    display: block;
+  }
+
+  & .icon {
+    width: 16px;
+    height: 16px;
+    background-size: contain;
+  }
+}

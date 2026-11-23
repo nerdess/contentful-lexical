@@ -5,11 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import {LexicalEditor} from 'lexical';
-import {useState} from 'react';
 import { FormControl, Note, Stack, TextInput } from '@contentful/f36-components';
-import { INSERT_FAQ_COMMAND } from '.';
+import { LexicalEditor } from 'lexical';
+import { useState } from 'react';
+
 import Button from '../../../ui/Button';
+
+import { INSERT_FAQ_COMMAND } from '.';
 
 export default function InsertFAQDialog({
   activeEditor,
@@ -18,7 +20,6 @@ export default function InsertFAQDialog({
   activeEditor: LexicalEditor;
   onClose: () => void;
 }): JSX.Element {
-    
   const [value, setValue] = useState<string>('1');
 
   const onClick = () => {
@@ -29,20 +30,16 @@ export default function InsertFAQDialog({
   return (
     <>
       <FormControl>
-          <FormControl.Label>
-            Number of questions
-          </FormControl.Label>
-          <Stack flexDirection="column" alignItems="start" spacing="spacingS">
-            <Note variant="neutral">
-              The number of questions cannot be changed after creation.
-            </Note>
-            <TextInput
-                value={value.toString()}
-                type="number"
-                style={{width: 100}}
-                onChange={(e) => setValue(e.target.value)}
-            />
-          </Stack>
+        <FormControl.Label>Number of questions</FormControl.Label>
+        <Stack flexDirection='column' alignItems='start' spacing='spacingS'>
+          <Note variant='neutral'>The number of questions cannot be changed after creation.</Note>
+          <TextInput
+            value={value.toString()}
+            type='number'
+            style={{ width: 100 }}
+            onChange={e => setValue(e.target.value)}
+          />
+        </Stack>
       </FormControl>
       <Button onClick={onClick}>Insert</Button>
     </>

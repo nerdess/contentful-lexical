@@ -1,22 +1,16 @@
 .link-editor {
   display: flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  max-width: 400px;
-  width: 100%;
-  opacity: 0;
-  background-color: rgba(223, 232, 250, 0.3);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 0 0 8px 8px;
-  transition: opacity 0.5s;
-  will-change: transform;
-}
-
-.link-editor > div {
+  flex-direction: column;
   background: #fff;
-  padding: 10px;
   border-radius: 8px;
-  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid #e1e8ed;
+  width: min(480px, calc(100vw - 40px));
+  max-width: 480px;
+  min-width: 320px;
+  max-height: calc(100vh - 40px);
+  overflow: hidden;
+  contain: layout;
+  box-sizing: border-box;
 }

@@ -1,112 +1,130 @@
-import { useState, ReactNode } from 'react';
-import { useRef } from 'react';
-import { useSDK } from '@contentful/react-apps-toolkit';
 import { DialogAppSDK } from '@contentful/app-sdk';
+import { Button, Flex, Modal, Stack } from '@contentful/f36-components';
+import { useSDK } from '@contentful/react-apps-toolkit';
+import { useState, ReactNode, useRef, useEffect, forwardRef } from 'react';
+
 import LexicalToContentful from '../LexicalToContentful';
-import {
-	Button,
-	Flex,
-	Modal,
-	Note,
-	Stack,
-} from '@contentful/f36-components';
-import { Cleanup, InvocationParameters_LexicalFullScreen } from '../plugins/copyPasteEnhancement/types';
+import type {
+  Cleanup,
+  InvocationParameters_LexicalFullScreen,
+} from '../plugins/copyPasteEnhancement/types';
+
+// NOTE: forwarded ref wrapper for Modal.Header
+const ForwardedModalHeader = forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<typeof Modal.Header> & { children?: ReactNode }
+>((props, ref) => (
+  <div ref={ref} style={{ display: 'contents' }}>
+    <Modal.Header {...props} />
+  </div>
+));
+
+ForwardedModalHeader.displayName = 'ForwardedModalHeader';
 
 const Wrapper = ({
-	children,
-	currentValue,
-	cleanups,
-	name = ''
-} : { 
-	children: ReactNode; 
-	currentValue?: string;
-	cleanups: Cleanup[];
-	name?: string;
+  children,
+  currentValue,
+  cleanups,
+  name = '',
+}: {
+  children: ReactNode;
+  currentValue?: string;
+  cleanups: Cleanup[];
+  name?: string;
 }) => {
+  const sdk = useSDK<DialogAppSDK>();
+  const [height, setHeight] = useState<string>('auto');
+  const headerRef = useRef<HTMLDivElement>(null);
+  const actionBarRef = useRef<HTMLDivElement>(null);
 
-	const sdk = useSDK<DialogAppSDK>();
+  useEffect(function calculateDynamicHeight() {
+    updateHeight();
 
-	return (
-		<Flex flexDirection='column'>
-			<Modal.Header title='Fullscreen' subtitle={name} />
-			<Modal.Content>
-				<Stack
-					flexDirection='column'
-					alignItems='end'
-				>
-					<Flex
-						style={{
-							width: '100%',
-							height: 'calc(100vh - 48px - 48px - 49px - 142px)' //todo: calculate dynamically
-						}}
-					>
-						{children}
-					</Flex>
-					<Stack 
-						flexDirection='row' 
-						spacing='spacingS'
-					>
-						<Note
-							variant='warning'
-							style={{
-								maxHeight: 74,
-								overflow: 'auto'
-							}}
-						>
-							Please note: In fullscreen-mode changes are <strong>not saved automatically</strong>!<br />
-							To auto-save hit the 'Close & Save'-Button ➡️&nbsp;➡️&nbsp;➡️ 
-						</Note>
-						<Button
-							variant="primary"
-							onClick={() => {
+    window.addEventListener('resize', updateHeight);
 
-									sdk.close({
-										value: currentValue,
-										cleanups
-									})
-								}
-							}
-						>
-							Close &amp; Save
-						</Button>
-					</Stack>
-				</Stack>
-			</Modal.Content>
-		</Flex>
-	);
+    return () => window.removeEventListener('resize', updateHeight);
+
+    function updateHeight() {
+      try {
+        const headerHeight = headerRef.current?.offsetHeight || 48;
+        const actionBarHeight = actionBarRef.current?.offsetHeight || 48;
+        const padding = 120;
+
+        const totalFixedHeight = headerHeight + actionBarHeight + padding;
+
+        const calculatedHeight = window.innerHeight - totalFixedHeight;
+
+        setHeight(`${Math.max(calculatedHeight, 200)}px`);
+      } catch (error) {
+        console.error('Height calculation failed:', error);
+        setHeight('500px');
+      }
+    }
+  }, []);
+
+  return (
+    <Flex flexDirection='column' data-test-id='dialog-lexical-fullscreen'>
+      <ForwardedModalHeader
+        ref={headerRef}
+        title='Fullscreen'
+        subtitle={name}
+        style={{ padding: '0.5rem', borderBottom: 'none' }}
+      />
+      <Modal.Content data-test-id='modal.content' style={{ padding: '0 1rem' }}>
+        <Stack flexDirection='column' alignItems='end'>
+          <Flex
+            style={{
+              width: '100%',
+              height: height,
+              minHeight: '200px',
+              backgroundColor: 'transparent',
+              transition: 'height 0.2s ease',
+            }}
+          >
+            {children}
+          </Flex>
+          <Stack ref={actionBarRef} flexDirection='row' spacing='spacingS'>
+            <Button
+              variant='primary'
+              onClick={() => {
+                sdk.close({
+                  value: currentValue,
+                  cleanups,
+                });
+              }}
+            >
+              Close &amp; Save
+            </Button>
+          </Stack>
+        </Stack>
+      </Modal.Content>
+    </Flex>
+  );
 };
 
-
 const DialogLexicalFullScreen = ({
-    invocationParams
-}:{
-    invocationParams: InvocationParameters_LexicalFullScreen;
+  invocationParams,
+}: {
+  invocationParams: InvocationParameters_LexicalFullScreen;
 }) => {
+  const { name, initialValue, cleanups } = invocationParams;
+  const countChanges = useRef(0);
+  const [currentValue, setCurrentValue] = useState<string>(initialValue);
+  const [cleanupsState, setCleanupsState] = useState<Cleanup[]>(cleanups);
 
-    const { name, initialValue, cleanups } = invocationParams;
-	const countChanges = useRef(0);
-	const [currentValue, setCurrentValue] = useState<string>(initialValue);
-	const [cleanupsState, setCleanupsState] = useState<Cleanup[]>(cleanups);
-
-	return (
-		<Wrapper
-			name={name}
-			currentValue={currentValue}
-			cleanups={cleanupsState}
-		>
-			<LexicalToContentful
-				initialValue={initialValue}
-				currentValue={currentValue}
-				countChanges={countChanges}
-				setValue={setCurrentValue}
-				resizable={false}
-				cleanups={cleanupsState}
-				setCleanups={setCleanupsState}
-			/>
-		</Wrapper>
-	);
-
-
+  return (
+    <Wrapper name={name} currentValue={currentValue} cleanups={cleanupsState}>
+      <LexicalToContentful
+        initialValue={initialValue}
+        currentValue={currentValue}
+        countChanges={countChanges}
+        setValue={setCurrentValue}
+        resizable={false}
+        cleanups={cleanupsState}
+        setCleanups={setCleanupsState}
+      />
+    </Wrapper>
+  );
 };
 
 export default DialogLexicalFullScreen;

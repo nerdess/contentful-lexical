@@ -1,18 +1,18 @@
 const theme = {
-    //ltr: "ltr",
-    //rtl: "rtl",
-    //placeholder: "editor-placeholder",
-    paragraph: "editor-paragraph",
-    quote: "editor-quote",
-    heading: {
-      //h1: "editor-heading-h1",
-      //h2: "ts-tpm-h2",
-      h4: "ts-tpm-h4",
-      //h3: "editor-heading-h3",
-      //h4: "editor-heading-h4",
-      //h5: "editor-heading-h5"
-    },
-    /*list: {
+  //ltr: "ltr",
+  //rtl: "rtl",
+  //placeholder: "editor-placeholder",
+  paragraph: 'editor-paragraph',
+  quote: 'editor-quote',
+  heading: {
+    //h1: "editor-heading-h1",
+    h2: 'ts-tpm-h2',
+    //h4: "ts-tpm-h4",
+    //h3: "editor-heading-h3",
+    //h4: "editor-heading-h4",
+    //h5: "editor-heading-h5"
+  },
+  /*list: {
       nested: {
         listitem: "editor-nested-listitem"
       },
@@ -20,19 +20,18 @@ const theme = {
       ul: "editor-list-ul",
       listitem: "editor-listitem"
     },*/
-    image: "editor-image",
-    //link: "editor-link",
-    text: {
-      bold: "editor-text-bold",
-      italic: "editor-text-italic",
-      //overflowed: "editor-text-overflowed",
-      //hashtag: "editor-text-hashtag",
-      underline: "editor-text-underline",
-      strikethrough: "editor-text-strikethrough",
-      underlineStrikethrough: "editor-text-underlineStrikethrough",
-      //code: "editor-text-code"
-    },
-  };
-  
-  export default theme;
-  
+  image: 'editor-image',
+  //link: "editor-link",
+  text: {
+    bold: 'editor-text-bold',
+    italic: 'editor-text-italic',
+    //overflowed: "editor-text-overflowed",
+    //hashtag: "editor-text-hashtag",
+    underline: 'editor-text-underline',
+    strikethrough: 'editor-text-strikethrough',
+    underlineStrikethrough: 'editor-text-underlineStrikethrough',
+    //code: "editor-text-code"
+  },
+};
+
+export default theme;

@@ -6,14 +6,13 @@
  *
  */
 
-import {useCallback, useMemo, useState} from 'react';
 import { Modal } from '@contentful/f36-components';
+import { useCallback, useMemo, useState } from 'react';
 
 export default function useModal(): [
   JSX.Element | null,
   (title: string, showModal: (onClose: () => void, onOK: () => void) => JSX.Element) => void,
 ] {
-
   const [modalContent, setModalContent] = useState<null | {
     closeOnClickOutside: boolean;
     content: JSX.Element;
@@ -26,36 +25,29 @@ export default function useModal(): [
 
   const onOK = useCallback(() => {}, []);
 
-
   const modal = useMemo(() => {
     if (modalContent === null) {
       return null;
     }
-    const {title, content} = modalContent;
+    const { title, content } = modalContent;
     return (
-      <Modal className="modal-image" onClose={onClose} isShown={true}>
-      {() => (
-        <>
-          <Modal.Header title={title} onClose={onClose} />
-          <Modal.Content>
-            {content}
-          </Modal.Content>
+      <Modal className='modal-image' onClose={onClose} isShown={true}>
+        {() => (
+          <>
+            <Modal.Header title={title} onClose={onClose} />
+            <Modal.Content>{content}</Modal.Content>
           </>
-      )}
-      
-    </Modal>
-    )
+        )}
+      </Modal>
+    );
   }, [modalContent, onClose]);
 
   const showModal = useCallback(
     (
       title: string,
       // eslint-disable-next-line no-shadow
-      getContent: (
-        onClose: () => void, 
-        onOK: () => void
-      ) => JSX.Element,
-      closeOnClickOutside = false,
+      getContent: (onClose: () => void, onOK: () => void) => JSX.Element,
+      closeOnClickOutside = false
     ) => {
       setModalContent({
         closeOnClickOutside,
@@ -63,7 +55,7 @@ export default function useModal(): [
         title,
       });
     },
-    [onClose, onOK],
+    [onClose, onOK]
   );
 
   return [modal, showModal];
